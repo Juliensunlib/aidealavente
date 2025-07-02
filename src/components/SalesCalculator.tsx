@@ -23,7 +23,7 @@ const SalesCalculator: React.FC = () => {
   const [selectedOffer, setSelectedOffer] = useState<CalculationResult | null>(null);
   const [error, setError] = useState<string>('');
 
-  // Données de prix maximum par puissance
+  // Données de prix maximum par puissance (jusqu'à 36 kWc)
   const maxPricesHT = [
     5200, 5500, 6290, 6750, 7542, 8333, 9250, 10083, 10833, 11417, 12000, 12500, 13083, 13667, 14167,
     14635, 15170, 15700, 16230, 16765, 17300, 17833, 18380, 18900, 19450, 20000, 20700, 21390, 22080,
@@ -50,7 +50,13 @@ const SalesCalculator: React.FC = () => {
     };
 
     let index = Math.floor((powerValue - 2) / 0.5);
-    index = Math.max(0, Math.min(index, 25));
+    
+    // Pour les puissances > 36 kWc, utiliser les paramètres du 36 kWc (dernier index)
+    if (powerValue > 36) {
+      index = 25; // Index correspondant à 36 kWc
+    } else {
+      index = Math.max(0, Math.min(index, 25));
+    }
     
     const rateArray = variableRates[duration as keyof typeof variableRates];
     const rate = index < rateArray.length ? rateArray[index] : rateArray[rateArray.length - 1];
@@ -92,18 +98,20 @@ const SalesCalculator: React.FC = () => {
     const powerValue = parseFloat(power);
     const priceValue = parseFloat(installationPrice);
 
-    if (!powerValue || !priceValue || powerValue < 2 || powerValue > 36) {
-      setError('Veuillez saisir une puissance valide (2-36 kWc) et un prix d\'installation.');
+    if (!powerValue || !priceValue || powerValue < 2) {
+      setError('Veuillez saisir une puissance valide (≥ 2 kWc) et un prix d\'installation.');
       return;
     }
 
-    // Vérification du plafond de prix
-    const index = Math.round((powerValue - 2) / 0.5);
-    const maxPrice = maxPricesHT[Math.min(index, maxPricesHT.length - 1)];
+    // Vérification du plafond de prix SEULEMENT pour les puissances ≤ 36 kWc
+    if (powerValue <= 36) {
+      const index = Math.round((powerValue - 2) / 0.5);
+      const maxPrice = maxPricesHT[Math.min(index, maxPricesHT.length - 1)];
 
-    if (priceValue > maxPrice) {
-      setError(`Prix HT dépasse le plafond autorisé (${maxPrice.toLocaleString()} €). Hors tarif Sunlib.`);
-      return;
+      if (priceValue > maxPrice) {
+        setError(`Prix HT dépasse le plafond autorisé (${maxPrice.toLocaleString()} €). Hors tarif Sunlib.`);
+        return;
+      }
     }
 
     const durations = [10, 15, 20, 25];
@@ -133,26 +141,6 @@ const SalesCalculator: React.FC = () => {
   const handleOfferSelection = (result: CalculationResult) => {
     setSelectedOffer(result);
     setShowOfferSummary(true);
-  };
-
-  const getSolvabilityColor = (solvability: string) => {
-    switch (solvability) {
-      case 'excellent': return 'text-green-600 bg-green-100';
-      case 'good': return 'text-green-500 bg-green-50';
-      case 'acceptable': return 'text-yellow-600 bg-yellow-100';
-      case 'difficult': return 'text-red-600 bg-red-100';
-      default: return 'text-gray-600 bg-gray-100';
-    }
-  };
-
-  const getSolvabilityIcon = (solvability: string) => {
-    switch (solvability) {
-      case 'excellent': return <CheckCircle className="w-4 h-4" />;
-      case 'good': return <CheckCircle className="w-4 h-4" />;
-      case 'acceptable': return <AlertCircle className="w-4 h-4" />;
-      case 'difficult': return <AlertCircle className="w-4 h-4" />;
-      default: return null;
-    }
   };
 
   if (showOfferSummary && selectedOffer) {
@@ -197,7 +185,6 @@ const SalesCalculator: React.FC = () => {
                 value={power}
                 onChange={(e) => setPower(e.target.value)}
                 min="2"
-                max="36"
                 step="0.5"
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
                 placeholder="Ex: 6.5"
@@ -334,11 +321,6 @@ const SalesCalculator: React.FC = () => {
                           <p className="text-lg font-bold text-blue-600">
                             {result.minRevenue.toLocaleString()} € / an
                           </p>
-                        </div>
-
-                        <div className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${getSolvabilityColor(result.solvability)}`}>
-                          {getSolvabilityIcon(result.solvability)}
-                          <span className="ml-1 capitalize">{result.solvability}</span>
                         </div>
                       </div>
 
