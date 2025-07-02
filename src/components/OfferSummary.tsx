@@ -245,7 +245,7 @@ const OfferSummary: React.FC<OfferSummaryProps> = ({ offer, power, clientType, d
               </div>
             </div>
 
-            {/* Valeurs résiduelles */}
+            {/* Valeurs résiduelles - Tableau */}
             <div>
               <h3 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
                 <TrendingUp className="w-5 h-5 text-green-600 mr-2" />
@@ -253,15 +253,27 @@ const OfferSummary: React.FC<OfferSummaryProps> = ({ offer, power, clientType, d
               </h3>
               
               <div className="bg-gray-50 p-6 rounded-lg">
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                  {offer.residualValues.map((residual) => (
-                    <div key={residual.year} className="bg-white p-3 rounded-lg shadow-sm">
-                      <div className="text-center">
-                        <p className="text-sm text-gray-600">Année {residual.year}</p>
-                        <p className="font-semibold text-green-800">{residual.value.toLocaleString()} €</p>
-                      </div>
-                    </div>
-                  ))}
+                <div className="overflow-x-auto">
+                  <table className="w-full">
+                    <thead>
+                      <tr>
+                        <th className="bg-green-600 text-white px-4 py-3 text-left rounded-tl-lg">Année</th>
+                        <th className="bg-green-600 text-white px-4 py-3 text-right rounded-tr-lg">Valeur résiduelle</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {offer.residualValues.map((residual, index) => (
+                        <tr key={residual.year} className={index % 2 === 0 ? 'bg-white' : 'bg-green-50'}>
+                          <td className="px-4 py-3 border-b border-green-200 font-medium text-gray-700">
+                            Année {residual.year}
+                          </td>
+                          <td className="px-4 py-3 border-b border-green-200 text-right font-semibold text-green-800">
+                            {residual.value.toLocaleString()} €
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
                 </div>
                 
                 <div className="mt-4 p-4 bg-green-100 rounded-lg">
