@@ -169,49 +169,16 @@ const OfferSummary: React.FC<OfferSummaryProps> = ({ offer, power, clientType, d
               font-size: 12px;
             }
             
-            .print-page-break {
+            .print-page-1 {
               page-break-after: always;
+            }
+            
+            .print-page-2 {
+              page-break-before: always;
             }
             
             .print-no-break {
               page-break-inside: avoid;
-            }
-            
-            .print-keep-together {
-              page-break-inside: avoid;
-              page-break-before: always;
-            }
-            
-            .print-advantages-compact {
-              margin-top: 15px !important;
-              padding: 15px !important;
-            }
-            
-            .print-process-compact {
-              margin-top: 15px !important;
-              padding: 15px !important;
-            }
-            
-            .print-advantages-grid {
-              display: grid !important;
-              grid-template-columns: 1fr 1fr !important;
-              gap: 8px !important;
-            }
-            
-            .print-advantages-item {
-              font-size: 10px !important;
-              margin-bottom: 8px !important;
-            }
-            
-            .print-process-steps {
-              display: grid !important;
-              grid-template-columns: 1fr 1fr !important;
-              gap: 8px !important;
-            }
-            
-            .print-process-item {
-              font-size: 10px !important;
-              margin-bottom: 8px !important;
             }
             
             .print-compact {
@@ -242,6 +209,28 @@ const OfferSummary: React.FC<OfferSummaryProps> = ({ offer, power, clientType, d
               flex: 1 !important;
             }
             
+            .print-advantages-grid {
+              display: grid !important;
+              grid-template-columns: 1fr 1fr !important;
+              gap: 8px !important;
+            }
+            
+            .print-advantages-item {
+              font-size: 10px !important;
+              margin-bottom: 8px !important;
+            }
+            
+            .print-process-steps {
+              display: grid !important;
+              grid-template-columns: 1fr 1fr !important;
+              gap: 8px !important;
+            }
+            
+            .print-process-item {
+              font-size: 10px !important;
+              margin-bottom: 8px !important;
+            }
+            
             .print-table-container {
               display: flex !important;
               gap: 10px !important;
@@ -253,6 +242,28 @@ const OfferSummary: React.FC<OfferSummaryProps> = ({ offer, power, clientType, d
             
             .print-hide {
               display: none !important;
+            }
+            
+            .print-page-1-content {
+              padding: 20px !important;
+              margin-bottom: 0 !important;
+            }
+            
+            .print-page-2-content {
+              padding: 20px !important;
+              margin-top: 0 !important;
+            }
+            
+            .print-advantages-compact {
+              margin-top: 15px !important;
+              margin-bottom: 15px !important;
+              padding: 15px !important;
+            }
+            
+            .print-process-compact {
+              margin-top: 15px !important;
+              margin-bottom: 0 !important;
+              padding: 15px !important;
             }
           }
         `
@@ -279,84 +290,81 @@ const OfferSummary: React.FC<OfferSummaryProps> = ({ offer, power, clientType, d
             </button>
           </div>
 
-          {/* En-tête de l'offre */}
-          <div className="bg-white rounded-2xl shadow-xl overflow-hidden mb-8 print:rounded-none print:shadow-none print:mb-4 print-no-break">
-            <div className="bg-gradient-to-r from-green-600 to-green-700 text-white p-8 print-compact-header print:bg-green-600">
-              <div className="flex items-center justify-center mb-4">
-                <Zap className="w-12 h-12 mr-3" />
-                <h1 className="text-4xl font-bold">SunLib</h1>
+          {/* PAGE 1 - Contenu principal */}
+          <div className="print-page-1">
+            <div className="bg-white rounded-2xl shadow-xl overflow-hidden mb-8 print:rounded-none print:shadow-none print:mb-0 print-page-1-content">
+              {/* En-tête de l'offre */}
+              <div className="bg-gradient-to-r from-green-600 to-green-700 text-white p-8 print-compact-header print:bg-green-600">
+                <div className="flex items-center justify-center mb-4">
+                  <Zap className="w-12 h-12 mr-3" />
+                  <h1 className="text-4xl font-bold">SunLib</h1>
+                </div>
+                <h2 className="text-2xl font-semibold text-center">Résumé de votre offre solaire</h2>
+                <div className="flex items-center justify-center mt-2">
+                  {clientType === 'particulier' ? (
+                    <Users className="w-5 h-5 mr-2" />
+                  ) : (
+                    <Building2 className="w-5 h-5 mr-2" />
+                  )}
+                  <p className="text-green-100">
+                    Abonnement {clientType} sur {offer.duration} ans
+                  </p>
+                </div>
               </div>
-              <h2 className="text-2xl font-semibold text-center">Résumé de votre offre solaire</h2>
-              <div className="flex items-center justify-center mt-2">
-                {clientType === 'particulier' ? (
-                  <Users className="w-5 h-5 mr-2" />
-                ) : (
-                  <Building2 className="w-5 h-5 mr-2" />
-                )}
-                <p className="text-green-100">
-                  Abonnement {clientType} sur {offer.duration} ans
-                </p>
-              </div>
-            </div>
 
-            {/* Informations principales */}
-            <div className="p-8 print-compact">
-              <div className="grid md:grid-cols-2 gap-8 mb-8 print-grid print:mb-4">
-                {/* Détails de l'installation */}
-                <div className="space-y-6 print:space-y-3">
-                  <h3 className="text-xl font-semibold text-gray-800 flex items-center print:text-lg">
-                    <Zap className="w-5 h-5 text-green-600 mr-2" />
-                    Détails de l'installation
-                  </h3>
-                  
-                  <div className="bg-green-50 p-4 rounded-lg">
-                    <div className="flex justify-between items-center mb-2">
-                      <span className="text-gray-700">Puissance installée</span>
-                      <span className="font-semibold text-green-800">{power} kWc</span>
+              {/* Informations principales */}
+              <div className="p-8 print-compact">
+                <div className="grid md:grid-cols-2 gap-8 mb-8 print-grid print:mb-4">
+                  {/* Détails de l'installation */}
+                  <div className="space-y-6 print:space-y-3">
+                    <h3 className="text-xl font-semibold text-gray-800 flex items-center print:text-lg">
+                      <Zap className="w-5 h-5 text-green-600 mr-2" />
+                      Détails de l'installation
+                    </h3>
+                    
+                    <div className="bg-green-50 p-4 rounded-lg">
+                      <div className="flex justify-between items-center mb-2">
+                        <span className="text-gray-700">Puissance installée</span>
+                        <span className="font-semibold text-green-800">{power} kWc</span>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <span className="text-gray-700">Type de client</span>
+                        <span className="font-semibold text-green-800 capitalize">{clientType}</span>
+                      </div>
                     </div>
-                    <div className="flex justify-between items-center">
-                      <span className="text-gray-700">Type de client</span>
-                      <span className="font-semibold text-green-800 capitalize">{clientType}</span>
+                  </div>
+
+                  {/* Conditions financières */}
+                  <div className="space-y-6 print:space-y-3">
+                    <h3 className="text-xl font-semibold text-gray-800 flex items-center print:text-lg">
+                      <Euro className="w-5 h-5 text-green-600 mr-2" />
+                      Conditions financières
+                    </h3>
+                    
+                    <div className="bg-green-50 p-4 rounded-lg">
+                      <div className="flex justify-between items-center mb-2">
+                        <span className="text-gray-700">Durée du contrat</span>
+                        <span className="font-semibold text-green-800">{offer.duration} ans</span>
+                      </div>
+                      <div className="flex justify-between items-center mb-2">
+                        <span className="text-gray-700">Mensualité {displayMode}</span>
+                        <span className="font-semibold text-green-800">{displayPrice.toFixed(2)} €</span>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <span className="text-gray-700">
+                          {clientType === 'entreprise' ? 'Solvabilité' : 'Revenus minimum requis'}
+                        </span>
+                        <span className="font-semibold text-green-800">
+                          {clientType === 'entreprise' 
+                            ? 'Sous réserve que SunLib contrôle la solvabilité'
+                            : `${offer.minRevenue.toLocaleString()} € / an`
+                          }
+                        </span>
+                      </div>
                     </div>
                   </div>
                 </div>
 
-                {/* Conditions financières */}
-                <div className="space-y-6 print:space-y-3">
-                  <h3 className="text-xl font-semibold text-gray-800 flex items-center print:text-lg">
-                    <Euro className="w-5 h-5 text-green-600 mr-2" />
-                    Conditions financières
-                  </h3>
-                  
-                  <div className="bg-green-50 p-4 rounded-lg">
-                    <div className="flex justify-between items-center mb-2">
-                      <span className="text-gray-700">Durée du contrat</span>
-                      <span className="font-semibold text-green-800">{offer.duration} ans</span>
-                    </div>
-                    <div className="flex justify-between items-center mb-2">
-                      <span className="text-gray-700">Mensualité {displayMode}</span>
-                      <span className="font-semibold text-green-800">{displayPrice.toFixed(2)} €</span>
-                    </div>
-                    <div className="flex justify-between items-center">
-                      <span className="text-gray-700">
-                        {clientType === 'entreprise' ? 'Solvabilité' : 'Revenus minimum requis'}
-                      </span>
-                      <span className="font-semibold text-green-800">
-                        {clientType === 'entreprise' 
-                          ? 'Sous réserve que SunLib contrôle la solvabilité'
-                          : `${offer.minRevenue.toLocaleString()} € / an`
-                        }
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Saut de page après les informations principales */}
-              <div className="print-page-break"></div>
-
-              {/* Container pour garder Avantages et Processus ensemble */}
-              <div className="print-keep-together">
                 {/* Avantages de l'offre */}
                 <div className="mt-8 bg-gradient-to-r from-green-50 to-green-100 p-6 rounded-lg print-advantages-compact">
                   <h3 className="text-xl font-semibold text-green-800 mb-4 text-center print:text-lg print:mb-2">
@@ -403,70 +411,85 @@ const OfferSummary: React.FC<OfferSummaryProps> = ({ offer, power, clientType, d
                     </p>
                   </div>
                 </div>
+              </div>
+            </div>
+          </div>
 
-                {/* Valeurs résiduelles - Maintenant en page 2 */}
-                <div className="mt-8 print-no-break">
-                  <h3 className="text-xl font-semibold text-gray-800 mb-4 flex items-center print:text-lg print:mb-2">
-                    <TrendingUp className="w-5 h-5 text-green-600 mr-2" />
-                    Évolution des valeurs résiduelles
-                  </h3>
+          {/* PAGE 2 - Valeurs résiduelles */}
+          <div className="print-page-2">
+            <div className="bg-white rounded-2xl shadow-xl overflow-hidden mb-8 print:rounded-none print:shadow-none print:mb-0 print-page-2-content">
+              {/* En-tête page 2 */}
+              <div className="bg-gradient-to-r from-green-600 to-green-700 text-white p-8 print-compact-header print:bg-green-600">
+                <div className="flex items-center justify-center mb-4">
+                  <Zap className="w-12 h-12 mr-3" />
+                  <h1 className="text-4xl font-bold">SunLib</h1>
+                </div>
+                <h2 className="text-2xl font-semibold text-center">Évolution des valeurs résiduelles</h2>
+                <div className="flex items-center justify-center mt-2">
+                  <TrendingUp className="w-5 h-5 mr-2" />
+                  <p className="text-green-100">
+                    Valeurs calculées en {displayMode}
+                  </p>
+                </div>
+              </div>
+
+              {/* Valeurs résiduelles */}
+              <div className="p-8 print-compact">
+                <div className="bg-gray-50 p-6 rounded-lg print:bg-white print:p-3 print:border print:border-gray-300">
+                  <div className="grid md:grid-cols-2 gap-6 print-table-container print:gap-3">
+                    {/* Première colonne */}
+                    <div className="overflow-x-auto">
+                      <table className="w-full">
+                        <thead>
+                          <tr>
+                            <th className="bg-green-600 text-white px-4 py-3 text-left rounded-tl-lg">Année</th>
+                            <th className="bg-green-600 text-white px-4 py-3 text-right rounded-tr-lg">Valeur résiduelle</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {offer.residualValues.slice(0, Math.ceil(offer.residualValues.length / 2)).map((residual, index) => (
+                            <tr key={residual.year} className={index % 2 === 0 ? 'bg-white' : 'bg-green-50 print:bg-gray-100'}>
+                              <td className="px-4 py-3 border-b border-green-200 font-medium text-gray-700 print:px-2 print:py-1 print-small-text">
+                                Année {residual.year}
+                              </td>
+                              <td className="px-4 py-3 border-b border-green-200 text-right font-semibold text-green-800 print:px-2 print:py-1 print-small-text">
+                                {residual.value.toLocaleString()} €
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+
+                    {/* Deuxième colonne */}
+                    <div className="overflow-x-auto">
+                      <table className="w-full">
+                        <thead>
+                          <tr>
+                            <th className="bg-green-600 text-white px-4 py-3 text-left rounded-tl-lg">Année</th>
+                            <th className="bg-green-600 text-white px-4 py-3 text-right rounded-tr-lg">Valeur résiduelle</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {offer.residualValues.slice(Math.ceil(offer.residualValues.length / 2)).map((residual, index) => (
+                            <tr key={residual.year} className={index % 2 === 0 ? 'bg-white' : 'bg-green-50 print:bg-gray-100'}>
+                              <td className="px-4 py-3 border-b border-green-200 font-medium text-gray-700 print:px-2 print:py-1 print-small-text">
+                                Année {residual.year}
+                              </td>
+                              <td className="px-4 py-3 border-b border-green-200 text-right font-semibold text-green-800 print:px-2 print:py-1 print-small-text">
+                                {residual.value.toLocaleString()} €
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
                   
-                  <div className="bg-gray-50 p-6 rounded-lg print:bg-white print:p-3 print:border print:border-gray-300">
-                    <div className="grid md:grid-cols-2 gap-6 print-table-container print:gap-3">
-                      {/* Première colonne */}
-                      <div className="overflow-x-auto">
-                        <table className="w-full">
-                          <thead>
-                            <tr>
-                              <th className="bg-green-600 text-white px-4 py-3 text-left rounded-tl-lg">Année</th>
-                              <th className="bg-green-600 text-white px-4 py-3 text-right rounded-tr-lg">Valeur résiduelle</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {offer.residualValues.slice(0, Math.ceil(offer.residualValues.length / 2)).map((residual, index) => (
-                              <tr key={residual.year} className={index % 2 === 0 ? 'bg-white' : 'bg-green-50 print:bg-gray-100'}>
-                                <td className="px-4 py-3 border-b border-green-200 font-medium text-gray-700 print:px-2 print:py-1 print-small-text">
-                                  Année {residual.year}
-                                </td>
-                                <td className="px-4 py-3 border-b border-green-200 text-right font-semibold text-green-800 print:px-2 print:py-1 print-small-text">
-                                  {residual.value.toLocaleString()} €
-                                </td>
-                              </tr>
-                            ))}
-                          </tbody>
-                        </table>
-                      </div>
-
-                      {/* Deuxième colonne */}
-                      <div className="overflow-x-auto">
-                        <table className="w-full">
-                          <thead>
-                            <tr>
-                              <th className="bg-green-600 text-white px-4 py-3 text-left rounded-tl-lg">Année</th>
-                              <th className="bg-green-600 text-white px-4 py-3 text-right rounded-tr-lg">Valeur résiduelle</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {offer.residualValues.slice(Math.ceil(offer.residualValues.length / 2)).map((residual, index) => (
-                              <tr key={residual.year} className={index % 2 === 0 ? 'bg-white' : 'bg-green-50 print:bg-gray-100'}>
-                                <td className="px-4 py-3 border-b border-green-200 font-medium text-gray-700 print:px-2 print:py-1 print-small-text">
-                                  Année {residual.year}
-                                </td>
-                                <td className="px-4 py-3 border-b border-green-200 text-right font-semibold text-green-800 print:px-2 print:py-1 print-small-text">
-                                  {residual.value.toLocaleString()} €
-                                </td>
-                              </tr>
-                            ))}
-                          </tbody>
-                        </table>
-                      </div>
-                    </div>
-                    
-                    <div className="mt-4 p-4 bg-green-100 rounded-lg print:mt-2 print:p-2 print:bg-gray-100">
-                      <p className="text-sm text-green-800 text-center print-small-text print:text-gray-800">
-                        <strong>Valeurs résiduelles calculées en {displayMode}</strong>
-                      </p>
-                    </div>
+                  <div className="mt-4 p-4 bg-green-100 rounded-lg print:mt-2 print:p-2 print:bg-gray-100">
+                    <p className="text-sm text-green-800 text-center print-small-text print:text-gray-800">
+                      <strong>Valeurs résiduelles calculées en {displayMode}</strong>
+                    </p>
                   </div>
                 </div>
               </div>
