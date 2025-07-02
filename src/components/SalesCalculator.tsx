@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Calculator, Zap, CheckCircle, AlertCircle, TrendingUp, ArrowLeft, FileText, Users, Building2 } from 'lucide-react';
+import { Calculator, Zap, CheckCircle, AlertCircle, TrendingUp, ArrowLeft, FileText, Users, Building2, ChevronUp, ChevronDown } from 'lucide-react';
 import OfferSummary from './OfferSummary';
 
 interface CalculationResult {
@@ -22,6 +22,7 @@ const SalesCalculator: React.FC = () => {
   const [showOfferSummary, setShowOfferSummary] = useState(false);
   const [selectedOffer, setSelectedOffer] = useState<CalculationResult | null>(null);
   const [error, setError] = useState<string>('');
+  const [isFormCollapsed, setIsFormCollapsed] = useState(false);
 
   // Données de prix maximum par puissance (jusqu'à 36 kWc)
   const maxPricesHT = [
@@ -137,11 +138,16 @@ const SalesCalculator: React.FC = () => {
     setResults(calculatedResults);
     setShowResults(true);
     setSelectedDuration(null);
+    setIsFormCollapsed(true); // Réduire automatiquement après calcul
   };
 
   const handleOfferSelection = (result: CalculationResult) => {
     setSelectedOffer(result);
     setShowOfferSummary(true);
+  };
+
+  const toggleFormCollapse = () => {
+    setIsFormCollapsed(!isFormCollapsed);
   };
 
   if (showOfferSummary && selectedOffer) {
@@ -170,117 +176,144 @@ const SalesCalculator: React.FC = () => {
         </div>
 
         {/* Formulaire de saisie */}
-        <div className="bg-white rounded-2xl shadow-xl p-8 mb-8">
-          <div className="flex items-center mb-6">
-            <Calculator className="w-6 h-6 text-green-600 mr-3" />
-            <h2 className="text-2xl font-semibold text-gray-800">Paramètres du projet</h2>
+        <div className="bg-white rounded-2xl shadow-xl mb-8 overflow-hidden">
+          {/* En-tête du formulaire avec bouton de collapse */}
+          <div 
+            className="flex items-center justify-between p-6 cursor-pointer hover:bg-gray-50 transition-colors"
+            onClick={toggleFormCollapse}
+          >
+            <div className="flex items-center">
+              <Calculator className="w-6 h-6 text-green-600 mr-3" />
+              <h2 className="text-2xl font-semibold text-gray-800">
+                Paramètres du projet
+                {showResults && (
+                  <span className="ml-3 text-sm font-normal text-green-600">
+                    {power} kWc • {parseFloat(installationPrice).toLocaleString()} € HT • {clientType}
+                  </span>
+                )}
+              </h2>
+            </div>
+            {showResults && (
+              <button className="text-green-600 hover:text-green-800 transition-colors">
+                {isFormCollapsed ? (
+                  <ChevronDown className="w-6 h-6" />
+                ) : (
+                  <ChevronUp className="w-6 h-6" />
+                )}
+              </button>
+            )}
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-4xl mx-auto">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Puissance (kWc)
-              </label>
-              <input
-                type="number"
-                value={power}
-                onChange={(e) => setPower(e.target.value)}
-                min="2"
-                step="0.5"
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
-                placeholder="Ex: 6.5"
-              />
-            </div>
+          {/* Contenu du formulaire */}
+          <div className={`transition-all duration-300 ease-in-out ${isFormCollapsed ? 'max-h-0 opacity-0' : 'max-h-none opacity-100'}`}>
+            <div className="px-8 pb-8">
+              <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-4xl mx-auto">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Puissance (kWc)
+                  </label>
+                  <input
+                    type="number"
+                    value={power}
+                    onChange={(e) => setPower(e.target.value)}
+                    min="2"
+                    step="0.5"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
+                    placeholder="Ex: 6.5"
+                  />
+                </div>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Prix installation HT (€)
-              </label>
-              <input
-                type="number"
-                value={installationPrice}
-                onChange={(e) => setInstallationPrice(e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
-                placeholder="Ex: 15000"
-              />
-            </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Prix installation HT (€)
+                  </label>
+                  <input
+                    type="number"
+                    value={installationPrice}
+                    onChange={(e) => setInstallationPrice(e.target.value)}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
+                    placeholder="Ex: 15000"
+                  />
+                </div>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Type de client
-              </label>
-              <div className="flex rounded-lg border border-gray-300 overflow-hidden">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Type de client
+                  </label>
+                  <div className="flex rounded-lg border border-gray-300 overflow-hidden">
+                    <button
+                      type="button"
+                      onClick={() => setClientType('particulier')}
+                      className={`flex-1 px-3 py-3 text-sm font-medium transition-colors flex items-center justify-center ${
+                        clientType === 'particulier'
+                          ? 'bg-green-600 text-white'
+                          : 'bg-white text-gray-700 hover:bg-gray-50'
+                      }`}
+                    >
+                      <Users className="w-4 h-4 mr-1" />
+                      Particulier
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setClientType('entreprise')}
+                      className={`flex-1 px-3 py-3 text-sm font-medium transition-colors flex items-center justify-center ${
+                        clientType === 'entreprise'
+                          ? 'bg-green-600 text-white'
+                          : 'bg-white text-gray-700 hover:bg-gray-50'
+                      }`}
+                    >
+                      <Building2 className="w-4 h-4 mr-1" />
+                      Entreprise
+                    </button>
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Affichage des prix
+                  </label>
+                  <div className="flex rounded-lg border border-gray-300 overflow-hidden">
+                    <button
+                      type="button"
+                      onClick={() => setDisplayMode('HT')}
+                      className={`flex-1 px-3 py-3 text-sm font-medium transition-colors ${
+                        displayMode === 'HT'
+                          ? 'bg-green-600 text-white'
+                          : 'bg-white text-gray-700 hover:bg-gray-50'
+                      }`}
+                    >
+                      HT
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setDisplayMode('TTC')}
+                      className={`flex-1 px-3 py-3 text-sm font-medium transition-colors ${
+                        displayMode === 'TTC'
+                          ? 'bg-green-600 text-white'
+                          : 'bg-white text-gray-700 hover:bg-gray-50'
+                      }`}
+                    >
+                      TTC
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              {error && (
+                <div className="mt-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg max-w-4xl mx-auto">
+                  {error}
+                </div>
+              )}
+
+              <div className="mt-8 max-w-4xl mx-auto">
                 <button
-                  type="button"
-                  onClick={() => setClientType('particulier')}
-                  className={`flex-1 px-3 py-3 text-sm font-medium transition-colors flex items-center justify-center ${
-                    clientType === 'particulier'
-                      ? 'bg-green-600 text-white'
-                      : 'bg-white text-gray-700 hover:bg-gray-50'
-                  }`}
+                  onClick={handleCalculate}
+                  className="w-full bg-gradient-to-r from-green-600 to-green-700 text-white font-semibold py-4 rounded-lg hover:from-green-700 hover:to-green-800 transition-all transform hover:scale-105 shadow-lg"
                 >
-                  <Users className="w-4 h-4 mr-1" />
-                  Particulier
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setClientType('entreprise')}
-                  className={`flex-1 px-3 py-3 text-sm font-medium transition-colors flex items-center justify-center ${
-                    clientType === 'entreprise'
-                      ? 'bg-green-600 text-white'
-                      : 'bg-white text-gray-700 hover:bg-gray-50'
-                  }`}
-                >
-                  <Building2 className="w-4 h-4 mr-1" />
-                  Entreprise
+                  Calculer les abonnements
                 </button>
               </div>
             </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Affichage des prix
-              </label>
-              <div className="flex rounded-lg border border-gray-300 overflow-hidden">
-                <button
-                  type="button"
-                  onClick={() => setDisplayMode('HT')}
-                  className={`flex-1 px-3 py-3 text-sm font-medium transition-colors ${
-                    displayMode === 'HT'
-                      ? 'bg-green-600 text-white'
-                      : 'bg-white text-gray-700 hover:bg-gray-50'
-                  }`}
-                >
-                  HT
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setDisplayMode('TTC')}
-                  className={`flex-1 px-3 py-3 text-sm font-medium transition-colors ${
-                    displayMode === 'TTC'
-                      ? 'bg-green-600 text-white'
-                      : 'bg-white text-gray-700 hover:bg-gray-50'
-                  }`}
-                >
-                  TTC
-                </button>
-              </div>
-            </div>
-          </div>
-
-          {error && (
-            <div className="mt-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg max-w-4xl mx-auto">
-              {error}
-            </div>
-          )}
-
-          <div className="mt-8 max-w-4xl mx-auto">
-            <button
-              onClick={handleCalculate}
-              className="w-full bg-gradient-to-r from-green-600 to-green-700 text-white font-semibold py-4 rounded-lg hover:from-green-700 hover:to-green-800 transition-all transform hover:scale-105 shadow-lg"
-            >
-              Calculer les abonnements
-            </button>
           </div>
         </div>
 
