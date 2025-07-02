@@ -192,9 +192,13 @@ const OfferSummary: React.FC<OfferSummaryProps> = ({ offer, power, clientType, d
                     <span className="text-gray-700">Durée du contrat</span>
                     <span className="font-semibold text-green-800">{offer.duration} ans</span>
                   </div>
-                  <div className="flex justify-between items-center">
+                  <div className="flex justify-between items-center mb-2">
                     <span className="text-gray-700">Mensualité {displayMode}</span>
                     <span className="font-semibold text-green-800">{displayPrice.toFixed(2)} €</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-gray-700">Revenus minimum requis</span>
+                    <span className="font-semibold text-green-800">{offer.minRevenue.toLocaleString()} € / an</span>
                   </div>
                 </div>
               </div>
