@@ -158,10 +158,71 @@ const OfferSummary: React.FC<OfferSummaryProps> = ({ offer, power, clientType, d
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 to-green-100 p-4">
-      <div className="max-w-4xl mx-auto">
+    <>
+      {/* Styles CSS pour l'impression */}
+      <style jsx>{`
+        @media print {
+          body {
+            margin: 0;
+            padding: 0;
+            font-size: 12px;
+          }
+          
+          .print-page-break {
+            page-break-after: always;
+          }
+          
+          .print-no-break {
+            page-break-inside: avoid;
+          }
+          
+          .print-compact {
+            margin: 0 !important;
+            padding: 10px !important;
+          }
+          
+          .print-compact-header {
+            padding: 15px !important;
+          }
+          
+          .print-compact-section {
+            margin-bottom: 15px !important;
+            padding: 10px !important;
+          }
+          
+          .print-small-text {
+            font-size: 11px !important;
+          }
+          
+          .print-grid {
+            display: flex !important;
+            flex-direction: row !important;
+            gap: 15px !important;
+          }
+          
+          .print-grid > div {
+            flex: 1 !important;
+          }
+          
+          .print-table-container {
+            display: flex !important;
+            gap: 10px !important;
+          }
+          
+          .print-table-container > div {
+            flex: 1 !important;
+          }
+          
+          .print-hide {
+            display: none !important;
+          }
+        }
+      `}</style>
+      
+      <div className="min-h-screen bg-gradient-to-br from-green-50 to-green-100 p-4 print:bg-white print:p-0">
+      <div className="max-w-4xl mx-auto print:max-w-none">
         {/* Header avec bouton retour */}
-        <div className="flex items-center justify-between mb-8">
+        <div className="flex items-center justify-between mb-8 print-hide">
           <button
             onClick={onBack}
             className="flex items-center text-green-700 hover:text-green-800 transition-colors"
@@ -180,8 +241,8 @@ const OfferSummary: React.FC<OfferSummaryProps> = ({ offer, power, clientType, d
         </div>
 
         {/* En-tête de l'offre */}
-        <div className="bg-white rounded-2xl shadow-xl overflow-hidden mb-8">
-          <div className="bg-gradient-to-r from-green-600 to-green-700 text-white p-8">
+        <div className="bg-white rounded-2xl shadow-xl overflow-hidden mb-8 print:rounded-none print:shadow-none print:mb-4 print-no-break">
+          <div className="bg-gradient-to-r from-green-600 to-green-700 text-white p-8 print-compact-header print:bg-green-600">
             <div className="flex items-center justify-center mb-4">
               <Zap className="w-12 h-12 mr-3" />
               <h1 className="text-4xl font-bold">SunLib</h1>
@@ -200,11 +261,11 @@ const OfferSummary: React.FC<OfferSummaryProps> = ({ offer, power, clientType, d
           </div>
 
           {/* Informations principales */}
-          <div className="p-8">
-            <div className="grid md:grid-cols-2 gap-8 mb-8">
+          <div className="p-8 print-compact">
+            <div className="grid md:grid-cols-2 gap-8 mb-8 print-grid print:mb-4">
               {/* Détails de l'installation */}
-              <div className="space-y-6">
-                <h3 className="text-xl font-semibold text-gray-800 flex items-center">
+              <div className="space-y-6 print:space-y-3">
+                <h3 className="text-xl font-semibold text-gray-800 flex items-center print:text-lg">
                   <Zap className="w-5 h-5 text-green-600 mr-2" />
                   Détails de l'installation
                 </h3>
@@ -222,8 +283,8 @@ const OfferSummary: React.FC<OfferSummaryProps> = ({ offer, power, clientType, d
               </div>
 
               {/* Conditions financières */}
-              <div className="space-y-6">
-                <h3 className="text-xl font-semibold text-gray-800 flex items-center">
+              <div className="space-y-6 print:space-y-3">
+                <h3 className="text-xl font-semibold text-gray-800 flex items-center print:text-lg">
                   <Euro className="w-5 h-5 text-green-600 mr-2" />
                   Conditions financières
                 </h3>
@@ -246,14 +307,14 @@ const OfferSummary: React.FC<OfferSummaryProps> = ({ offer, power, clientType, d
             </div>
 
             {/* Valeurs résiduelles - Tableau sur deux colonnes */}
-            <div>
-              <h3 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+            <div className="print-no-break">
+              <h3 className="text-xl font-semibold text-gray-800 mb-4 flex items-center print:text-lg print:mb-2">
                 <TrendingUp className="w-5 h-5 text-green-600 mr-2" />
                 Évolution des valeurs résiduelles
               </h3>
               
-              <div className="bg-gray-50 p-6 rounded-lg">
-                <div className="grid md:grid-cols-2 gap-6">
+              <div className="bg-gray-50 p-6 rounded-lg print:bg-white print:p-3 print:border print:border-gray-300">
+                <div className="grid md:grid-cols-2 gap-6 print-table-container print:gap-3">
                   {/* Première colonne */}
                   <div className="overflow-x-auto">
                     <table className="w-full">
@@ -265,11 +326,11 @@ const OfferSummary: React.FC<OfferSummaryProps> = ({ offer, power, clientType, d
                       </thead>
                       <tbody>
                         {offer.residualValues.slice(0, Math.ceil(offer.residualValues.length / 2)).map((residual, index) => (
-                          <tr key={residual.year} className={index % 2 === 0 ? 'bg-white' : 'bg-green-50'}>
-                            <td className="px-4 py-3 border-b border-green-200 font-medium text-gray-700">
+                          <tr key={residual.year} className={index % 2 === 0 ? 'bg-white' : 'bg-green-50 print:bg-gray-100'}>
+                            <td className="px-4 py-3 border-b border-green-200 font-medium text-gray-700 print:px-2 print:py-1 print-small-text">
                               Année {residual.year}
                             </td>
-                            <td className="px-4 py-3 border-b border-green-200 text-right font-semibold text-green-800">
+                            <td className="px-4 py-3 border-b border-green-200 text-right font-semibold text-green-800 print:px-2 print:py-1 print-small-text">
                               {residual.value.toLocaleString()} €
                             </td>
                           </tr>
@@ -289,11 +350,11 @@ const OfferSummary: React.FC<OfferSummaryProps> = ({ offer, power, clientType, d
                       </thead>
                       <tbody>
                         {offer.residualValues.slice(Math.ceil(offer.residualValues.length / 2)).map((residual, index) => (
-                          <tr key={residual.year} className={index % 2 === 0 ? 'bg-white' : 'bg-green-50'}>
-                            <td className="px-4 py-3 border-b border-green-200 font-medium text-gray-700">
+                          <tr key={residual.year} className={index % 2 === 0 ? 'bg-white' : 'bg-green-50 print:bg-gray-100'}>
+                            <td className="px-4 py-3 border-b border-green-200 font-medium text-gray-700 print:px-2 print:py-1 print-small-text">
                               Année {residual.year}
                             </td>
-                            <td className="px-4 py-3 border-b border-green-200 text-right font-semibold text-green-800">
+                            <td className="px-4 py-3 border-b border-green-200 text-right font-semibold text-green-800 print:px-2 print:py-1 print-small-text">
                               {residual.value.toLocaleString()} €
                             </td>
                           </tr>
@@ -303,13 +364,16 @@ const OfferSummary: React.FC<OfferSummaryProps> = ({ offer, power, clientType, d
                   </div>
                 </div>
                 
-                <div className="mt-4 p-4 bg-green-100 rounded-lg">
-                  <p className="text-sm text-green-800 text-center">
+                <div className="mt-4 p-4 bg-green-100 rounded-lg print:mt-2 print:p-2 print:bg-gray-100">
+                  <p className="text-sm text-green-800 text-center print-small-text print:text-gray-800">
                     <strong>Valeur en année {lastResidualValue?.year} :</strong> {lastResidualValue?.value.toLocaleString()} €
                   </p>
                 </div>
               </div>
             </div>
+
+            {/* Saut de page après les valeurs résiduelles */}
+            <div className="print-page-break"></div>
 
             {/* Avantages de l'offre */}
             <div className="mt-8 bg-gradient-to-r from-green-50 to-green-100 p-6 rounded-lg">
@@ -361,7 +425,7 @@ const OfferSummary: React.FC<OfferSummaryProps> = ({ offer, power, clientType, d
         </div>
 
         {/* Footer */}
-        <div className="text-center text-gray-600 text-sm">
+        <div className="text-center text-gray-600 text-sm print-hide">
           <p>Document généré par l'outil d'aide à la vente SunLib</p>
           <p className="mt-1">Pour plus d'informations, contactez votre conseiller SunLib</p>
         </div>
