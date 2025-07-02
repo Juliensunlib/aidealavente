@@ -323,4 +323,158 @@ const OfferSummary: React.FC<OfferSummaryProps> = ({ offer, power, clientType, d
 
                 {/* Conditions financières */}
                 <div className="space-y-6 print:space-y-3">
-                  <h3 className="text-xl font-semib
+                  <h3 className="text-xl font-semibold text-gray-800 flex items-center print:text-lg">
+                    <Euro className="w-5 h-5 text-green-600 mr-2" />
+                    Conditions financières
+                  </h3>
+                  
+                  <div className="bg-green-50 p-4 rounded-lg">
+                    <div className="flex justify-between items-center mb-2">
+                      <span className="text-gray-700">Durée du contrat</span>
+                      <span className="font-semibold text-green-800">{offer.duration} ans</span>
+                    </div>
+                    <div className="flex justify-between items-center mb-2">
+                      <span className="text-gray-700">Mensualité {displayMode}</span>
+                      <span className="font-semibold text-green-800">{displayPrice.toFixed(2)} €</span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-gray-700">Revenus minimum requis</span>
+                      <span className="font-semibold text-green-800">{offer.minRevenue.toLocaleString()} € / an</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Saut de page après les informations principales */}
+              <div className="print-page-break"></div>
+
+              {/* Container pour garder Avantages et Processus ensemble */}
+              <div className="print-keep-together">
+                {/* Avantages de l'offre */}
+                <div className="mt-8 bg-gradient-to-r from-green-50 to-green-100 p-6 rounded-lg print-advantages-compact">
+                  <h3 className="text-xl font-semibold text-green-800 mb-4 text-center print:text-lg print:mb-2">
+                    Avantages de votre abonnement SunLib
+                  </h3>
+                  
+                  <div className="grid md:grid-cols-2 gap-4 print-advantages-grid">
+                    {getClientAdvantages().map((advantage, index) => (
+                      <div key={index} className="flex items-start print-advantages-item">
+                        <CheckCircle className="w-5 h-5 text-green-600 mr-3 mt-0.5 flex-shrink-0 print:w-3 print:h-3 print:mr-2" />
+                        <div>
+                          <p className="font-medium text-green-800 print:text-xs print:font-semibold">{advantage.title}</p>
+                          <p className="text-sm text-green-700 print:text-xs">{advantage.description}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Processus de mise en place */}
+                <div className="mt-8 bg-white border-2 border-green-200 p-6 rounded-lg print-process-compact">
+                  <h3 className="text-xl font-semibold text-green-800 mb-6 text-center flex items-center justify-center print:text-lg print:mb-3">
+                    <Calendar className="w-5 h-5 mr-2 print:w-4 print:h-4" />
+                    Et concrètement, comment ça se passe ?
+                  </h3>
+                  
+                  <div className="space-y-4 print-process-steps print:space-y-2">
+                    {getCommonProcess().map((process, index) => (
+                      <div key={index} className="flex items-start print-process-item">
+                        <div className="flex-shrink-0 w-8 h-8 bg-green-600 text-white rounded-full flex items-center justify-center text-sm font-bold mr-4 print:w-6 print:h-6 print:text-xs print:mr-2">
+                          {process.step}
+                        </div>
+                        <div className="flex-1">
+                          <h4 className="font-medium text-green-800 mb-1 print:text-xs print:font-semibold print:mb-0">{process.title}</h4>
+                          <p className="text-sm text-green-700 print:text-xs">{process.description}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  
+                  <div className="mt-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg print:mt-3 print:p-2">
+                    <p className="text-sm text-yellow-800 text-center print:text-xs">
+                      <strong>Important :</strong> En cas de refus de la mairie, le contrat est annulé et le dépôt de garantie restitué
+                    </p>
+                  </div>
+                </div>
+
+                {/* Valeurs résiduelles - Maintenant en page 2 */}
+                <div className="mt-8 print-no-break">
+                  <h3 className="text-xl font-semibold text-gray-800 mb-4 flex items-center print:text-lg print:mb-2">
+                    <TrendingUp className="w-5 h-5 text-green-600 mr-2" />
+                    Évolution des valeurs résiduelles
+                  </h3>
+                  
+                  <div className="bg-gray-50 p-6 rounded-lg print:bg-white print:p-3 print:border print:border-gray-300">
+                    <div className="grid md:grid-cols-2 gap-6 print-table-container print:gap-3">
+                      {/* Première colonne */}
+                      <div className="overflow-x-auto">
+                        <table className="w-full">
+                          <thead>
+                            <tr>
+                              <th className="bg-green-600 text-white px-4 py-3 text-left rounded-tl-lg">Année</th>
+                              <th className="bg-green-600 text-white px-4 py-3 text-right rounded-tr-lg">Valeur résiduelle</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {offer.residualValues.slice(0, Math.ceil(offer.residualValues.length / 2)).map((residual, index) => (
+                              <tr key={residual.year} className={index % 2 === 0 ? 'bg-white' : 'bg-green-50 print:bg-gray-100'}>
+                                <td className="px-4 py-3 border-b border-green-200 font-medium text-gray-700 print:px-2 print:py-1 print-small-text">
+                                  Année {residual.year}
+                                </td>
+                                <td className="px-4 py-3 border-b border-green-200 text-right font-semibold text-green-800 print:px-2 print:py-1 print-small-text">
+                                  {residual.value.toLocaleString()} €
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+
+                      {/* Deuxième colonne */}
+                      <div className="overflow-x-auto">
+                        <table className="w-full">
+                          <thead>
+                            <tr>
+                              <th className="bg-green-600 text-white px-4 py-3 text-left rounded-tl-lg">Année</th>
+                              <th className="bg-green-600 text-white px-4 py-3 text-right rounded-tr-lg">Valeur résiduelle</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {offer.residualValues.slice(Math.ceil(offer.residualValues.length / 2)).map((residual, index) => (
+                              <tr key={residual.year} className={index % 2 === 0 ? 'bg-white' : 'bg-green-50 print:bg-gray-100'}>
+                                <td className="px-4 py-3 border-b border-green-200 font-medium text-gray-700 print:px-2 print:py-1 print-small-text">
+                                  Année {residual.year}
+                                </td>
+                                <td className="px-4 py-3 border-b border-green-200 text-right font-semibold text-green-800 print:px-2 print:py-1 print-small-text">
+                                  {residual.value.toLocaleString()} €
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                    
+                    <div className="mt-4 p-4 bg-green-100 rounded-lg print:mt-2 print:p-2 print:bg-gray-100">
+                      <p className="text-sm text-green-800 text-center print-small-text print:text-gray-800">
+                        <strong>Valeur en année {lastResidualValue?.year} :</strong> {lastResidualValue?.value.toLocaleString()} €
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Footer */}
+          <div className="text-center text-gray-600 text-sm print-hide">
+            <p>Document généré par l'outil d'aide à la vente SunLib</p>
+            <p className="mt-1">Pour plus d'informations, contactez votre conseiller SunLib</p>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+};
+
+export default OfferSummary;
