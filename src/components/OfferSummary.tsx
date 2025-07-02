@@ -338,8 +338,15 @@ const OfferSummary: React.FC<OfferSummaryProps> = ({ offer, power, clientType, d
                       <span className="font-semibold text-green-800">{displayPrice.toFixed(2)} €</span>
                     </div>
                     <div className="flex justify-between items-center">
-                      <span className="text-gray-700">Revenus minimum requis</span>
-                      <span className="font-semibold text-green-800">{offer.minRevenue.toLocaleString()} € / an</span>
+                      <span className="text-gray-700">
+                        {clientType === 'entreprise' ? 'Solvabilité' : 'Revenus minimum requis'}
+                      </span>
+                      <span className="font-semibold text-green-800">
+                        {clientType === 'entreprise' 
+                          ? 'Sous réserve que SunLib contrôle la solvabilité'
+                          : `${offer.minRevenue.toLocaleString()} € / an`
+                        }
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -457,7 +464,7 @@ const OfferSummary: React.FC<OfferSummaryProps> = ({ offer, power, clientType, d
                     
                     <div className="mt-4 p-4 bg-green-100 rounded-lg print:mt-2 print:p-2 print:bg-gray-100">
                       <p className="text-sm text-green-800 text-center print-small-text print:text-gray-800">
-                        <strong>Valeur en année {lastResidualValue?.year} :</strong> {lastResidualValue?.value.toLocaleString()} €
+                        <strong>Valeurs résiduelles calculées en {displayMode}</strong>
                       </p>
                     </div>
                   </div>
