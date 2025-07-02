@@ -182,6 +182,38 @@ const OfferSummary: React.FC<OfferSummaryProps> = ({ offer, power, clientType, d
               page-break-before: always;
             }
             
+            .print-advantages-compact {
+              margin-top: 15px !important;
+              padding: 15px !important;
+            }
+            
+            .print-process-compact {
+              margin-top: 15px !important;
+              padding: 15px !important;
+            }
+            
+            .print-advantages-grid {
+              display: grid !important;
+              grid-template-columns: 1fr 1fr !important;
+              gap: 8px !important;
+            }
+            
+            .print-advantages-item {
+              font-size: 10px !important;
+              margin-bottom: 8px !important;
+            }
+            
+            .print-process-steps {
+              display: grid !important;
+              grid-template-columns: 1fr 1fr !important;
+              gap: 8px !important;
+            }
+            
+            .print-process-item {
+              font-size: 10px !important;
+              margin-bottom: 8px !important;
+            }
+            
             .print-compact {
               margin: 0 !important;
               padding: 10px !important;
@@ -385,18 +417,18 @@ const OfferSummary: React.FC<OfferSummaryProps> = ({ offer, power, clientType, d
               {/* Container pour garder Avantages et Processus ensemble */}
               <div className="print-keep-together">
                 {/* Avantages de l'offre */}
-                <div className="mt-8 bg-gradient-to-r from-green-50 to-green-100 p-6 rounded-lg">
-                  <h3 className="text-xl font-semibold text-green-800 mb-4 text-center">
+                <div className="mt-8 bg-gradient-to-r from-green-50 to-green-100 p-6 rounded-lg print-advantages-compact">
+                  <h3 className="text-xl font-semibold text-green-800 mb-4 text-center print:text-lg print:mb-2">
                     Avantages de votre abonnement SunLib
                   </h3>
                   
-                  <div className="grid md:grid-cols-2 gap-4">
+                  <div className="grid md:grid-cols-2 gap-4 print-advantages-grid">
                     {getClientAdvantages().map((advantage, index) => (
-                      <div key={index} className="flex items-start">
-                        <CheckCircle className="w-5 h-5 text-green-600 mr-3 mt-0.5 flex-shrink-0" />
+                      <div key={index} className="flex items-start print-advantages-item">
+                        <CheckCircle className="w-5 h-5 text-green-600 mr-3 mt-0.5 flex-shrink-0 print:w-3 print:h-3 print:mr-2" />
                         <div>
-                          <p className="font-medium text-green-800">{advantage.title}</p>
-                          <p className="text-sm text-green-700">{advantage.description}</p>
+                          <p className="font-medium text-green-800 print:text-xs print:font-semibold">{advantage.title}</p>
+                          <p className="text-sm text-green-700 print:text-xs">{advantage.description}</p>
                         </div>
                       </div>
                     ))}
@@ -404,28 +436,28 @@ const OfferSummary: React.FC<OfferSummaryProps> = ({ offer, power, clientType, d
                 </div>
 
                 {/* Processus de mise en place */}
-                <div className="mt-8 bg-white border-2 border-green-200 p-6 rounded-lg">
-                  <h3 className="text-xl font-semibold text-green-800 mb-6 text-center flex items-center justify-center">
-                    <Calendar className="w-5 h-5 mr-2" />
+                <div className="mt-8 bg-white border-2 border-green-200 p-6 rounded-lg print-process-compact">
+                  <h3 className="text-xl font-semibold text-green-800 mb-6 text-center flex items-center justify-center print:text-lg print:mb-3">
+                    <Calendar className="w-5 h-5 mr-2 print:w-4 print:h-4" />
                     Et concrètement, comment ça se passe ?
                   </h3>
                   
-                  <div className="space-y-4">
+                  <div className="space-y-4 print-process-steps print:space-y-2">
                     {getCommonProcess().map((process, index) => (
-                      <div key={index} className="flex items-start">
-                        <div className="flex-shrink-0 w-8 h-8 bg-green-600 text-white rounded-full flex items-center justify-center text-sm font-bold mr-4">
+                      <div key={index} className="flex items-start print-process-item">
+                        <div className="flex-shrink-0 w-8 h-8 bg-green-600 text-white rounded-full flex items-center justify-center text-sm font-bold mr-4 print:w-6 print:h-6 print:text-xs print:mr-2">
                           {process.step}
                         </div>
                         <div className="flex-1">
-                          <h4 className="font-medium text-green-800 mb-1">{process.title}</h4>
-                          <p className="text-sm text-green-700">{process.description}</p>
+                          <h4 className="font-medium text-green-800 mb-1 print:text-xs print:font-semibold print:mb-0">{process.title}</h4>
+                          <p className="text-sm text-green-700 print:text-xs">{process.description}</p>
                         </div>
                       </div>
                     ))}
                   </div>
                   
-                  <div className="mt-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
-                    <p className="text-sm text-yellow-800 text-center">
+                  <div className="mt-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg print:mt-3 print:p-2">
+                    <p className="text-sm text-yellow-800 text-center print:text-xs">
                       <strong>Important :</strong> En cas de refus de la mairie, le contrat est annulé et le dépôt de garantie restitué
                     </p>
                   </div>
