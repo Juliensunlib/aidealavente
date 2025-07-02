@@ -113,6 +113,7 @@ const SalesCalculator: React.FC = () => {
         return;
       }
     }
+    // Pour les puissances > 36 kWc, pas de limitation de prix
 
     const durations = [10, 15, 20, 25];
     const calculatedResults: CalculationResult[] = durations.map(duration => {
