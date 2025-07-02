@@ -186,11 +186,6 @@ const SalesCalculator: React.FC = () => {
               <Calculator className="w-6 h-6 text-green-600 mr-3" />
               <h2 className="text-2xl font-semibold text-gray-800">
                 Paramètres du projet
-                {showResults && (
-                  <span className="ml-3 text-sm font-normal text-green-600">
-                    {power} kWc • {parseFloat(installationPrice).toLocaleString()} € HT • {clientType}
-                  </span>
-                )}
               </h2>
             </div>
             {showResults && (
