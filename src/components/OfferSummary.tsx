@@ -166,7 +166,7 @@ const OfferSummary: React.FC<OfferSummaryProps> = ({ offer, power, clientType, d
             body {
               margin: 0;
               padding: 0;
-              font-size: 12px;
+              font-size: 10px;
             }
             
             .print-page-1 {
@@ -183,26 +183,26 @@ const OfferSummary: React.FC<OfferSummaryProps> = ({ offer, power, clientType, d
             
             .print-compact {
               margin: 0 !important;
-              padding: 10px !important;
+              padding: 5px !important;
             }
             
             .print-compact-header {
-              padding: 15px !important;
+              padding: 8px !important;
             }
             
             .print-compact-section {
-              margin-bottom: 15px !important;
-              padding: 10px !important;
+              margin-bottom: 8px !important;
+              padding: 5px !important;
             }
             
             .print-small-text {
-              font-size: 11px !important;
+              font-size: 9px !important;
             }
             
             .print-grid {
               display: flex !important;
               flex-direction: row !important;
-              gap: 15px !important;
+              gap: 10px !important;
             }
             
             .print-grid > div {
@@ -212,23 +212,23 @@ const OfferSummary: React.FC<OfferSummaryProps> = ({ offer, power, clientType, d
             .print-advantages-grid {
               display: grid !important;
               grid-template-columns: 1fr 1fr !important;
-              gap: 8px !important;
+              gap: 4px !important;
             }
             
             .print-advantages-item {
-              font-size: 10px !important;
-              margin-bottom: 8px !important;
+              font-size: 8px !important;
+              margin-bottom: 4px !important;
             }
             
             .print-process-steps {
               display: grid !important;
               grid-template-columns: 1fr 1fr !important;
-              gap: 8px !important;
+              gap: 4px !important;
             }
             
             .print-process-item {
-              font-size: 10px !important;
-              margin-bottom: 8px !important;
+              font-size: 8px !important;
+              margin-bottom: 4px !important;
             }
             
             .print-table-container {
@@ -245,7 +245,7 @@ const OfferSummary: React.FC<OfferSummaryProps> = ({ offer, power, clientType, d
             }
             
             .print-page-1-content {
-              padding: 20px !important;
+              padding: 10px !important;
               margin-bottom: 0 !important;
             }
             
@@ -255,15 +255,47 @@ const OfferSummary: React.FC<OfferSummaryProps> = ({ offer, power, clientType, d
             }
             
             .print-advantages-compact {
-              margin-top: 15px !important;
-              margin-bottom: 15px !important;
-              padding: 15px !important;
+              margin-top: 8px !important;
+              margin-bottom: 8px !important;
+              padding: 8px !important;
             }
             
             .print-process-compact {
-              margin-top: 15px !important;
+              margin-top: 8px !important;
               margin-bottom: 0 !important;
-              padding: 15px !important;
+              padding: 8px !important;
+            }
+            
+            .print-header-compact h1 {
+              font-size: 24px !important;
+            }
+            
+            .print-header-compact h2 {
+              font-size: 16px !important;
+            }
+            
+            .print-section-title {
+              font-size: 14px !important;
+              margin-bottom: 5px !important;
+            }
+            
+            .print-step-circle {
+              width: 18px !important;
+              height: 18px !important;
+              font-size: 10px !important;
+              margin-right: 8px !important;
+            }
+            
+            .print-advantage-icon {
+              width: 12px !important;
+              height: 12px !important;
+              margin-right: 6px !important;
+            }
+            
+            .print-warning-box {
+              margin-top: 8px !important;
+              padding: 6px !important;
+              font-size: 8px !important;
             }
           }
         `
@@ -294,19 +326,19 @@ const OfferSummary: React.FC<OfferSummaryProps> = ({ offer, power, clientType, d
           <div className="print-page-1">
             <div className="bg-white rounded-2xl shadow-xl overflow-hidden mb-8 print:rounded-none print:shadow-none print:mb-0 print-page-1-content">
               {/* En-tête de l'offre */}
-              <div className="bg-gradient-to-r from-green-600 to-green-700 text-white p-8 print-compact-header print:bg-green-600">
-                <div className="flex items-center justify-center mb-4">
-                  <Zap className="w-12 h-12 mr-3" />
+              <div className="bg-gradient-to-r from-green-600 to-green-700 text-white p-8 print-compact-header print:bg-green-600 print-header-compact">
+                <div className="flex items-center justify-center mb-4 print:mb-2">
+                  <Zap className="w-12 h-12 mr-3 print:w-8 print:h-8 print:mr-2" />
                   <h1 className="text-4xl font-bold">SunLib</h1>
                 </div>
                 <h2 className="text-2xl font-semibold text-center">Résumé de votre offre solaire</h2>
-                <div className="flex items-center justify-center mt-2">
+                <div className="flex items-center justify-center mt-2 print:mt-1">
                   {clientType === 'particulier' ? (
-                    <Users className="w-5 h-5 mr-2" />
+                    <Users className="w-5 h-5 mr-2 print:w-4 print:h-4" />
                   ) : (
-                    <Building2 className="w-5 h-5 mr-2" />
+                    <Building2 className="w-5 h-5 mr-2 print:w-4 print:h-4" />
                   )}
-                  <p className="text-green-100">
+                  <p className="text-green-100 print:text-sm">
                     Abonnement {clientType} sur {offer.duration} ans
                   </p>
                 </div>
@@ -316,45 +348,45 @@ const OfferSummary: React.FC<OfferSummaryProps> = ({ offer, power, clientType, d
               <div className="p-8 print-compact">
                 <div className="grid md:grid-cols-2 gap-8 mb-8 print-grid print:mb-4">
                   {/* Détails de l'installation */}
-                  <div className="space-y-6 print:space-y-3">
-                    <h3 className="text-xl font-semibold text-gray-800 flex items-center print:text-lg">
-                      <Zap className="w-5 h-5 text-green-600 mr-2" />
+                  <div className="space-y-6 print:space-y-2">
+                    <h3 className="text-xl font-semibold text-gray-800 flex items-center print-section-title">
+                      <Zap className="w-5 h-5 text-green-600 mr-2 print:w-4 print:h-4" />
                       Détails de l'installation
                     </h3>
                     
-                    <div className="bg-green-50 p-4 rounded-lg">
-                      <div className="flex justify-between items-center mb-2">
-                        <span className="text-gray-700">Puissance installée</span>
-                        <span className="font-semibold text-green-800">{power} kWc</span>
+                    <div className="bg-green-50 p-4 rounded-lg print:p-2">
+                      <div className="flex justify-between items-center mb-2 print:mb-1">
+                        <span className="text-gray-700 print:text-xs">Puissance installée</span>
+                        <span className="font-semibold text-green-800 print:text-xs">{power} kWc</span>
                       </div>
                       <div className="flex justify-between items-center">
-                        <span className="text-gray-700">Type de client</span>
-                        <span className="font-semibold text-green-800 capitalize">{clientType}</span>
+                        <span className="text-gray-700 print:text-xs">Type de client</span>
+                        <span className="font-semibold text-green-800 capitalize print:text-xs">{clientType}</span>
                       </div>
                     </div>
                   </div>
 
                   {/* Conditions financières */}
-                  <div className="space-y-6 print:space-y-3">
-                    <h3 className="text-xl font-semibold text-gray-800 flex items-center print:text-lg">
-                      <Euro className="w-5 h-5 text-green-600 mr-2" />
+                  <div className="space-y-6 print:space-y-2">
+                    <h3 className="text-xl font-semibold text-gray-800 flex items-center print-section-title">
+                      <Euro className="w-5 h-5 text-green-600 mr-2 print:w-4 print:h-4" />
                       Conditions financières
                     </h3>
                     
-                    <div className="bg-green-50 p-4 rounded-lg">
-                      <div className="flex justify-between items-center mb-2">
-                        <span className="text-gray-700">Durée du contrat</span>
-                        <span className="font-semibold text-green-800">{offer.duration} ans</span>
+                    <div className="bg-green-50 p-4 rounded-lg print:p-2">
+                      <div className="flex justify-between items-center mb-2 print:mb-1">
+                        <span className="text-gray-700 print:text-xs">Durée du contrat</span>
+                        <span className="font-semibold text-green-800 print:text-xs">{offer.duration} ans</span>
                       </div>
-                      <div className="flex justify-between items-center mb-2">
-                        <span className="text-gray-700">Mensualité {displayMode}</span>
-                        <span className="font-semibold text-green-800">{displayPrice.toFixed(2)} €</span>
+                      <div className="flex justify-between items-center mb-2 print:mb-1">
+                        <span className="text-gray-700 print:text-xs">Mensualité {displayMode}</span>
+                        <span className="font-semibold text-green-800 print:text-xs">{displayPrice.toFixed(2)} €</span>
                       </div>
                       <div className="flex justify-between items-center">
-                        <span className="text-gray-700">
+                        <span className="text-gray-700 print:text-xs">
                           {clientType === 'entreprise' ? 'Solvabilité' : 'Revenus minimum requis'}
                         </span>
-                        <span className="font-semibold text-green-800">
+                        <span className="font-semibold text-green-800 print:text-xs">
                           {clientType === 'entreprise' 
                             ? 'Sous réserve que SunLib contrôle la solvabilité'
                             : `${offer.minRevenue.toLocaleString()} € / an`
@@ -367,14 +399,14 @@ const OfferSummary: React.FC<OfferSummaryProps> = ({ offer, power, clientType, d
 
                 {/* Avantages de l'offre */}
                 <div className="mt-8 bg-gradient-to-r from-green-50 to-green-100 p-6 rounded-lg print-advantages-compact">
-                  <h3 className="text-xl font-semibold text-green-800 mb-4 text-center print:text-lg print:mb-2">
+                  <h3 className="text-xl font-semibold text-green-800 mb-4 text-center print-section-title print:mb-2">
                     Avantages de votre abonnement SunLib
                   </h3>
                   
                   <div className="grid md:grid-cols-2 gap-4 print-advantages-grid">
                     {getClientAdvantages().map((advantage, index) => (
                       <div key={index} className="flex items-start print-advantages-item">
-                        <CheckCircle className="w-5 h-5 text-green-600 mr-3 mt-0.5 flex-shrink-0 print:w-3 print:h-3 print:mr-2" />
+                        <CheckCircle className="w-5 h-5 text-green-600 mr-3 mt-0.5 flex-shrink-0 print-advantage-icon" />
                         <div>
                           <p className="font-medium text-green-800 print:text-xs print:font-semibold">{advantage.title}</p>
                           <p className="text-sm text-green-700 print:text-xs">{advantage.description}</p>
@@ -386,15 +418,15 @@ const OfferSummary: React.FC<OfferSummaryProps> = ({ offer, power, clientType, d
 
                 {/* Processus de mise en place */}
                 <div className="mt-8 bg-white border-2 border-green-200 p-6 rounded-lg print-process-compact">
-                  <h3 className="text-xl font-semibold text-green-800 mb-6 text-center flex items-center justify-center print:text-lg print:mb-3">
+                  <h3 className="text-xl font-semibold text-green-800 mb-6 text-center flex items-center justify-center print-section-title print:mb-3">
                     <Calendar className="w-5 h-5 mr-2 print:w-4 print:h-4" />
                     Et concrètement, comment ça se passe ?
                   </h3>
                   
-                  <div className="space-y-4 print-process-steps print:space-y-2">
+                  <div className="space-y-4 print-process-steps print:space-y-1">
                     {getCommonProcess().map((process, index) => (
                       <div key={index} className="flex items-start print-process-item">
-                        <div className="flex-shrink-0 w-8 h-8 bg-green-600 text-white rounded-full flex items-center justify-center text-sm font-bold mr-4 print:w-6 print:h-6 print:text-xs print:mr-2">
+                        <div className="flex-shrink-0 w-8 h-8 bg-green-600 text-white rounded-full flex items-center justify-center text-sm font-bold mr-4 print-step-circle">
                           {process.step}
                         </div>
                         <div className="flex-1">
@@ -405,7 +437,7 @@ const OfferSummary: React.FC<OfferSummaryProps> = ({ offer, power, clientType, d
                     ))}
                   </div>
                   
-                  <div className="mt-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg print:mt-3 print:p-2">
+                  <div className="mt-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg print-warning-box">
                     <p className="text-sm text-yellow-800 text-center print:text-xs">
                       <strong>Important :</strong> En cas de refus de la mairie, le contrat est annulé et le dépôt de garantie restitué
                     </p>
