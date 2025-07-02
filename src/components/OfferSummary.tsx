@@ -54,6 +54,9 @@ const OfferSummary: React.FC<OfferSummaryProps> = ({ offer, power, clientType, d
   const displayPrice = displayMode === 'HT' ? offer.monthlyPayment : offer.monthlyPaymentTTC;
   const lastResidualValue = offer.residualValues[offer.residualValues.length - 1];
 
+  // Masquer la solvabilité pour tous les clients
+  const shouldShowSolvability = false;
+
   // Avantages selon le type de client
   const getClientAdvantages = () => {
     if (clientType === 'particulier') {
@@ -189,35 +192,11 @@ const OfferSummary: React.FC<OfferSummaryProps> = ({ offer, power, clientType, d
                     <span className="text-gray-700">Durée du contrat</span>
                     <span className="font-semibold text-green-800">{offer.duration} ans</span>
                   </div>
-                  <div className="flex justify-between items-center mb-2">
+                  <div className="flex justify-between items-center">
                     <span className="text-gray-700">Mensualité {displayMode}</span>
                     <span className="font-semibold text-green-800">{displayPrice.toFixed(2)} €</span>
                   </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-gray-700">Revenus minimum requis</span>
-                    <span className="font-semibold text-green-800">{offer.minRevenue.toLocaleString()} € / an</span>
-                  </div>
                 </div>
-              </div>
-            </div>
-
-            {/* Évaluation de solvabilité */}
-            <div className="mb-8">
-              <h3 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
-                <CheckCircle className="w-5 h-5 text-green-600 mr-2" />
-                Évaluation de solvabilité
-              </h3>
-              
-              <div className={`p-6 rounded-lg border-2 ${getSolvabilityColor(offer.solvability)}`}>
-                <div className="flex items-center justify-center">
-                  {getSolvabilityIcon(offer.solvability)}
-                  <span className="ml-3 text-lg font-semibold">
-                    {getSolvabilityText(offer.solvability)}
-                  </span>
-                </div>
-                <p className="text-center mt-2 text-sm opacity-80">
-                  Basée sur une mensualité de {displayPrice.toFixed(2)} € {displayMode}
-                </p>
               </div>
             </div>
 
