@@ -245,7 +245,7 @@ const OfferSummary: React.FC<OfferSummaryProps> = ({ offer, power, clientType, d
               </div>
             </div>
 
-            {/* Valeurs résiduelles - Tableau */}
+            {/* Valeurs résiduelles - Tableau sur deux colonnes */}
             <div>
               <h3 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
                 <TrendingUp className="w-5 h-5 text-green-600 mr-2" />
@@ -253,27 +253,54 @@ const OfferSummary: React.FC<OfferSummaryProps> = ({ offer, power, clientType, d
               </h3>
               
               <div className="bg-gray-50 p-6 rounded-lg">
-                <div className="overflow-x-auto">
-                  <table className="w-full">
-                    <thead>
-                      <tr>
-                        <th className="bg-green-600 text-white px-4 py-3 text-left rounded-tl-lg">Année</th>
-                        <th className="bg-green-600 text-white px-4 py-3 text-right rounded-tr-lg">Valeur résiduelle</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {offer.residualValues.map((residual, index) => (
-                        <tr key={residual.year} className={index % 2 === 0 ? 'bg-white' : 'bg-green-50'}>
-                          <td className="px-4 py-3 border-b border-green-200 font-medium text-gray-700">
-                            Année {residual.year}
-                          </td>
-                          <td className="px-4 py-3 border-b border-green-200 text-right font-semibold text-green-800">
-                            {residual.value.toLocaleString()} €
-                          </td>
+                <div className="grid md:grid-cols-2 gap-6">
+                  {/* Première colonne */}
+                  <div className="overflow-x-auto">
+                    <table className="w-full">
+                      <thead>
+                        <tr>
+                          <th className="bg-green-600 text-white px-4 py-3 text-left rounded-tl-lg">Année</th>
+                          <th className="bg-green-600 text-white px-4 py-3 text-right rounded-tr-lg">Valeur résiduelle</th>
                         </tr>
-                      ))}
-                    </tbody>
-                  </table>
+                      </thead>
+                      <tbody>
+                        {offer.residualValues.slice(0, Math.ceil(offer.residualValues.length / 2)).map((residual, index) => (
+                          <tr key={residual.year} className={index % 2 === 0 ? 'bg-white' : 'bg-green-50'}>
+                            <td className="px-4 py-3 border-b border-green-200 font-medium text-gray-700">
+                              Année {residual.year}
+                            </td>
+                            <td className="px-4 py-3 border-b border-green-200 text-right font-semibold text-green-800">
+                              {residual.value.toLocaleString()} €
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+
+                  {/* Deuxième colonne */}
+                  <div className="overflow-x-auto">
+                    <table className="w-full">
+                      <thead>
+                        <tr>
+                          <th className="bg-green-600 text-white px-4 py-3 text-left rounded-tl-lg">Année</th>
+                          <th className="bg-green-600 text-white px-4 py-3 text-right rounded-tr-lg">Valeur résiduelle</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {offer.residualValues.slice(Math.ceil(offer.residualValues.length / 2)).map((residual, index) => (
+                          <tr key={residual.year} className={index % 2 === 0 ? 'bg-white' : 'bg-green-50'}>
+                            <td className="px-4 py-3 border-b border-green-200 font-medium text-gray-700">
+                              Année {residual.year}
+                            </td>
+                            <td className="px-4 py-3 border-b border-green-200 text-right font-semibold text-green-800">
+                              {residual.value.toLocaleString()} €
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
                 
                 <div className="mt-4 p-4 bg-green-100 rounded-lg">
