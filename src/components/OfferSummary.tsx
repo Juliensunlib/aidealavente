@@ -177,6 +177,11 @@ const OfferSummary: React.FC<OfferSummaryProps> = ({ offer, power, clientType, d
               page-break-inside: avoid;
             }
             
+            .print-keep-together {
+              page-break-inside: avoid;
+              page-break-before: always;
+            }
+            
             .print-compact {
               margin: 0 !important;
               padding: 10px !important;
@@ -377,27 +382,29 @@ const OfferSummary: React.FC<OfferSummaryProps> = ({ offer, power, clientType, d
               {/* Saut de page après les valeurs résiduelles */}
               <div className="print-page-break"></div>
 
-              {/* Avantages de l'offre */}
-              <div className="mt-8 bg-gradient-to-r from-green-50 to-green-100 p-6 rounded-lg">
-                <h3 className="text-xl font-semibold text-green-800 mb-4 text-center">
-                  Avantages de votre abonnement SunLib
-                </h3>
-                
-                <div className="grid md:grid-cols-2 gap-4">
-                  {getClientAdvantages().map((advantage, index) => (
-                    <div key={index} className="flex items-start">
-                      <CheckCircle className="w-5 h-5 text-green-600 mr-3 mt-0.5 flex-shrink-0" />
-                      <div>
-                        <p className="font-medium text-green-800">{advantage.title}</p>
-                        <p className="text-sm text-green-700">{advantage.description}</p>
+              {/* Container pour garder Avantages et Processus ensemble */}
+              <div className="print-keep-together">
+                {/* Avantages de l'offre */}
+                <div className="mt-8 bg-gradient-to-r from-green-50 to-green-100 p-6 rounded-lg">
+                  <h3 className="text-xl font-semibold text-green-800 mb-4 text-center">
+                    Avantages de votre abonnement SunLib
+                  </h3>
+                  
+                  <div className="grid md:grid-cols-2 gap-4">
+                    {getClientAdvantages().map((advantage, index) => (
+                      <div key={index} className="flex items-start">
+                        <CheckCircle className="w-5 h-5 text-green-600 mr-3 mt-0.5 flex-shrink-0" />
+                        <div>
+                          <p className="font-medium text-green-800">{advantage.title}</p>
+                          <p className="text-sm text-green-700">{advantage.description}</p>
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    ))}
+                  </div>
                 </div>
-              </div>
 
-              {/* Processus de mise en place */}
-              <div className="mt-8 bg-white border-2 border-green-200 p-6 rounded-lg">
+                {/* Processus de mise en place */}
+                <div className="mt-8 bg-white border-2 border-green-200 p-6 rounded-lg">
                 <h3 className="text-xl font-semibold text-green-800 mb-6 text-center flex items-center justify-center">
                   <Calendar className="w-5 h-5 mr-2" />
                   Et concrètement, comment ça se passe ?
