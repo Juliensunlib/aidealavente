@@ -405,29 +405,30 @@ const OfferSummary: React.FC<OfferSummaryProps> = ({ offer, power, clientType, d
 
                 {/* Processus de mise en place */}
                 <div className="mt-8 bg-white border-2 border-green-200 p-6 rounded-lg">
-                <h3 className="text-xl font-semibold text-green-800 mb-6 text-center flex items-center justify-center">
-                  <Calendar className="w-5 h-5 mr-2" />
-                  Et concrètement, comment ça se passe ?
-                </h3>
-                
-                <div className="space-y-4">
-                  {getCommonProcess().map((process, index) => (
-                    <div key={index} className="flex items-start">
-                      <div className="flex-shrink-0 w-8 h-8 bg-green-600 text-white rounded-full flex items-center justify-center text-sm font-bold mr-4">
-                        {process.step}
+                  <h3 className="text-xl font-semibold text-green-800 mb-6 text-center flex items-center justify-center">
+                    <Calendar className="w-5 h-5 mr-2" />
+                    Et concrètement, comment ça se passe ?
+                  </h3>
+                  
+                  <div className="space-y-4">
+                    {getCommonProcess().map((process, index) => (
+                      <div key={index} className="flex items-start">
+                        <div className="flex-shrink-0 w-8 h-8 bg-green-600 text-white rounded-full flex items-center justify-center text-sm font-bold mr-4">
+                          {process.step}
+                        </div>
+                        <div className="flex-1">
+                          <h4 className="font-medium text-green-800 mb-1">{process.title}</h4>
+                          <p className="text-sm text-green-700">{process.description}</p>
+                        </div>
                       </div>
-                      <div className="flex-1">
-                        <h4 className="font-medium text-green-800 mb-1">{process.title}</h4>
-                        <p className="text-sm text-green-700">{process.description}</p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-                
-                <div className="mt-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
-                  <p className="text-sm text-yellow-800 text-center">
-                    <strong>Important :</strong> En cas de refus de la mairie, le contrat est annulé et le dépôt de garantie restitué
-                  </p>
+                    ))}
+                  </div>
+                  
+                  <div className="mt-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+                    <p className="text-sm text-yellow-800 text-center">
+                      <strong>Important :</strong> En cas de refus de la mairie, le contrat est annulé et le dépôt de garantie restitué
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
