@@ -57,63 +57,104 @@ const OfferSummary: React.FC<OfferSummaryProps> = ({ offer, power, clientType, d
   // Masquer la solvabilité pour tous les clients
   const shouldShowSolvability = false;
 
-  // Avantages selon le type de client
+  // Avantages selon le type de client (basés sur les PDFs)
   const getClientAdvantages = () => {
     if (clientType === 'particulier') {
       return [
         {
-          title: "Installation clé en main",
-          description: "Prise en charge complète de votre projet"
+          title: "Pas d'apport initial",
+          description: "Zéro investissement initial : votre épargne reste intacte"
         },
         {
-          title: "Maintenance incluse",
-          description: "Suivi et entretien pendant toute la durée"
+          title: "Pas d'emprunt",
+          description: "Préserve la capacité d'endettement et évite des démarches longues et complexes de demande de crédit"
         },
         {
-          title: "Taux variable avantageux",
-          description: "Profitez de conditions financières optimales"
+          title: "Économies immédiates",
+          description: "Économies immédiates dès la première année • Factures d'électricité réduites"
         },
         {
-          title: "Valeur résiduelle garantie",
-          description: "Récupérez la valeur de votre installation"
+          title: "Tranquillité d'esprit totale",
+          description: "En cas de panne, SunLib s'occupe de tout • Garantie de bon fonctionnement incluse"
         },
         {
-          title: "Économies d'énergie",
-          description: "Réduisez vos factures d'électricité"
+          title: "Offre de service complète",
+          description: "Service client dédié SunLib situé en France • Monitoring 24h/24h • Possibilité d'évolution"
         },
         {
-          title: "Transition écologique",
-          description: "Contribuez à la protection de l'environnement"
+          title: "Flexibilité",
+          description: "Choix de la durée d'abonnement de 10 à 25 ans, possibilité d'acquérir l'installation au bout de la 2ème année"
         }
       ];
     } else {
       return [
         {
-          title: "Solution professionnelle",
-          description: "Adaptée aux besoins des entreprises"
+          title: "Pas d'apport initial",
+          description: "Aucun investissement • Préserve la trésorerie et évite l'immobilisation de capital (pas de CAPEX)"
         },
         {
-          title: "Optimisation fiscale",
-          description: "Déductibilité des charges d'exploitation"
+          title: "Pas d'emprunt",
+          description: "Préserve la capacité d'endettement • Pas d'engagement hors bilan pour les TPE/PME"
         },
         {
-          title: "Performance garantie",
-          description: "Monitoring et maintenance professionnels"
+          title: "Économies immédiates",
+          description: "Économies dès la première année • Factures d'électricité réduites nettes des frais d'abonnement"
         },
         {
-          title: "Image RSE",
-          description: "Renforcez votre engagement environnemental"
+          title: "Tranquillité d'esprit totale",
+          description: "Garantie de bon fonctionnement • Monitoring 24h/24 et 7j/7 du système"
         },
         {
-          title: "Maîtrise des coûts",
-          description: "Prévisibilité budgétaire sur la durée"
+          title: "Offre de service complète",
+          description: "APP SunLib pour le suivi • Service client dédié en France"
         },
         {
-          title: "Accompagnement expert",
-          description: "Support technique et commercial dédié"
+          title: "Avantages professionnels",
+          description: "Possibilité d'acquérir l'installation au bout de la 5ème année • Protection contre les fluctuations du prix de l'électricité"
         }
       ];
     }
+  };
+
+  // Processus commun (basé sur le PDF "A mettre partout")
+  const getCommonProcess = () => {
+    return [
+      {
+        step: "1",
+        title: "Étude personnalisée et Devis d'abonnement",
+        description: "L'installateur vous recommande une solution technique et un abonnement en fonction de vos besoins. SunLib procède à la vérification de votre dossier"
+      },
+      {
+        step: "2",
+        title: "Signature du contrat SunLib",
+        description: "Vous signez un contrat avec SunLib et choisissez le jour du prélèvement mensuel"
+      },
+      {
+        step: "3",
+        title: "Accord de la mairie",
+        description: "L'installateur obtient l'approbation de la mairie pour les travaux*"
+      },
+      {
+        step: "4",
+        title: "Pose des panneaux",
+        description: "Les panneaux solaires sont installés sur votre toit par l'Installateur"
+      },
+      {
+        step: "5",
+        title: "Prélèvement du dépôt de garantie",
+        description: "Le dépôt de garantie de 2 mois d'abonnement est prélevé"
+      },
+      {
+        step: "6",
+        title: "Démarrage de l'abonnement",
+        description: "Vous remplissez un formulaire via QR Code ou par email pour l'autorisation de prélèvement automatique"
+      },
+      {
+        step: "7",
+        title: "Optimisation de l'installation",
+        description: "Vous utilisez l'application SunLib pour optimiser votre consommation pour encore + d'économies !"
+      }
+    ];
   };
 
   return (
@@ -247,6 +288,34 @@ const OfferSummary: React.FC<OfferSummaryProps> = ({ offer, power, clientType, d
                     </div>
                   </div>
                 ))}
+              </div>
+            </div>
+
+            {/* Processus de mise en place */}
+            <div className="mt-8 bg-white border-2 border-green-200 p-6 rounded-lg">
+              <h3 className="text-xl font-semibold text-green-800 mb-6 text-center flex items-center justify-center">
+                <Calendar className="w-5 h-5 mr-2" />
+                Et concrètement, comment ça se passe ?
+              </h3>
+              
+              <div className="space-y-4">
+                {getCommonProcess().map((process, index) => (
+                  <div key={index} className="flex items-start">
+                    <div className="flex-shrink-0 w-8 h-8 bg-green-600 text-white rounded-full flex items-center justify-center text-sm font-bold mr-4">
+                      {process.step}
+                    </div>
+                    <div className="flex-1">
+                      <h4 className="font-medium text-green-800 mb-1">{process.title}</h4>
+                      <p className="text-sm text-green-700">{process.description}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              
+              <div className="mt-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+                <p className="text-sm text-yellow-800 text-center">
+                  <strong>Important :</strong> En cas de refus de la mairie, le contrat est annulé et le dépôt de garantie restitué
+                </p>
               </div>
             </div>
           </div>
