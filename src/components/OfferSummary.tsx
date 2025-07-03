@@ -367,7 +367,7 @@ const OfferSummary: React.FC<OfferSummaryProps> = ({ offer, power, clientType, d
                       <div className="flex justify-between items-center">
                         <span className="text-gray-700 print:text-xs flex items-center">
                           <Battery className="w-4 h-4 mr-1 print:w-3 print:h-3" />
-                          Batterie virtuelle(abonnement non inclus dans le prix)
+                          Batterie virtuelle(abonnement non compris)
                         </span>
                         <span className={`font-semibold print:text-xs ${virtualBattery ? 'text-green-800' : 'text-gray-500'}`}>
                           {virtualBattery ? 'Incluse' : 'Non incluse'}
