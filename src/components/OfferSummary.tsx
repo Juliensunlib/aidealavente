@@ -388,7 +388,7 @@ const OfferSummary: React.FC<OfferSummaryProps> = ({ offer, power, clientType, d
                         </span>
                         <span className="font-semibold text-green-800 print:text-xs">
                           {clientType === 'entreprise' 
-                            ? 'Sous réserve que SunLib contrôle la solvabilité'
+                            ? 'Validation sous réserve de l\'étude SunLib'
                             : `${offer.minRevenue.toLocaleString()} € / an`
                           }
                         </span>
