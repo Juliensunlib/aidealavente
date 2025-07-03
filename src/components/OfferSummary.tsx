@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowLeft, Zap, Calendar, Euro, TrendingUp, CheckCircle, AlertCircle, FileText, Printer, Users, Building2 } from 'lucide-react';
+import { ArrowLeft, Zap, Calendar, Euro, TrendingUp, CheckCircle, AlertCircle, FileText, Printer, Users, Building2, Battery } from 'lucide-react';
 
 interface OfferSummaryProps {
   offer: {
@@ -13,10 +13,11 @@ interface OfferSummaryProps {
   power: number;
   clientType: 'particulier' | 'entreprise';
   displayMode: 'HT' | 'TTC';
+  virtualBattery: boolean;
   onBack: () => void;
 }
 
-const OfferSummary: React.FC<OfferSummaryProps> = ({ offer, power, clientType, displayMode, onBack }) => {
+const OfferSummary: React.FC<OfferSummaryProps> = ({ offer, power, clientType, displayMode, virtualBattery, onBack }) => {
   const getSolvabilityColor = (solvability: string) => {
     switch (solvability) {
       case 'excellent': return 'text-green-600 bg-green-100 border-green-200';
@@ -359,11 +360,37 @@ const OfferSummary: React.FC<OfferSummaryProps> = ({ offer, power, clientType, d
                         <span className="text-gray-700 print:text-xs">Puissance installée</span>
                         <span className="font-semibold text-green-800 print:text-xs">{power} kWc</span>
                       </div>
-                      <div className="flex justify-between items-center">
+                      <div className="flex justify-between items-center mb-2 print:mb-1">
                         <span className="text-gray-700 print:text-xs">Type de client</span>
                         <span className="font-semibold text-green-800 capitalize print:text-xs">{clientType}</span>
                       </div>
+                      <div className="flex justify-between items-center">
+                        <span className="text-gray-700 print:text-xs flex items-center">
+                          <Battery className="w-4 h-4 mr-1 print:w-3 print:h-3" />
+                          Batterie virtuelle
+                        </span>
+                        <span className={`font-semibold print:text-xs ${virtualBattery ? 'text-green-800' : 'text-gray-500'}`}>
+                          {virtualBattery ? 'Incluse' : 'Non incluse'}
+                        </span>
+                      </div>
                     </div>
+
+                    {/* Information supplémentaire sur la batterie virtuelle si incluse */}
+                    {virtualBattery && (
+                      <div className="bg-blue-50 p-3 rounded-lg border border-blue-200 print:p-2 print:bg-blue-50">
+                        <div className="flex items-start">
+                          <Battery className="w-4 h-4 text-blue-600 mr-2 mt-0.5 print:w-3 print:h-3" />
+                          <div>
+                            <p className="text-sm font-medium text-blue-800 print:text-xs">
+                              Batterie virtuelle SunLib
+                            </p>
+                            <p className="text-xs text-blue-700 print:text-xs">
+                              Stockage intelligent de votre surplus d'énergie
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    )}
                   </div>
 
                   {/* Conditions financières */}
