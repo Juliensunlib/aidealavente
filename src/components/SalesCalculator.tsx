@@ -8,7 +8,7 @@ interface CalculationResult {
   monthlyPaymentTTC: number;
   minRevenue: number;
   solvability: 'excellent' | 'good' | 'acceptable' | 'difficult';
-  residualValues: { year: number; value: number }[];
+  residualValues: { year: number; value: number; valueTTC: number }[];
 }
 
 const SalesCalculator: React.FC = () => {
@@ -88,10 +88,15 @@ const SalesCalculator: React.FC = () => {
 
   const calculateResidualValues = (initialPrice: number, duration: number) => {
     const percentages = residualPercentages[duration as keyof typeof residualPercentages];
-    return percentages.map((percentage, index) => ({
-      year: index + 2,
-      value: Math.round((initialPrice * percentage / 100) * 100) / 100
-    }));
+    return percentages.map((percentage, index) => {
+      const valueHT = Math.round((initialPrice * percentage / 100) * 100) / 100;
+      const valueTTC = Math.round((valueHT * 1.20) * 100) / 100;
+      return {
+        year: index + 2,
+        value: valueHT,
+        valueTTC: valueTTC
+      };
+    });
   };
 
   const handleCalculate = () => {
@@ -374,14 +379,19 @@ const SalesCalculator: React.FC = () => {
 
                     {selectedDuration === result.duration && (
                       <div className="border-t border-green-200 bg-green-50 p-4 rounded-b-xl">
-                        <h5 className="font-semibold text-green-800 mb-3 text-center">Valeurs résiduelles</h5>
+                        <h5 className="font-semibold text-green-800 mb-3 text-center">
+                          Valeurs résiduelles {displayMode}
+                        </h5>
                         <div className="max-h-48 overflow-y-auto space-y-2">
-                          {result.residualValues.map((residual) => (
-                            <div key={residual.year} className="flex justify-between items-center text-sm">
-                              <span className="text-green-700">Année {residual.year}</span>
-                              <span className="font-medium text-green-800">{residual.value.toLocaleString()} €</span>
-                            </div>
-                          ))}
+                          {result.residualValues.map((residual) => {
+                            const displayValue = displayMode === 'HT' ? residual.value : residual.valueTTC;
+                            return (
+                              <div key={residual.year} className="flex justify-between items-center text-sm">
+                                <span className="text-green-700">Année {residual.year}</span>
+                                <span className="font-medium text-green-800">{displayValue.toLocaleString()} €</span>
+                              </div>
+                            );
+                          })}
                         </div>
                       </div>
                     )}
