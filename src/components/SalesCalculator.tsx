@@ -349,12 +349,25 @@ const SalesCalculator: React.FC = () => {
                         </div>
 
                         <div className="mb-4 p-3 bg-blue-50 rounded-lg">
-                          <p className="text-sm text-blue-800 font-medium">
-                            Revenus minimum requis
-                          </p>
-                          <p className="text-lg font-bold text-blue-600">
-                            {result.minRevenue.toLocaleString()} € / an
-                          </p>
+                          {clientType === 'particulier' ? (
+                            <>
+                              <p className="text-sm text-blue-800 font-medium">
+                                Revenus minimum requis
+                              </p>
+                              <p className="text-lg font-bold text-blue-600">
+                                {result.minRevenue.toLocaleString()} € / an
+                              </p>
+                            </>
+                          ) : (
+                            <>
+                              <p className="text-sm text-blue-800 font-medium">
+                                Solvabilité
+                              </p>
+                              <p className="text-sm font-bold text-blue-600 text-center">
+                                Validation sous réserve de l'étude SunLib
+                              </p>
+                            </>
+                          )}
                         </div>
                       </div>
 
