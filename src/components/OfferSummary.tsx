@@ -382,7 +382,7 @@ const OfferSummary: React.FC<OfferSummaryProps> = ({ offer, power, clientType, d
                         <span className="text-gray-700 print:text-xs">Mensualité {displayMode}</span>
                         <span className="font-semibold text-green-800 print:text-xs">{displayPrice.toFixed(2)} €</span>
                       </div>
-                      <div className="flex justify-between items-center">
+                      <div className="flex justify-between items-center mb-2 print:mb-1">
                         <span className="text-gray-700 print:text-xs">
                           {clientType === 'entreprise' ? 'Solvabilité' : 'Revenus minimum requis'}
                         </span>
@@ -392,6 +392,10 @@ const OfferSummary: React.FC<OfferSummaryProps> = ({ offer, power, clientType, d
                             : `${offer.minRevenue.toLocaleString()} € / an`
                           }
                         </span>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <span className="text-gray-700 print:text-xs">Valeur résiduelle (année {lastResidualValue.year})</span>
+                        <span className="font-semibold text-green-800 print:text-xs">{lastResidualValue.value.toLocaleString()} € {displayMode}</span>
                       </div>
                     </div>
                   </div>
@@ -475,7 +479,7 @@ const OfferSummary: React.FC<OfferSummaryProps> = ({ offer, power, clientType, d
                         <thead>
                           <tr>
                             <th className="bg-green-600 text-white px-4 py-3 text-left rounded-tl-lg">Année</th>
-                            <th className="bg-green-600 text-white px-4 py-3 text-right rounded-tr-lg">Valeur résiduelle</th>
+                            <th className="bg-green-600 text-white px-4 py-3 text-right rounded-tr-lg">Valeur résiduelle ({displayMode})</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -499,7 +503,7 @@ const OfferSummary: React.FC<OfferSummaryProps> = ({ offer, power, clientType, d
                         <thead>
                           <tr>
                             <th className="bg-green-600 text-white px-4 py-3 text-left rounded-tl-lg">Année</th>
-                            <th className="bg-green-600 text-white px-4 py-3 text-right rounded-tr-lg">Valeur résiduelle</th>
+                            <th className="bg-green-600 text-white px-4 py-3 text-right rounded-tr-lg">Valeur résiduelle ({displayMode})</th>
                           </tr>
                         </thead>
                         <tbody>
