@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Calculator, Zap, CheckCircle, AlertCircle, TrendingUp, ArrowLeft, FileText, Users, Building2, ChevronUp, ChevronDown } from 'lucide-react';
+import { Calculator, Zap, CheckCircle, AlertCircle, TrendingUp, ArrowLeft, FileText, Users, Building2, ChevronUp, ChevronDown, Battery } from 'lucide-react';
 import OfferSummary from './OfferSummary';
 
 interface CalculationResult {
@@ -16,6 +16,7 @@ const SalesCalculator: React.FC = () => {
   const [installationPrice, setInstallationPrice] = useState<string>('');
   const [clientType, setClientType] = useState<'particulier' | 'entreprise'>('particulier');
   const [displayMode, setDisplayMode] = useState<'HT' | 'TTC'>('TTC');
+  const [virtualBattery, setVirtualBattery] = useState<boolean>(false);
   const [results, setResults] = useState<CalculationResult[]>([]);
   const [selectedDuration, setSelectedDuration] = useState<number | null>(null);
   const [showResults, setShowResults] = useState(false);
@@ -162,6 +163,7 @@ const SalesCalculator: React.FC = () => {
         power={parseFloat(power)}
         clientType={clientType}
         displayMode={displayMode}
+        virtualBattery={virtualBattery}
         onBack={() => setShowOfferSummary(false)}
       />
     );
@@ -297,6 +299,29 @@ const SalesCalculator: React.FC = () => {
                     </button>
                   </div>
                 </div>
+              </div>
+
+              {/* Option Batterie virtuelle */}
+              <div className="mt-6 max-w-4xl mx-auto">
+                <div className="flex items-center justify-center">
+                  <label className="flex items-center cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors rounded-lg p-4 border-2 border-gray-200 hover:border-green-300">
+                    <input
+                      type="checkbox"
+                      checked={virtualBattery}
+                      onChange={(e) => setVirtualBattery(e.target.checked)}
+                      className="w-5 h-5 text-green-600 bg-gray-100 border-gray-300 rounded focus:ring-green-500 focus:ring-2"
+                    />
+                    <Battery className={`w-6 h-6 ml-3 mr-2 ${virtualBattery ? 'text-green-600' : 'text-gray-400'}`} />
+                    <span className={`text-sm font-medium ${virtualBattery ? 'text-green-800' : 'text-gray-600'}`}>
+                      Batterie virtuelle incluse
+                    </span>
+                  </label>
+                </div>
+                {virtualBattery && (
+                  <div className="mt-2 text-center text-sm text-green-700 bg-green-50 p-3 rounded-lg">
+                    <p>🔋 Option batterie virtuelle sélectionnée - cette information apparaîtra dans le résumé d'offre</p>
+                  </div>
+                )}
               </div>
 
               {error && (
