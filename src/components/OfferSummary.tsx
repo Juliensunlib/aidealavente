@@ -374,23 +374,6 @@ const OfferSummary: React.FC<OfferSummaryProps> = ({ offer, power, clientType, d
                         </span>
                       </div>
                     </div>
-
-                    {/* Information supplémentaire sur la batterie virtuelle si incluse */}
-                    {virtualBattery && (
-                      <div className="bg-blue-50 p-3 rounded-lg border border-blue-200 print:p-2 print:bg-blue-50">
-                        <div className="flex items-start">
-                          <Battery className="w-4 h-4 text-blue-600 mr-2 mt-0.5 print:w-3 print:h-3" />
-                          <div>
-                            <p className="text-sm font-medium text-blue-800 print:text-xs">
-                              Batterie virtuelle SunLib
-                            </p>
-                            <p className="text-xs text-blue-700 print:text-xs">
-                              Stockage intelligent de votre surplus d'énergie
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                    )}
                   </div>
 
                   {/* Conditions financières */}
