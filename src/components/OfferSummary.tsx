@@ -137,13 +137,13 @@ const OfferSummary: React.FC<OfferSummaryProps> = ({ offer, power, clientType, d
       },
       {
         step: "4",
-        title: "Pose des panneaux",
-        description: "Les panneaux solaires sont installés sur votre toit par l'Installateur"
+        title: "Prélèvement du dépôt de garantie",
+        description: "Le dépôt de garantie de 2 mois d'abonnement est prélevé"
       },
       {
         step: "5",
-        title: "Prélèvement du dépôt de garantie",
-        description: "Le dépôt de garantie de 2 mois d'abonnement est prélevé"
+        title: "Pose des panneaux",
+        description: "Les panneaux solaires sont installés sur votre toit par l'Installateur"
       },
       {
         step: "6",
