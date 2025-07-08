@@ -55,61 +55,46 @@ const OfferSummary: React.FC<OfferSummaryProps> = ({ offer, power, clientType, d
   const handleMail = () => {
     const displayPrice = displayMode === 'HT' ? offer.monthlyPayment : offer.monthlyPaymentTTC;
     
-    const subject = encodeURIComponent(`Offre SunLib - Abonnement ${clientType} ${power}kWc sur ${offer.duration} ans`);
+    const subject = encodeURIComponent('Offre SunLib - Abonnement ' + clientType + ' ' + power + 'kWc sur ' + offer.duration + ' ans');
     
-    const body = encodeURIComponent(`
-Bonjour,
+    const body = encodeURIComponent('Bonjour,\n\n' +
+'Veuillez trouver ci-dessous le résumé de votre offre SunLib :\n\n' +
+'DÉTAILS DE L\'INSTALLATION\n' +
+'- Puissance installée : ' + power + ' kWc\n' +
+'- Batterie virtuelle : ' + (virtualBattery ? 'Incluse' : 'Non incluse') + '\n\n' +
+'CONDITIONS FINANCIÈRES\n' +
+'- Durée du contrat : ' + offer.duration + ' ans\n' +
+'- Mensualité ' + displayMode + ' : ' + displayPrice.toFixed(2) + ' €\n' +
+'- ' + (clientType === 'entreprise' ? 'Solvabilité : Validation sous réserve étude SunLib' : 'Revenus minimum requis : ' + offer.minRevenue.toLocaleString() + ' € / an') + '\n\n' +
+'AVANTAGES PRINCIPAUX\n' +
+'- Pas d\'apport initial\n' +
+'- Pas d\'emprunt\n' +
+'- Économies immédiates\n' +
+'- Tranquillité d\'esprit totale\n' +
+'- Offre de service complète\n' +
+'- Flexibilité\n\n' +
+'ET CONCRÈTEMENT, COMMENT ÇA SE PASSE ?\n' +
+'1. Étude personnalisée et Devis d\'abonnement\n' +
+'   L\'installateur vous recommande une solution technique et un abonnement en fonction de vos besoins. SunLib procède à la vérification de votre dossier\n\n' +
+'2. Signature du contrat SunLib\n' +
+'   Vous signez un contrat avec SunLib et choisissez le jour du prélèvement mensuel\n\n' +
+'3. Accord de la mairie\n' +
+'   L\'installateur obtient l\'approbation de la mairie pour les travaux*\n\n' +
+'4. Prélèvement du dépôt de garantie\n' +
+'   Le dépôt de garantie de 2 mois d\'abonnement est prélevé\n\n' +
+'5. Pose des panneaux\n' +
+'   Les panneaux solaires sont installés sur votre toit par l\'Installateur\n\n' +
+'6. Démarrage de l\'abonnement\n' +
+'   Vous remplissez un formulaire via QR Code ou par email pour l\'autorisation de prélèvement automatique\n\n' +
+'7. Optimisation de l\'installation\n' +
+'   Vous utilisez l\'application SunLib pour optimiser votre consommation pour encore + d\'économies !\n\n' +
+'*Important : En cas de refus de la mairie, le contrat est annulé et le dépôt de garantie restitué\n\n' +
+'Pour plus d\'informations ou pour finaliser votre abonnement, n\'hésitez pas à nous contacter.\n\n' +
+'Cordialement,\n' +
+'L\'équipe SunLib');
 
-Veuillez trouver ci-dessous le résumé de votre offre SunLib :
-
-DÉTAILS DE L'INSTALLATION
-- Puissance installée : ${power} kWc
-- Batterie virtuelle : ${virtualBattery ? 'Incluse' : 'Non incluse'}
-
-CONDITIONS FINANCIÈRES
-- Durée du contrat : ${offer.duration} ans
-- Mensualité ${displayMode} : ${displayPrice.toFixed(2)} €
-- ${clientType === 'entreprise' ? 'Solvabilité : Validation sous réserve étude SunLib' : `Revenus minimum requis : ${offer.minRevenue.toLocaleString()} € / an`}
-
-AVANTAGES PRINCIPAUX
-- Pas d'apport initial
-- Pas d'emprunt 
-- Économies immédiates
-- Tranquillité d'esprit totale
-- Offre de service complète
-- Flexibilité
-
-ET CONCRÈTEMENT, COMMENT ÇA SE PASSE ?
-1. Étude personnalisée et Devis d'abonnement
-   L'installateur vous recommande une solution technique et un abonnement en fonction de vos besoins. SunLib procède à la vérification de votre dossier
-
-2. Signature du contrat SunLib
-   Vous signez un contrat avec SunLib et choisissez le jour du prélèvement mensuel
-
-3. Accord de la mairie
-   L'installateur obtient l'approbation de la mairie pour les travaux*
-
-4. Prélèvement du dépôt de garantie
-   Le dépôt de garantie de 2 mois d'abonnement est prélevé
-
-5. Pose des panneaux
-   Les panneaux solaires sont installés sur votre toit par l'Installateur
-
-6. Démarrage de l'abonnement
-   Vous remplissez un formulaire via QR Code ou par email pour l'autorisation de prélèvement automatique
-
-7. Optimisation de l'installation
-   Vous utilisez l'application SunLib pour optimiser votre consommation pour encore + d'économies !
-
-*Important : En cas de refus de la mairie, le contrat est annulé et le dépôt de garantie restitué
-
-Pour plus d'informations ou pour finaliser votre abonnement, n'hésitez pas à nous contacter.
-
-Cordialement,
-L'équipe SunLib
-    `);
     
-    const mailtoUrl = `mailto:?subject=${subject}&body=${body}`;
+    const mailtoUrl = 'mailto:?subject=' + subject + '&body=' + body;
     window.open(mailtoUrl, '_blank');
   };
 
