@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowLeft, Zap, Calendar, Euro, TrendingUp, CheckCircle, AlertCircle, FileText, Printer, Users, Building2, Battery } from 'lucide-react';
+import { ArrowLeft, Zap, Calendar, Euro, TrendingUp, CheckCircle, AlertCircle, FileText, Printer, Mail, Users, Building2, Battery } from 'lucide-react';
 
 interface OfferSummaryProps {
   offer: {
@@ -50,6 +50,48 @@ const OfferSummary: React.FC<OfferSummaryProps> = ({ offer, power, clientType, d
 
   const handlePrint = () => {
     window.print();
+  };
+
+  const handleMail = () => {
+    const displayPrice = displayMode === 'HT' ? offer.monthlyPayment : offer.monthlyPaymentTTC;
+    const lastResidualValue = offer.residualValues[offer.residualValues.length - 1];
+    
+    const subject = encodeURIComponent(`Offre SunLib - Abonnement ${clientType} ${power}kWc sur ${offer.duration} ans`);
+    
+    const body = encodeURIComponent(`
+Bonjour,
+
+Veuillez trouver ci-dessous le résumé de votre offre SunLib :
+
+DÉTAILS DE L'INSTALLATION
+- Puissance installée : ${power} kWc
+- Type de client : ${clientType}
+- Batterie virtuelle : ${virtualBattery ? 'Incluse' : 'Non incluse'}
+
+CONDITIONS FINANCIÈRES
+- Durée du contrat : ${offer.duration} ans
+- Mensualité ${displayMode} : ${displayPrice.toFixed(2)} €
+- ${clientType === 'entreprise' ? 'Solvabilité : Validation sous réserve étude SunLib' : `Revenus minimum requis : ${offer.minRevenue.toLocaleString()} € / an`}
+
+VALEUR RÉSIDUELLE EN FIN DE CONTRAT
+- Valeur résiduelle année ${lastResidualValue.year} : ${lastResidualValue.value.toLocaleString()} € ${displayMode}
+
+AVANTAGES PRINCIPAUX
+- Pas d'apport initial
+- Pas d'emprunt 
+- Économies immédiates
+- Tranquillité d'esprit totale
+- Offre de service complète
+- Flexibilité
+
+Pour plus d'informations ou pour finaliser votre abonnement, n'hésitez pas à nous contacter.
+
+Cordialement,
+L'équipe SunLib
+    `);
+    
+    const mailtoUrl = `mailto:?subject=${subject}&body=${body}`;
+    window.open(mailtoUrl, '_blank');
   };
 
   const displayPrice = displayMode === 'HT' ? offer.monthlyPayment : offer.monthlyPaymentTTC;
@@ -314,13 +356,23 @@ const OfferSummary: React.FC<OfferSummaryProps> = ({ offer, power, clientType, d
               Retour aux résultats
             </button>
             
-            <button
-              onClick={handlePrint}
-              className="flex items-center bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors"
-            >
-              <Printer className="w-4 h-4 mr-2" />
-              Imprimer
-            </button>
+            <div className="flex gap-3">
+              <button
+                onClick={handleMail}
+                className="flex items-center bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+              >
+                <Mail className="w-4 h-4 mr-2" />
+                Envoyer par mail
+              </button>
+              
+              <button
+                onClick={handlePrint}
+                className="flex items-center bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors"
+              >
+                <Printer className="w-4 h-4 mr-2" />
+                Imprimer
+              </button>
+            </div>
           </div>
 
           {/* PAGE 1 - Contenu principal */}
