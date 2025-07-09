@@ -82,6 +82,7 @@ const OfferSummary: React.FC<OfferSummaryProps> = ({ offer, power, clientType, d
       '5. Accord de la mairie\n' +
       '6. Pose des panneaux et mise en service de l\'installation. Démarrage de l\'abonnement\n\n' +
       'Pour plus d\'informations, n\'hésitez pas à nous contacter.\n\n' +
+      'Contact : contact@sunlib.fr\n\n' +
       'Cordialement,\n' +
       'L\'équipe SunLib';
 
