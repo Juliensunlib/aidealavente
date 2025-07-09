@@ -170,12 +170,12 @@ const OfferSummary: React.FC<OfferSummaryProps> = ({ offer, power, clientType, d
       {
         step: "1",
         title: "Signature du Devis d'abonnement",
-        description: "Signature du devis d'abonnement personnalisé selon vos besoins"
+        description: "Vous signez le devis d'abonnement personnalisé selon vos besoins"
       },
       {
         step: "2",
         title: "Validation du projet par les équipes SunLib",
-        description: "Les équipes SunLib valident votre projet et procèdent aux vérifications nécessaires"
+        description: "Les équipes SunLib procédent aux verifications nécessaires et valide votre projet"
       },
       {
         step: "3",
@@ -185,7 +185,7 @@ const OfferSummary: React.FC<OfferSummaryProps> = ({ offer, power, clientType, d
       {
         step: "4",
         title: "Signature du mandat SEPA et prélèvement de la caution",
-        description: `Signature du mandat SEPA et prélèvement de ${clientType === 'entreprise' ? '3' : '2'} mois de caution`
+        description: `Vous signez le mandat SEPA et vous êtes prélevé de ${clientType === 'entreprise' ? '3' : '2'} mois de caution`
       },
       {
         step: "5",
