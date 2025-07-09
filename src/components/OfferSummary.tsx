@@ -75,13 +75,12 @@ const OfferSummary: React.FC<OfferSummaryProps> = ({ offer, power, clientType, d
       '- Offre de service complète\n' +
       '- Flexibilité\n\n' +
       'ET CONCRÈTEMENT, COMMENT ÇA SE PASSE ?\n' +
-      '1. Étude personnalisée et Devis d\'abonnement\n' +
-      '2. Signature du contrat SunLib\n' +
-      '3. Accord de la mairie\n' +
-      '4. Prélèvement du dépôt de garantie\n' +
-      '5. Pose des panneaux\n' +
-      '6. Démarrage de l\'abonnement\n' +
-      '7. Optimisation de l\'installation\n\n' +
+      '1. Signature du Devis d\'abonnement\n' +
+      '2. Validation du projet par les équipes SunLib\n' +
+      '3. Réception et signature du contrat d\'abonnement SunLib\n' +
+      '4. Signature du mandat SEPA et prélèvement de ' + (clientType === 'entreprise' ? '3' : '2') + ' mois de caution\n' +
+      '5. Accord de la mairie\n' +
+      '6. Pose des panneaux et mise en service de l\'installation. Démarrage de l\'abonnement\n\n' +
       'Pour plus d\'informations, n\'hésitez pas à nous contacter.\n\n' +
       'Cordialement,\n' +
       'L\'équipe SunLib';
@@ -169,38 +168,33 @@ const OfferSummary: React.FC<OfferSummaryProps> = ({ offer, power, clientType, d
     return [
       {
         step: "1",
-        title: "Étude personnalisée et Devis d'abonnement",
-        description: "L'installateur vous recommande une solution technique et un abonnement en fonction de vos besoins. SunLib procède à la vérification de votre dossier"
+        title: "Signature du Devis d'abonnement",
+        description: "Signature du devis d'abonnement personnalisé selon vos besoins"
       },
       {
         step: "2",
-        title: "Signature du contrat SunLib",
-        description: "Vous signez un contrat avec SunLib et choisissez le jour du prélèvement mensuel"
+        title: "Validation du projet par les équipes SunLib",
+        description: "Les équipes SunLib valident votre projet et procèdent aux vérifications nécessaires"
       },
       {
         step: "3",
-        title: "Accord de la mairie",
-        description: "L'installateur obtient l'approbation de la mairie pour les travaux*"
+        title: "Réception et signature du contrat d'abonnement SunLib",
+        description: "Vous recevez et signez le contrat d'abonnement SunLib"
       },
       {
         step: "4",
-        title: "Prélèvement du dépôt de garantie",
-        description: "Le dépôt de garantie de 2 mois d'abonnement est prélevé"
+        title: "Signature du mandat SEPA et prélèvement de la caution",
+        description: `Signature du mandat SEPA et prélèvement de ${clientType === 'entreprise' ? '3' : '2'} mois de caution`
       },
       {
         step: "5",
-        title: "Pose des panneaux",
-        description: "Les panneaux solaires sont installés sur votre toit par l'Installateur"
+        title: "Accord de la mairie",
+        description: "Obtention de l'approbation de la mairie pour les travaux"
       },
       {
         step: "6",
-        title: "Démarrage de l'abonnement",
-        description: "Vous remplissez un formulaire via QR Code ou par email pour l'autorisation de prélèvement automatique"
-      },
-      {
-        step: "7",
-        title: "Optimisation de l'installation",
-        description: "Vous utilisez l'application SunLib pour optimiser votre consommation pour encore + d'économies !"
+        title: "Pose des panneaux et mise en service de l'installation",
+        description: "Installation des panneaux solaires et mise en service. Démarrage de l'abonnement"
       }
     ];
   };
