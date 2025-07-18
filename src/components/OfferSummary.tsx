@@ -273,31 +273,31 @@ const OfferSummary: React.FC<OfferSummaryProps> = ({ offer, power, clientType, d
             }
             
             .print-residual-section {
-              margin-top: 12px !important;
-              padding: 8px !important;
+              margin-top: 4px !important;
+              padding: 3px !important;
               border: 1px solid #ddd !important;
               border-radius: 4px !important;
             }
             
             .print-residual-table {
-              font-size: 7px !important;
-              line-height: 1.3 !important;
+              font-size: 5px !important;
+              line-height: 1.1 !important;
             }
             
             .print-residual-table th {
-              padding: 2px 3px !important;
-              font-size: 7px !important;
+              padding: 1px 1px !important;
+              font-size: 5px !important;
             }
             
             .print-residual-table td {
-              padding: 2px 3px !important;
-              font-size: 7px !important;
+              padding: 1px 1px !important;
+              font-size: 5px !important;
             }
             
             .print-residual-grid {
               display: grid !important;
               grid-template-columns: 1fr 1fr 1fr !important;
-              gap: 6px !important;
+              gap: 2px !important;
             }
             
             .print-hide {
@@ -339,13 +339,27 @@ const OfferSummary: React.FC<OfferSummaryProps> = ({ offer, power, clientType, d
             }
             
             .print-residual-title {
-              font-size: 11px !important;
-              margin-bottom: 4px !important;
+              font-size: 9px !important;
+              margin-bottom: 1px !important;
               text-align: center !important;
             }
             
             .print-main-content {
-              padding: 12px !important;
+              padding: 10px !important;
+            }
+            
+            .print-main-sections {
+              margin-bottom: 15px !important;
+            }
+            
+            .print-advantages-section {
+              margin-bottom: 12px !important;
+              padding: 10px !important;
+            }
+            
+            .print-process-section {
+              margin-bottom: 8px !important;
+              padding: 8px !important;
             }
             
             .print-advantages-bordered {
@@ -411,7 +425,7 @@ const OfferSummary: React.FC<OfferSummaryProps> = ({ offer, power, clientType, d
 
               {/* Contenu principal */}
               <div className="p-8 print-main-content">
-                <div className="grid md:grid-cols-2 gap-8 mb-6 print-grid print:mb-3">
+                <div className="grid md:grid-cols-2 gap-8 mb-6 print-grid print:mb-3 print-main-sections">
                   {/* Détails de l'installation */}
                   <div className="space-y-6 print:space-y-2">
                     <h3 className="text-xl font-semibold text-gray-800 flex items-center print-section-title">
@@ -474,7 +488,7 @@ const OfferSummary: React.FC<OfferSummaryProps> = ({ offer, power, clientType, d
                 </div>
 
                 {/* Avantages de l'offre avec cadre */}
-                <div className="mt-6 bg-gradient-to-r from-green-50 to-green-100 p-4 rounded-lg border-2 border-green-600 print-compact-section print-advantages-bordered">
+                <div className="mt-6 bg-gradient-to-r from-green-50 to-green-100 p-4 rounded-lg border-2 border-green-600 print-advantages-section print-advantages-bordered">
                   <h3 className="text-lg font-semibold text-green-800 mb-3 text-center print-section-title print:mb-2">
                     Avantages de votre abonnement SunLib
                   </h3>
@@ -493,7 +507,7 @@ const OfferSummary: React.FC<OfferSummaryProps> = ({ offer, power, clientType, d
                 </div>
 
                 {/* Processus de mise en place */}
-                <div className="mt-6 bg-white border-2 border-green-200 p-4 rounded-lg print-compact-section">
+                <div className="mt-6 bg-white border-2 border-green-200 p-4 rounded-lg print-process-section">
                   <h3 className="text-lg font-semibold text-green-800 mb-4 text-center flex items-center justify-center print-section-title print:mb-2">
                     <Calendar className="w-4 h-4 mr-2 print:w-3 print:h-3" />
                     Comment ça se passe ?
