@@ -58,11 +58,13 @@ const OfferSummary: React.FC<OfferSummaryProps> = ({ offer, power, clientType, d
     
     const subject = 'Offre SunLib - Abonnement ' + clientType + ' ' + power + 'kWc sur ' + offer.duration + ' ans';
     
+    const batteryLine = virtualBattery ? '- Batterie virtuelle : Incluse\n' : '';
+    
     const bodyText = 'Bonjour,\n\n' +
       'Veuillez trouver ci-dessous le résumé de votre offre SunLib :\n\n' +
       'DÉTAILS DE L\'INSTALLATION\n' +
       '- Puissance installée : ' + power + ' kWc\n' +
-      '- Batterie virtuelle : ' + (virtualBattery ? 'Incluse' : 'Non incluse') + '\n\n' +
+      batteryLine + '\n' +
       'CONDITIONS FINANCIÈRES\n' +
       '- Durée du contrat : ' + offer.duration + ' ans\n' +
       '- Mensualité ' + displayMode + ' : ' + displayPrice.toFixed(2) + ' €\n' +
@@ -222,26 +224,26 @@ const OfferSummary: React.FC<OfferSummaryProps> = ({ offer, power, clientType, d
             }
             
             .print-compact-header {
-              padding: 6px !important;
+              padding: 8px !important;
             }
             
             .print-compact-section {
-              margin-bottom: 6px !important;
-              padding: 4px !important;
+              margin-bottom: 12px !important;
+              padding: 8px !important;
             }
             
             .print-small-text {
-              font-size: 8px !important;
+              font-size: 9px !important;
             }
             
             .print-tiny-text {
-              font-size: 7px !important;
+              font-size: 8px !important;
             }
             
             .print-grid {
               display: flex !important;
               flex-direction: row !important;
-              gap: 8px !important;
+              gap: 12px !important;
             }
             
             .print-grid > div {
@@ -251,51 +253,51 @@ const OfferSummary: React.FC<OfferSummaryProps> = ({ offer, power, clientType, d
             .print-advantages-grid {
               display: grid !important;
               grid-template-columns: 1fr 1fr !important;
-              gap: 3px !important;
+              gap: 6px !important;
             }
             
             .print-advantages-item {
-              font-size: 7px !important;
-              margin-bottom: 2px !important;
+              font-size: 8px !important;
+              margin-bottom: 4px !important;
             }
             
             .print-process-steps {
               display: grid !important;
               grid-template-columns: 1fr 1fr !important;
-              gap: 3px !important;
+              gap: 6px !important;
             }
             
             .print-process-item {
-              font-size: 7px !important;
-              margin-bottom: 2px !important;
+              font-size: 8px !important;
+              margin-bottom: 4px !important;
             }
             
             .print-residual-section {
-              margin-top: 6px !important;
-              padding: 4px !important;
+              margin-top: 12px !important;
+              padding: 8px !important;
               border: 1px solid #ddd !important;
               border-radius: 4px !important;
             }
             
             .print-residual-table {
-              font-size: 6px !important;
-              line-height: 1.2 !important;
+              font-size: 7px !important;
+              line-height: 1.3 !important;
             }
             
             .print-residual-table th {
-              padding: 1px 2px !important;
-              font-size: 6px !important;
+              padding: 2px 3px !important;
+              font-size: 7px !important;
             }
             
             .print-residual-table td {
-              padding: 1px 2px !important;
-              font-size: 6px !important;
+              padding: 2px 3px !important;
+              font-size: 7px !important;
             }
             
             .print-residual-grid {
               display: grid !important;
               grid-template-columns: 1fr 1fr 1fr !important;
-              gap: 4px !important;
+              gap: 6px !important;
             }
             
             .print-hide {
@@ -303,47 +305,52 @@ const OfferSummary: React.FC<OfferSummaryProps> = ({ offer, power, clientType, d
             }
             
             .print-header-compact h1 {
-              font-size: 18px !important;
-              margin-bottom: 2px !important;
+              font-size: 20px !important;
+              margin-bottom: 4px !important;
             }
             
             .print-header-compact h2 {
-              font-size: 12px !important;
-              margin-bottom: 2px !important;
+              font-size: 14px !important;
+              margin-bottom: 4px !important;
             }
             
             .print-section-title {
-              font-size: 11px !important;
-              margin-bottom: 3px !important;
+              font-size: 12px !important;
+              margin-bottom: 6px !important;
             }
             
             .print-step-circle {
-              width: 14px !important;
-              height: 14px !important;
-              font-size: 8px !important;
-              margin-right: 6px !important;
+              width: 16px !important;
+              height: 16px !important;
+              font-size: 9px !important;
+              margin-right: 8px !important;
             }
             
             .print-advantage-icon {
-              width: 10px !important;
-              height: 10px !important;
-              margin-right: 4px !important;
+              width: 12px !important;
+              height: 12px !important;
+              margin-right: 6px !important;
             }
             
             .print-warning-box {
-              margin-top: 4px !important;
-              padding: 3px !important;
-              font-size: 7px !important;
+              margin-top: 8px !important;
+              padding: 6px !important;
+              font-size: 8px !important;
             }
             
             .print-residual-title {
-              font-size: 10px !important;
-              margin-bottom: 2px !important;
+              font-size: 11px !important;
+              margin-bottom: 4px !important;
               text-align: center !important;
             }
             
             .print-main-content {
-              padding: 8px !important;
+              padding: 12px !important;
+            }
+            
+            .print-advantages-bordered {
+              border: 2px solid #16a34a !important;
+              border-radius: 8px !important;
             }
           }
         `
@@ -421,15 +428,17 @@ const OfferSummary: React.FC<OfferSummaryProps> = ({ offer, power, clientType, d
                         <span className="text-gray-700 print:text-xs">Type de client</span>
                         <span className="font-semibold text-green-800 capitalize print:text-xs">{clientType}</span>
                       </div>
-                      <div className="flex justify-between items-center">
-                        <span className="text-gray-700 print:text-xs flex items-center">
-                          <Battery className="w-4 h-4 mr-1 print:w-2 print:h-2" />
-                          Batterie virtuelle
-                        </span>
-                        <span className={`font-semibold print:text-xs ${virtualBattery ? 'text-green-800' : 'text-gray-500'}`}>
-                          {virtualBattery ? 'Incluse' : 'Non incluse'}
-                        </span>
-                      </div>
+                      {virtualBattery && (
+                        <div className="flex justify-between items-center">
+                          <span className="text-gray-700 print:text-xs flex items-center">
+                            <Battery className="w-4 h-4 mr-1 print:w-2 print:h-2" />
+                            Batterie virtuelle
+                          </span>
+                          <span className="font-semibold text-green-800 print:text-xs">
+                            Incluse
+                          </span>
+                        </div>
+                      )}
                     </div>
                   </div>
 
@@ -464,8 +473,8 @@ const OfferSummary: React.FC<OfferSummaryProps> = ({ offer, power, clientType, d
                   </div>
                 </div>
 
-                {/* Avantages de l'offre */}
-                <div className="mt-6 bg-gradient-to-r from-green-50 to-green-100 p-4 rounded-lg print-compact-section">
+                {/* Avantages de l'offre avec cadre */}
+                <div className="mt-6 bg-gradient-to-r from-green-50 to-green-100 p-4 rounded-lg border-2 border-green-600 print-compact-section print-advantages-bordered">
                   <h3 className="text-lg font-semibold text-green-800 mb-3 text-center print-section-title print:mb-2">
                     Avantages de votre abonnement SunLib
                   </h3>
