@@ -212,15 +212,7 @@ const OfferSummary: React.FC<OfferSummaryProps> = ({ offer, power, clientType, d
               font-size: 10px;
             }
             
-            .print-page-1 {
-              page-break-after: always;
-            }
-            
-            .print-page-2 {
-              page-break-before: always;
-            }
-            
-            .print-no-break {
+            .print-single-page {
               page-break-inside: avoid;
             }
             
@@ -230,22 +222,26 @@ const OfferSummary: React.FC<OfferSummaryProps> = ({ offer, power, clientType, d
             }
             
             .print-compact-header {
-              padding: 8px !important;
+              padding: 6px !important;
             }
             
             .print-compact-section {
-              margin-bottom: 8px !important;
-              padding: 5px !important;
+              margin-bottom: 6px !important;
+              padding: 4px !important;
             }
             
             .print-small-text {
-              font-size: 9px !important;
+              font-size: 8px !important;
+            }
+            
+            .print-tiny-text {
+              font-size: 7px !important;
             }
             
             .print-grid {
               display: flex !important;
               flex-direction: row !important;
-              gap: 10px !important;
+              gap: 8px !important;
             }
             
             .print-grid > div {
@@ -255,90 +251,99 @@ const OfferSummary: React.FC<OfferSummaryProps> = ({ offer, power, clientType, d
             .print-advantages-grid {
               display: grid !important;
               grid-template-columns: 1fr 1fr !important;
-              gap: 4px !important;
+              gap: 3px !important;
             }
             
             .print-advantages-item {
-              font-size: 8px !important;
-              margin-bottom: 4px !important;
+              font-size: 7px !important;
+              margin-bottom: 2px !important;
             }
             
             .print-process-steps {
               display: grid !important;
               grid-template-columns: 1fr 1fr !important;
-              gap: 4px !important;
+              gap: 3px !important;
             }
             
             .print-process-item {
-              font-size: 8px !important;
-              margin-bottom: 4px !important;
+              font-size: 7px !important;
+              margin-bottom: 2px !important;
             }
             
-            .print-table-container {
-              display: flex !important;
-              gap: 10px !important;
+            .print-residual-section {
+              margin-top: 6px !important;
+              padding: 4px !important;
+              border: 1px solid #ddd !important;
+              border-radius: 4px !important;
             }
             
-            .print-table-container > div {
-              flex: 1 !important;
+            .print-residual-table {
+              font-size: 6px !important;
+              line-height: 1.2 !important;
+            }
+            
+            .print-residual-table th {
+              padding: 1px 2px !important;
+              font-size: 6px !important;
+            }
+            
+            .print-residual-table td {
+              padding: 1px 2px !important;
+              font-size: 6px !important;
+            }
+            
+            .print-residual-grid {
+              display: grid !important;
+              grid-template-columns: 1fr 1fr 1fr !important;
+              gap: 4px !important;
             }
             
             .print-hide {
               display: none !important;
             }
             
-            .print-page-1-content {
-              padding: 10px !important;
-              margin-bottom: 0 !important;
-            }
-            
-            .print-page-2-content {
-              padding: 20px !important;
-              margin-top: 0 !important;
-            }
-            
-            .print-advantages-compact {
-              margin-top: 8px !important;
-              margin-bottom: 8px !important;
-              padding: 8px !important;
-            }
-            
-            .print-process-compact {
-              margin-top: 8px !important;
-              margin-bottom: 0 !important;
-              padding: 8px !important;
-            }
-            
             .print-header-compact h1 {
-              font-size: 24px !important;
+              font-size: 18px !important;
+              margin-bottom: 2px !important;
             }
             
             .print-header-compact h2 {
-              font-size: 16px !important;
+              font-size: 12px !important;
+              margin-bottom: 2px !important;
             }
             
             .print-section-title {
-              font-size: 14px !important;
-              margin-bottom: 5px !important;
+              font-size: 11px !important;
+              margin-bottom: 3px !important;
             }
             
             .print-step-circle {
-              width: 18px !important;
-              height: 18px !important;
-              font-size: 10px !important;
-              margin-right: 8px !important;
-            }
-            
-            .print-advantage-icon {
-              width: 12px !important;
-              height: 12px !important;
+              width: 14px !important;
+              height: 14px !important;
+              font-size: 8px !important;
               margin-right: 6px !important;
             }
             
+            .print-advantage-icon {
+              width: 10px !important;
+              height: 10px !important;
+              margin-right: 4px !important;
+            }
+            
             .print-warning-box {
-              margin-top: 8px !important;
-              padding: 6px !important;
-              font-size: 8px !important;
+              margin-top: 4px !important;
+              padding: 3px !important;
+              font-size: 7px !important;
+            }
+            
+            .print-residual-title {
+              font-size: 10px !important;
+              margin-bottom: 2px !important;
+              text-align: center !important;
+            }
+            
+            .print-main-content {
+              padding: 8px !important;
             }
           }
         `
@@ -375,35 +380,35 @@ const OfferSummary: React.FC<OfferSummaryProps> = ({ offer, power, clientType, d
             </div>
           </div>
 
-          {/* PAGE 1 - Contenu principal */}
-          <div className="print-page-1">
-            <div className="bg-white rounded-2xl shadow-xl overflow-hidden mb-8 print:rounded-none print:shadow-none print:mb-0 print-page-1-content">
+          {/* PAGE UNIQUE - Tout le contenu */}
+          <div className="print-single-page">
+            <div className="bg-white rounded-2xl shadow-xl overflow-hidden mb-8 print:rounded-none print:shadow-none print:mb-0">
               {/* En-tête de l'offre */}
               <div className="bg-gradient-to-r from-green-600 to-green-700 text-white p-8 print-compact-header print:bg-green-600 print-header-compact">
-                <div className="flex items-center justify-center mb-4 print:mb-2">
-                  <Zap className="w-12 h-12 mr-3 print:w-8 print:h-8 print:mr-2" />
+                <div className="flex items-center justify-center mb-4 print:mb-1">
+                  <Zap className="w-12 h-12 mr-3 print:w-6 print:h-6 print:mr-2" />
                   <h1 className="text-4xl font-bold">SunLib</h1>
                 </div>
                 <h2 className="text-2xl font-semibold text-center">Résumé de votre offre solaire</h2>
                 <div className="flex items-center justify-center mt-2 print:mt-1">
                   {clientType === 'particulier' ? (
-                    <Users className="w-5 h-5 mr-2 print:w-4 print:h-4" />
+                    <Users className="w-5 h-5 mr-2 print:w-3 print:h-3" />
                   ) : (
-                    <Building2 className="w-5 h-5 mr-2 print:w-4 print:h-4" />
+                    <Building2 className="w-5 h-5 mr-2 print:w-3 print:h-3" />
                   )}
-                  <p className="text-green-100 print:text-sm">
+                  <p className="text-green-100 print:text-xs">
                     Abonnement {clientType} sur {offer.duration} ans
                   </p>
                 </div>
               </div>
 
-              {/* Informations principales */}
-              <div className="p-8 print-compact">
-                <div className="grid md:grid-cols-2 gap-8 mb-8 print-grid print:mb-4">
+              {/* Contenu principal */}
+              <div className="p-8 print-main-content">
+                <div className="grid md:grid-cols-2 gap-8 mb-6 print-grid print:mb-3">
                   {/* Détails de l'installation */}
                   <div className="space-y-6 print:space-y-2">
                     <h3 className="text-xl font-semibold text-gray-800 flex items-center print-section-title">
-                      <Zap className="w-5 h-5 text-green-600 mr-2 print:w-4 print:h-4" />
+                      <Zap className="w-5 h-5 text-green-600 mr-2 print:w-3 print:h-3" />
                       Détails de l'installation
                     </h3>
                     
@@ -418,8 +423,8 @@ const OfferSummary: React.FC<OfferSummaryProps> = ({ offer, power, clientType, d
                       </div>
                       <div className="flex justify-between items-center">
                         <span className="text-gray-700 print:text-xs flex items-center">
-                          <Battery className="w-4 h-4 mr-1 print:w-3 print:h-3" />
-                          Batterie virtuelle(abonnement non compris)
+                          <Battery className="w-4 h-4 mr-1 print:w-2 print:h-2" />
+                          Batterie virtuelle
                         </span>
                         <span className={`font-semibold print:text-xs ${virtualBattery ? 'text-green-800' : 'text-gray-500'}`}>
                           {virtualBattery ? 'Incluse' : 'Non incluse'}
@@ -431,7 +436,7 @@ const OfferSummary: React.FC<OfferSummaryProps> = ({ offer, power, clientType, d
                   {/* Conditions financières */}
                   <div className="space-y-6 print:space-y-2">
                     <h3 className="text-xl font-semibold text-gray-800 flex items-center print-section-title">
-                      <Euro className="w-5 h-5 text-green-600 mr-2 print:w-4 print:h-4" />
+                      <Euro className="w-5 h-5 text-green-600 mr-2 print:w-3 print:h-3" />
                       Conditions financières
                     </h3>
                     
@@ -448,10 +453,10 @@ const OfferSummary: React.FC<OfferSummaryProps> = ({ offer, power, clientType, d
                         <span className="text-gray-700 print:text-xs">
                           {clientType === 'entreprise' ? 'Solvabilité :' : 'Revenus minimum requis'}
                         </span>
-                        <span className="font-semibold text-green-800 print:text-xs text-sm">
+                        <span className="font-semibold text-green-800 print:text-xs">
                           {clientType === 'entreprise' 
-                            ? 'Validation sous réserve étude SunLib'
-                            : `${offer.minRevenue.toLocaleString()} € / an`
+                            ? 'Étude SunLib'
+                            : `${offer.minRevenue.toLocaleString()} €/an`
                           }
                         </span>
                       </div>
@@ -460,18 +465,18 @@ const OfferSummary: React.FC<OfferSummaryProps> = ({ offer, power, clientType, d
                 </div>
 
                 {/* Avantages de l'offre */}
-                <div className="mt-8 bg-gradient-to-r from-green-50 to-green-100 p-6 rounded-lg print-advantages-compact">
-                  <h3 className="text-xl font-semibold text-green-800 mb-4 text-center print-section-title print:mb-2">
+                <div className="mt-6 bg-gradient-to-r from-green-50 to-green-100 p-4 rounded-lg print-compact-section">
+                  <h3 className="text-lg font-semibold text-green-800 mb-3 text-center print-section-title print:mb-2">
                     Avantages de votre abonnement SunLib
                   </h3>
                   
-                  <div className="grid md:grid-cols-2 gap-4 print-advantages-grid">
+                  <div className="grid md:grid-cols-2 gap-3 print-advantages-grid">
                     {getClientAdvantages().map((advantage, index) => (
                       <div key={index} className="flex items-start print-advantages-item">
-                        <CheckCircle className="w-5 h-5 text-green-600 mr-3 mt-0.5 flex-shrink-0 print-advantage-icon" />
+                        <CheckCircle className="w-4 h-4 text-green-600 mr-2 mt-0.5 flex-shrink-0 print-advantage-icon" />
                         <div>
-                          <p className="font-medium text-green-800 print:text-xs print:font-semibold">{advantage.title}</p>
-                          <p className="text-sm text-green-700 print:text-xs">{advantage.description}</p>
+                          <p className="font-medium text-green-800 text-sm print:text-xs print:font-semibold">{advantage.title}</p>
+                          <p className="text-xs text-green-700 print:text-xs">{advantage.description}</p>
                         </div>
                       </div>
                     ))}
@@ -479,75 +484,58 @@ const OfferSummary: React.FC<OfferSummaryProps> = ({ offer, power, clientType, d
                 </div>
 
                 {/* Processus de mise en place */}
-                <div className="mt-8 bg-white border-2 border-green-200 p-6 rounded-lg print-process-compact">
-                  <h3 className="text-xl font-semibold text-green-800 mb-6 text-center flex items-center justify-center print-section-title print:mb-3">
-                    <Calendar className="w-5 h-5 mr-2 print:w-4 print:h-4" />
-                    Et concrètement, comment ça se passe ?
+                <div className="mt-6 bg-white border-2 border-green-200 p-4 rounded-lg print-compact-section">
+                  <h3 className="text-lg font-semibold text-green-800 mb-4 text-center flex items-center justify-center print-section-title print:mb-2">
+                    <Calendar className="w-4 h-4 mr-2 print:w-3 print:h-3" />
+                    Comment ça se passe ?
                   </h3>
                   
-                  <div className="space-y-4 print-process-steps print:space-y-1">
+                  <div className="space-y-3 print-process-steps print:space-y-1">
                     {getCommonProcess().map((process, index) => (
                       <div key={index} className="flex items-start print-process-item">
-                        <div className="flex-shrink-0 w-8 h-8 bg-green-600 text-white rounded-full flex items-center justify-center text-sm font-bold mr-4 print-step-circle">
+                        <div className="flex-shrink-0 w-6 h-6 bg-green-600 text-white rounded-full flex items-center justify-center text-xs font-bold mr-3 print-step-circle">
                           {process.step}
                         </div>
                         <div className="flex-1">
-                          <h4 className="font-medium text-green-800 mb-1 print:text-xs print:font-semibold print:mb-0">{process.title}</h4>
-                          <p className="text-sm text-green-700 print:text-xs">{process.description}</p>
+                          <h4 className="font-medium text-green-800 text-sm print:text-xs print:font-semibold">{process.title}</h4>
+                          <p className="text-xs text-green-700 print:text-xs">{process.description}</p>
                         </div>
                       </div>
                     ))}
                   </div>
                   
-                  <div className="mt-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg print-warning-box">
-                    <p className="text-sm text-yellow-800 text-center print:text-xs">
+                  <div className="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg print-warning-box">
+                    <p className="text-xs text-yellow-800 text-center print:text-xs">
                       <strong>Important :</strong> En cas de refus de la mairie, le contrat est annulé et le dépôt de garantie restitué
                     </p>
                   </div>
                 </div>
-              </div>
-            </div>
-          </div>
 
-          {/* PAGE 2 - Valeurs résiduelles */}
-          <div className="print-page-2">
-            <div className="bg-white rounded-2xl shadow-xl overflow-hidden mb-8 print:rounded-none print:shadow-none print:mb-0 print-page-2-content">
-              {/* En-tête page 2 */}
-              <div className="bg-gradient-to-r from-green-600 to-green-700 text-white p-8 print-compact-header print:bg-green-600">
-                <div className="flex items-center justify-center mb-4">
-                  <Zap className="w-12 h-12 mr-3" />
-                  <h1 className="text-4xl font-bold">SunLib</h1>
-                </div>
-                <h2 className="text-2xl font-semibold text-center">Évolution des valeurs résiduelles</h2>
-                <div className="flex items-center justify-center mt-2">
-                  <TrendingUp className="w-5 h-5 mr-2" />
-                  <p className="text-green-100">
-                    Valeurs calculées en {displayMode}
-                  </p>
-                </div>
-              </div>
-
-              {/* Valeurs résiduelles */}
-              <div className="p-8 print-compact">
-                <div className="bg-gray-50 p-6 rounded-lg print:bg-white print:p-3 print:border print:border-gray-300">
-                  <div className="grid md:grid-cols-2 gap-6 print-table-container print:gap-3">
+                {/* Valeurs résiduelles compactes */}
+                <div className="mt-6 bg-gray-50 p-4 rounded-lg print-residual-section">
+                  <h3 className="text-lg font-semibold text-gray-800 mb-3 text-center flex items-center justify-center print-residual-title">
+                    <TrendingUp className="w-4 h-4 mr-2 print:w-3 print:h-3" />
+                    Valeurs résiduelles ({displayMode})
+                  </h3>
+                  
+                  <div className="grid grid-cols-3 gap-2 print-residual-grid">
                     {/* Première colonne */}
                     <div className="overflow-x-auto">
-                      <table className="w-full">
+                      <table className="w-full text-xs print-residual-table">
                         <thead>
                           <tr>
-                            <th className="bg-green-600 text-white px-4 py-3 text-left rounded-tl-lg">Année</th>
-                            <th className="bg-green-600 text-white px-4 py-3 text-right rounded-tr-lg">Valeur résiduelle ({displayMode})</th>
+                            <th className="bg-green-600 text-white px-2 py-1 text-left text-xs">Année</th>
+                            <th className="bg-green-600 text-white px-2 py-1 text-right text-xs">Valeur</th>
                           </tr>
                         </thead>
                         <tbody>
-                          {offer.residualValues.slice(0, Math.ceil(offer.residualValues.length / 2)).map((residual, index) => (
-                            <tr key={residual.year} className={index % 2 === 0 ? 'bg-white' : 'bg-green-50 print:bg-gray-100'}>
-                              <td className="px-4 py-3 border-b border-green-200 font-medium text-gray-700 print:px-2 print:py-1 print-small-text">
-                                Année {residual.year}
+                          {offer.residualValues.slice(0, Math.ceil(offer.residualValues.length / 3)).map((residual, index) => (
+                            <tr key={residual.year} className={index % 2 === 0 ? 'bg-white' : 'bg-green-50'}>
+                              <td className="px-2 py-1 border-b border-green-200 text-gray-700 text-xs">
+                                {residual.year}
                               </td>
-                              <td className="px-4 py-3 border-b border-green-200 text-right font-semibold text-green-800 print:px-2 print:py-1 print-small-text">
-                                {residual.value.toLocaleString()} €
+                              <td className="px-2 py-1 border-b border-green-200 text-right font-semibold text-green-800 text-xs">
+                                {residual.value.toLocaleString()}€
                               </td>
                             </tr>
                           ))}
@@ -557,33 +545,51 @@ const OfferSummary: React.FC<OfferSummaryProps> = ({ offer, power, clientType, d
 
                     {/* Deuxième colonne */}
                     <div className="overflow-x-auto">
-                      <table className="w-full">
+                      <table className="w-full text-xs print-residual-table">
                         <thead>
                           <tr>
-                            <th className="bg-green-600 text-white px-4 py-3 text-left rounded-tl-lg">Année</th>
-                            <th className="bg-green-600 text-white px-4 py-3 text-right rounded-tr-lg">Valeur résiduelle ({displayMode})</th>
+                            <th className="bg-green-600 text-white px-2 py-1 text-left text-xs">Année</th>
+                            <th className="bg-green-600 text-white px-2 py-1 text-right text-xs">Valeur</th>
                           </tr>
                         </thead>
                         <tbody>
-                          {offer.residualValues.slice(Math.ceil(offer.residualValues.length / 2)).map((residual, index) => (
-                            <tr key={residual.year} className={index % 2 === 0 ? 'bg-white' : 'bg-green-50 print:bg-gray-100'}>
-                              <td className="px-4 py-3 border-b border-green-200 font-medium text-gray-700 print:px-2 print:py-1 print-small-text">
-                                Année {residual.year}
+                          {offer.residualValues.slice(Math.ceil(offer.residualValues.length / 3), Math.ceil(offer.residualValues.length * 2 / 3)).map((residual, index) => (
+                            <tr key={residual.year} className={index % 2 === 0 ? 'bg-white' : 'bg-green-50'}>
+                              <td className="px-2 py-1 border-b border-green-200 text-gray-700 text-xs">
+                                {residual.year}
                               </td>
-                              <td className="px-4 py-3 border-b border-green-200 text-right font-semibold text-green-800 print:px-2 print:py-1 print-small-text">
-                                {residual.value.toLocaleString()} €
+                              <td className="px-2 py-1 border-b border-green-200 text-right font-semibold text-green-800 text-xs">
+                                {residual.value.toLocaleString()}€
                               </td>
                             </tr>
                           ))}
                         </tbody>
                       </table>
                     </div>
-                  </div>
-                  
-                  <div className="mt-4 p-4 bg-green-100 rounded-lg print:mt-2 print:p-2 print:bg-gray-100">
-                    <p className="text-sm text-green-800 text-center print-small-text print:text-gray-800">
-                      <strong>Valeurs résiduelles calculées en {displayMode}</strong>
-                    </p>
+
+                    {/* Troisième colonne */}
+                    <div className="overflow-x-auto">
+                      <table className="w-full text-xs print-residual-table">
+                        <thead>
+                          <tr>
+                            <th className="bg-green-600 text-white px-2 py-1 text-left text-xs">Année</th>
+                            <th className="bg-green-600 text-white px-2 py-1 text-right text-xs">Valeur</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {offer.residualValues.slice(Math.ceil(offer.residualValues.length * 2 / 3)).map((residual, index) => (
+                            <tr key={residual.year} className={index % 2 === 0 ? 'bg-white' : 'bg-green-50'}>
+                              <td className="px-2 py-1 border-b border-green-200 text-gray-700 text-xs">
+                                {residual.year}
+                              </td>
+                              <td className="px-2 py-1 border-b border-green-200 text-right font-semibold text-green-800 text-xs">
+                                {residual.value.toLocaleString()}€
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
                   </div>
                 </div>
               </div>
