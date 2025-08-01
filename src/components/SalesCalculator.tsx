@@ -1,6 +1,11 @@
 import React, { useState } from 'react';
-import { Calculator, Zap, CheckCircle, AlertCircle, TrendingUp, ArrowLeft, FileText, Users, Building2, ChevronUp, ChevronDown, Battery } from 'lucide-react';
+import { Calculator, Zap, CheckCircle, AlertCircle, TrendingUp, ArrowLeft, FileText, Users, Building2, ChevronUp, ChevronDown, Battery, MapPin, Loader } from 'lucide-react';
 import OfferSummary from './OfferSummary';
+import AddressSearch from './AddressSearch';
+import MapView from './MapView';
+import EconomicAnalysis from './EconomicAnalysis';
+import { EconomicData } from '../types';
+import { getPVGISData } from '../services/pvgis';
 
 interface CalculationResult {
   duration: number;
@@ -9,6 +14,14 @@ interface CalculationResult {
   minRevenue: number;
   solvability: 'excellent' | 'good' | 'acceptable' | 'difficult';
   residualValues: { year: number; value: number; valueTTC: number }[];
+  economicAnalysis?: {
+    duration: number;
+    totalSavings: number;
+    totalProduction: number;
+    totalSelfConsumption: number;
+    totalSales: number;
+    totalElectricitySavings: number;
+  };
 }
 
 const SalesCalculator: React.FC = () => {
@@ -24,6 +37,16 @@ const SalesCalculator: React.FC = () => {
   const [selectedOffer, setSelectedOffer] = useState<CalculationResult | null>(null);
   const [error, setError] = useState<string>('');
   const [isFormCollapsed, setIsFormCollapsed] = useState(false);
+  
+  // Nouveaux états pour l'étude économique
+  const [address, setAddress] = useState<string>('');
+  const [latitude, setLatitude] = useState<number | null>(null);
+  const [longitude, setLongitude] = useState<number | null>(null);
+  const [monthlyBill, setMonthlyBill] = useState<string>('');
+  const [electricityPrice, setElectricityPrice] = useState<string>('0.25');
+  const [annualProduction, setAnnualProduction] = useState<number | null>(null);
+  const [isLoadingPVGIS, setIsLoadingPVGIS] = useState(false);
+  const [economicData, setEconomicData] = useState<EconomicData | null>(null);
 
   // Données de prix maximum par puissance (jusqu'à 36 kWc)
   const maxPricesHT = [
@@ -100,16 +123,101 @@ const SalesCalculator: React.FC = () => {
     });
   };
 
+  const handleAddressSelect = async (selectedAddress: string, lat: number, lng: number) => {
+    setAddress(selectedAddress);
+    setLatitude(lat);
+    setLongitude(lng);
+    
+    // Calculer automatiquement le productible si on a la puissance
+    if (power && parseFloat(power) > 0) {
+      await calculatePVGISProduction(lat, lng, parseFloat(power));
+    }
+  };
+
+  const calculatePVGISProduction = async (lat: number, lng: number, powerValue: number) => {
+    setIsLoadingPVGIS(true);
+    try {
+      const production = await getPVGISData(lat, lng, powerValue);
+      setAnnualProduction(production);
+    } catch (error) {
+      console.error('Erreur PVGIS:', error);
+      setError('Impossible de récupérer les données de production solaire');
+    } finally {
+      setIsLoadingPVGIS(false);
+    }
+  };
+
+  const calculateEconomicAnalysis = (powerValue: number, production: number, monthlyBillValue: number, electricityPriceValue: number) => {
+    const selfConsumptionRate = virtualBattery ? 0.9 : 0.6;
+    const sellPrice = 0.004; // 0.4 cts/kWh
+    
+    const durations = [10, 15, 20, 25, 30];
+    const economicAnalysis = durations.map(duration => {
+      const totalProduction = production * duration;
+      const totalSelfConsumption = totalProduction * selfConsumptionRate;
+      const totalSurplus = totalProduction - totalSelfConsumption;
+      
+      // Économies sur l'électricité (ce qu'on n'achète plus)
+      const totalElectricitySavings = totalSelfConsumption * electricityPriceValue;
+      
+      // Revenus de la vente du surplus
+      const totalSales = totalSurplus * sellPrice;
+      
+      // Économies totales
+      const totalSavings = totalElectricitySavings + totalSales;
+      
+      return {
+        duration,
+        totalSavings,
+        totalProduction,
+        totalSelfConsumption,
+        totalSales,
+        totalElectricitySavings
+      };
+    });
+
+    const economicDataObj: EconomicData = {
+      address,
+      latitude: latitude!,
+      longitude: longitude!,
+      monthlyBill: monthlyBillValue,
+      electricityPrice: electricityPriceValue,
+      annualProduction: production,
+      selfConsumptionRate,
+      sellPrice,
+      economicAnalysis
+    };
+
+    setEconomicData(economicDataObj);
+    return economicAnalysis;
+  };
   const handleCalculate = () => {
     setError('');
     const powerValue = parseFloat(power);
     const priceValue = parseFloat(installationPrice);
+    const monthlyBillValue = parseFloat(monthlyBill);
+    const electricityPriceValue = parseFloat(electricityPrice);
 
     if (!powerValue || !priceValue || powerValue < 2) {
       setError('Veuillez saisir une puissance valide (≥ 2 kWc) et un prix d\'installation.');
       return;
     }
 
+    // Vérifications pour l'étude économique
+    if (!address || !latitude || !longitude) {
+      setError('Veuillez sélectionner une adresse pour l\'étude économique.');
+      return;
+    }
+
+    if (!annualProduction) {
+      setError('Données de production solaire non disponibles. Veuillez réessayer.');
+      return;
+    }
+
+    if (!monthlyBillValue || !electricityPriceValue) {
+      setError('Veuillez saisir la facture mensuelle et le prix de l\'électricité.');
+      return;
+    }
     // Vérification du plafond de prix SEULEMENT pour les puissances ≤ 36 kWc
     if (powerValue <= 36) {
       const index = Math.round((powerValue - 2) / 0.5);
@@ -122,14 +230,18 @@ const SalesCalculator: React.FC = () => {
     }
     // Pour les puissances > 36 kWc, pas de limitation de prix
 
+    // Calculer l'analyse économique
+    const economicAnalysisData = calculateEconomicAnalysis(powerValue, annualProduction, monthlyBillValue, electricityPriceValue);
+
     const durations = [10, 15, 20, 25];
-    const calculatedResults: CalculationResult[] = durations.map(duration => {
+    const calculatedResults: CalculationResult[] = durations.map((duration, index) => {
       const rate = getVariableRates(duration, powerValue);
       const monthlyPaymentHT = calculateMonthlyPayment(priceValue, rate, duration * 12);
       const monthlyPaymentTTC = monthlyPaymentHT * 1.20; // TVA 20%
       const minRevenue = calculateMinRevenue(monthlyPaymentTTC);
       const solvability = getSolvability(monthlyPaymentTTC);
       const residualValues = calculateResidualValues(priceValue, duration);
+      const economicAnalysis = economicAnalysisData.find(analysis => analysis.duration === duration);
 
       return {
         duration,
@@ -137,7 +249,8 @@ const SalesCalculator: React.FC = () => {
         monthlyPaymentTTC,
         minRevenue,
         solvability,
-        residualValues
+        residualValues,
+        economicAnalysis
       };
     });
 
@@ -149,6 +262,13 @@ const SalesCalculator: React.FC = () => {
 
   const handleOfferSelection = (result: CalculationResult) => {
     setSelectedOffer(result);
+    // Passer aussi les données économiques complètes
+    if (economicData && selectedOffer) {
+      setSelectedOffer({
+        ...result,
+        economicData
+      } as any);
+    }
     setShowOfferSummary(true);
   };
 
@@ -160,6 +280,7 @@ const SalesCalculator: React.FC = () => {
     return (
       <OfferSummary
         offer={selectedOffer}
+        economicData={economicData}
         power={parseFloat(power)}
         clientType={clientType}
         displayMode={displayMode}
@@ -209,7 +330,8 @@ const SalesCalculator: React.FC = () => {
           {/* Contenu du formulaire */}
           <div className={`transition-all duration-300 ease-in-out ${isFormCollapsed ? 'max-h-0 opacity-0' : 'max-h-none opacity-100'}`}>
             <div className="px-8 pb-8">
-              <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-4xl mx-auto">
+              {/* Première ligne - Paramètres de base */}
+              <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto mb-6">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Puissance (kWc)
@@ -217,7 +339,13 @@ const SalesCalculator: React.FC = () => {
                   <input
                     type="number"
                     value={power}
-                    onChange={(e) => setPower(e.target.value)}
+                    onChange={async (e) => {
+                      setPower(e.target.value);
+                      // Recalculer le productible si on a une adresse
+                      if (latitude && longitude && parseFloat(e.target.value) > 0) {
+                        await calculatePVGISProduction(latitude, longitude, parseFloat(e.target.value));
+                      }
+                    }}
                     min="2"
                     step="0.5"
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
@@ -301,25 +429,122 @@ const SalesCalculator: React.FC = () => {
                 </div>
               </div>
 
+              {/* Deuxième ligne - Localisation et données économiques */}
+              <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto mb-6">
+                <div className="lg:col-span-2">
+                  <AddressSearch
+                    onAddressSelect={handleAddressSelect}
+                    selectedAddress={address}
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Facture mensuelle (€)
+                  </label>
+                  <input
+                    type="number"
+                    value={monthlyBill}
+                    onChange={(e) => setMonthlyBill(e.target.value)}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
+                    placeholder="Ex: 120"
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Prix électricité (€/kWh)
+                  </label>
+                  <input
+                    type="number"
+                    value={electricityPrice}
+                    onChange={(e) => setElectricityPrice(e.target.value)}
+                    step="0.01"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
+                    placeholder="Ex: 0.25"
+                  />
+                </div>
+              </div>
+
+              {/* Vue satellite et données de production */}
+              {latitude && longitude && (
+                <div className="max-w-6xl mx-auto mb-6">
+                  <div className="grid md:grid-cols-2 gap-6">
+                    <div>
+                      <h4 className="text-sm font-medium text-gray-700 mb-2">Vue satellite du projet</h4>
+                      <MapView latitude={latitude} longitude={longitude} address={address} />
+                    </div>
+                    
+                    <div className="space-y-4">
+                      <div>
+                        <h4 className="text-sm font-medium text-gray-700 mb-2">Données de production</h4>
+                        <div className="bg-green-50 p-4 rounded-lg border border-green-200">
+                          {isLoadingPVGIS ? (
+                            <div className="flex items-center justify-center py-4">
+                              <Loader className="w-6 h-6 text-green-600 animate-spin mr-2" />
+                              <span className="text-green-700">Calcul du productible en cours...</span>
+                            </div>
+                          ) : annualProduction ? (
+                            <div className="space-y-2">
+                              <div className="flex justify-between items-center">
+                                <span className="text-green-700">Production annuelle estimée</span>
+                                <span className="font-semibold text-green-800">
+                                  {Math.round(annualProduction).toLocaleString()} kWh/an
+                                </span>
+                              </div>
+                              <div className="flex justify-between items-center">
+                                <span className="text-green-700">Taux d'autoconsommation</span>
+                                <span className="font-semibold text-green-800 flex items-center">
+                                  {virtualBattery ? '90%' : '60%'}
+                                  {virtualBattery && <Battery className="w-4 h-4 ml-1" />}
+                                </span>
+                              </div>
+                              <div className="flex justify-between items-center">
+                                <span className="text-green-700">Prix de revente surplus</span>
+                                <span className="font-semibold text-green-800">0.4 cts/kWh</span>
+                              </div>
+                            </div>
+                          ) : (
+                            <p className="text-green-700 text-center">
+                              Saisissez une puissance pour calculer le productible
+                            </p>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
               {/* Option Batterie virtuelle */}
-              <div className="mt-6 max-w-4xl mx-auto">
+              <div className="mt-6 max-w-6xl mx-auto">
                 <div className="flex items-center justify-center">
                   <label className="flex items-center cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors rounded-lg p-4 border-2 border-gray-200 hover:border-green-300">
                     <input
                       type="checkbox"
                       checked={virtualBattery}
-                      onChange={(e) => setVirtualBattery(e.target.checked)}
+                      onChange={(e) => {
+                        setVirtualBattery(e.target.checked);
+                        // Recalculer l'analyse économique si on a toutes les données
+                        if (annualProduction && monthlyBill && electricityPrice) {
+                          calculateEconomicAnalysis(
+                            parseFloat(power),
+                            annualProduction,
+                            parseFloat(monthlyBill),
+                            parseFloat(electricityPrice)
+                          );
+                        }
+                      }}
                       className="w-5 h-5 text-green-600 bg-gray-100 border-gray-300 rounded focus:ring-green-500 focus:ring-2"
                     />
                     <Battery className={`w-6 h-6 ml-3 mr-2 ${virtualBattery ? 'text-green-600' : 'text-gray-400'}`} />
                     <span className={`text-sm font-medium ${virtualBattery ? 'text-green-800' : 'text-gray-600'}`}>
-                      Batterie virtuelle incluse
+                      Batterie virtuelle incluse (90% autoconso. vs 60%)
                     </span>
                   </label>
                 </div>
                 {virtualBattery && (
                   <div className="mt-2 text-center text-sm text-green-700 bg-green-50 p-3 rounded-lg">
-                    <p>🔋 Option batterie virtuelle sélectionnée - cette information apparaîtra dans le résumé d'offre</p>
+                    <p>🔋 Batterie virtuelle sélectionnée - Taux d'autoconsommation porté à 90%</p>
                   </div>
                 )}
               </div>
@@ -330,12 +555,12 @@ const SalesCalculator: React.FC = () => {
                 </div>
               )}
 
-              <div className="mt-8 max-w-4xl mx-auto">
+              <div className="mt-8 max-w-6xl mx-auto">
                 <button
                   onClick={handleCalculate}
                   className="w-full bg-gradient-to-r from-green-600 to-green-700 text-white font-semibold py-4 rounded-lg hover:from-green-700 hover:to-green-800 transition-all transform hover:scale-105 shadow-lg"
                 >
-                  Calculer les abonnements
+                  Calculer les abonnements et l'étude économique
                 </button>
               </div>
             </div>
@@ -345,7 +570,9 @@ const SalesCalculator: React.FC = () => {
         {/* Résultats */}
         {showResults && (
           <div className="space-y-6">
-            <h3 className="text-2xl font-semibold text-green-800 text-center">Résultats des calculs</h3>
+            <h3 className="text-2xl font-semibold text-green-800 text-center">
+              Résultats des calculs et étude économique
+            </h3>
             
             <div className="grid lg:grid-cols-2 xl:grid-cols-4 gap-6">
               {results.map((result) => {
@@ -402,7 +629,7 @@ const SalesCalculator: React.FC = () => {
                           className="w-full bg-green-100 text-green-700 py-2 px-4 rounded-lg hover:bg-green-200 transition-colors flex items-center justify-center"
                         >
                           <TrendingUp className="w-4 h-4 mr-2" />
-                          Voir valeurs résiduelles
+                          Voir détails économiques
                         </button>
 
                         <button
@@ -416,20 +643,38 @@ const SalesCalculator: React.FC = () => {
                     </div>
 
                     {selectedDuration === result.duration && (
-                      <div className="border-t border-green-200 bg-green-50 p-4 rounded-b-xl">
-                        <h5 className="font-semibold text-green-800 mb-3 text-center">
-                          Valeurs résiduelles {displayMode}
-                        </h5>
-                        <div className="max-h-48 overflow-y-auto space-y-2">
-                          {result.residualValues.map((residual) => {
-                            const displayValue = displayMode === 'HT' ? residual.value : residual.valueTTC;
-                            return (
-                              <div key={residual.year} className="flex justify-between items-center text-sm">
-                                <span className="text-green-700">Année {residual.year}</span>
-                                <span className="font-medium text-green-800">{displayValue.toLocaleString()} €</span>
-                              </div>
-                            );
-                          })}
+                      <div>
+                        {/* Analyse économique */}
+                        {economicData && (
+                          <EconomicAnalysis
+                            economicData={economicData}
+                            selectedDuration={result.duration}
+                            displayMode={displayMode}
+                            virtualBattery={virtualBattery}
+                          />
+                        )}
+                        
+                        {/* Valeurs résiduelles */}
+                        <div className="border-t border-green-200 bg-gray-50 p-4 rounded-b-xl mt-2">
+                          <h5 className="font-semibold text-gray-800 mb-3 text-center">
+                            Valeurs résiduelles {displayMode}
+                          </h5>
+                          <div className="max-h-32 overflow-y-auto space-y-1">
+                            {result.residualValues.slice(0, 8).map((residual) => {
+                              const displayValue = displayMode === 'HT' ? residual.value : residual.valueTTC;
+                              return (
+                                <div key={residual.year} className="flex justify-between items-center text-xs">
+                                  <span className="text-gray-600">Année {residual.year}</span>
+                                  <span className="font-medium text-gray-800">{displayValue.toLocaleString()} €</span>
+                                </div>
+                              );
+                            })}
+                            {result.residualValues.length > 8 && (
+                              <p className="text-xs text-gray-500 text-center mt-2">
+                                ... et {result.residualValues.length - 8} autres années
+                              </p>
+                            )}
+                          </div>
                         </div>
                       </div>
                     )}
@@ -440,7 +685,7 @@ const SalesCalculator: React.FC = () => {
 
             {selectedDuration && (
               <div className="text-center text-sm text-gray-600 bg-green-50 p-4 rounded-lg">
-                <p>💡 Cliquez sur "Voir valeurs résiduelles" d'une autre durée pour comparer</p>
+                <p>💡 Cliquez sur "Voir détails économiques" d'une autre durée pour comparer les analyses</p>
               </div>
             )}
           </div>
