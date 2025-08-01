@@ -1,5 +1,6 @@
 import React from 'react';
 import { ArrowLeft, Zap, Calendar, Euro, TrendingUp, CheckCircle, AlertCircle, FileText, Printer, Mail, Users, Building2, Battery } from 'lucide-react';
+import { EconomicData } from '../types';
 
 interface OfferSummaryProps {
   offer: {
@@ -10,6 +11,7 @@ interface OfferSummaryProps {
     solvability: 'excellent' | 'good' | 'acceptable' | 'difficult';
     residualValues: { year: number; value: number }[];
   };
+  economicData: EconomicData | null;
   power: number;
   clientType: 'particulier' | 'entreprise';
   displayMode: 'HT' | 'TTC';
@@ -17,7 +19,7 @@ interface OfferSummaryProps {
   onBack: () => void;
 }
 
-const OfferSummary: React.FC<OfferSummaryProps> = ({ offer, power, clientType, displayMode, virtualBattery, onBack }) => {
+const OfferSummary: React.FC<OfferSummaryProps> = ({ offer, economicData, power, clientType, displayMode, virtualBattery, onBack }) => {
   const getSolvabilityColor = (solvability: string) => {
     switch (solvability) {
       case 'excellent': return 'text-green-600 bg-green-100 border-green-200';
@@ -59,16 +61,31 @@ const OfferSummary: React.FC<OfferSummaryProps> = ({ offer, power, clientType, d
     const subject = 'Offre SunLib - Abonnement ' + clientType + ' ' + power + 'kWc sur ' + offer.duration + ' ans';
     
     const batteryLine = virtualBattery ? '- Batterie virtuelle : Incluse\n' : '';
+    const addressLine = economicData ? '- Adresse : ' + economicData.address + '\n' : '';
+    const productionLine = economicData ? '- Production annuelle estimée : ' + Math.round(economicData.annualProduction).toLocaleString() + ' kWh/an\n' : '';
+    
+    // Calcul des économies pour la durée sélectionnée
+    const economicAnalysis = economicData?.economicAnalysis.find(analysis => analysis.duration === offer.duration);
+    const economicsLine = economicAnalysis ? 
+      '\nÉTUDE ÉCONOMIQUE SUR ' + offer.duration + ' ANS\n' +
+      '- Économies totales estimées : ' + economicAnalysis.totalSavings.toLocaleString() + ' €\n' +
+      '- Production totale : ' + Math.round(economicAnalysis.totalProduction).toLocaleString() + ' kWh\n' +
+      '- Taux d\'autoconsommation : ' + (economicData.selfConsumptionRate * 100) + '%\n' +
+      '- Économies électricité : ' + economicAnalysis.totalElectricitySavings.toLocaleString() + ' €\n' +
+      '- Revenus vente surplus : ' + economicAnalysis.totalSales.toLocaleString() + ' €\n' : '';
     
     const bodyText = 'Bonjour,\n\n' +
       'Veuillez trouver ci-dessous le résumé de votre offre SunLib :\n\n' +
       'DÉTAILS DE L\'INSTALLATION\n' +
       '- Puissance installée : ' + power + ' kWc\n' +
+      addressLine +
+      productionLine +
       batteryLine + '\n' +
       'CONDITIONS FINANCIÈRES\n' +
       '- Durée du contrat : ' + offer.duration + ' ans\n' +
       '- Mensualité ' + displayMode + ' : ' + displayPrice.toFixed(2) + ' €\n' +
-      '- ' + (clientType === 'entreprise' ? 'Solvabilité : Validation sous réserve étude SunLib' : 'Revenus minimum requis : ' + offer.minRevenue.toLocaleString() + ' € / an') + '\n\n' +
+      '- ' + (clientType === 'entreprise' ? 'Solvabilité : Validation sous réserve étude SunLib' : 'Revenus minimum requis : ' + offer.minRevenue.toLocaleString() + ' € / an') + '\n' +
+      economicsLine + '\n' +
       'AVANTAGES PRINCIPAUX\n' +
       '- Pas d\'apport initial\n' +
       '- Pas d\'emprunt\n' +
@@ -438,6 +455,25 @@ const OfferSummary: React.FC<OfferSummaryProps> = ({ offer, power, clientType, d
                         <span className="text-gray-700 print:text-xs">Puissance installée</span>
                         <span className="font-semibold text-green-800 print:text-xs">{power} kWc</span>
                       </div>
+                      {economicData && (
+                        <>
+                          <div className="flex justify-between items-center mb-2 print:mb-1">
+                            <span className="text-gray-700 print:text-xs">Adresse</span>
+                            <span className="font-semibold text-green-800 print:text-xs text-right text-xs">
+                              {economicData.address.length > 30 ? 
+                                economicData.address.substring(0, 30) + '...' : 
+                                economicData.address
+                              }
+                            </span>
+                          </div>
+                          <div className="flex justify-between items-center mb-2 print:mb-1">
+                            <span className="text-gray-700 print:text-xs">Production annuelle</span>
+                            <span className="font-semibold text-green-800 print:text-xs">
+                              {Math.round(economicData.annualProduction).toLocaleString()} kWh/an
+                            </span>
+                          </div>
+                        </>
+                      )}
                       <div className="flex justify-between items-center mb-2 print:mb-1">
                         <span className="text-gray-700 print:text-xs">Type de client</span>
                         <span className="font-semibold text-green-800 capitalize print:text-xs">{clientType}</span>
@@ -505,6 +541,88 @@ const OfferSummary: React.FC<OfferSummaryProps> = ({ offer, power, clientType, d
                     ))}
                   </div>
                 </div>
+
+                {/* Étude économique détaillée */}
+                {economicData && (
+                  <div className="mt-6 bg-blue-50 p-4 rounded-lg border-2 border-blue-600 print-advantages-section">
+                    <h3 className="text-lg font-semibold text-blue-800 mb-3 text-center print-section-title print:mb-2">
+                      Étude économique sur {offer.duration} ans
+                    </h3>
+                    
+                    {(() => {
+                      const analysis = economicData.economicAnalysis.find(a => a.duration === offer.duration);
+                      if (!analysis) return null;
+                      
+                      return (
+                        <div className="grid md:grid-cols-2 gap-4 print:grid-cols-2 print:gap-2">
+                          <div className="bg-white p-3 rounded-lg print:p-2">
+                            <h4 className="font-semibold text-blue-800 mb-2 text-sm print:text-xs">Production et consommation</h4>
+                            <div className="space-y-1 text-sm print:text-xs">
+                              <div className="flex justify-between">
+                                <span className="text-blue-700">Production totale</span>
+                                <span className="font-medium">{Math.round(analysis.totalProduction).toLocaleString()} kWh</span>
+                              </div>
+                              <div className="flex justify-between">
+                                <span className="text-blue-700">Autoconsommation</span>
+                                <span className="font-medium">{Math.round(analysis.totalSelfConsumption).toLocaleString()} kWh</span>
+                              </div>
+                              <div className="flex justify-between">
+                                <span className="text-blue-700">Vente surplus</span>
+                                <span className="font-medium">{Math.round(analysis.totalProduction - analysis.totalSelfConsumption).toLocaleString()} kWh</span>
+                              </div>
+                              <div className="flex justify-between">
+                                <span className="text-blue-700">Taux autoconso.</span>
+                                <span className="font-medium flex items-center">
+                                  {(economicData.selfConsumptionRate * 100)}%
+                                  {virtualBattery && <Battery className="w-3 h-3 ml-1" />}
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                          
+                          <div className="bg-white p-3 rounded-lg print:p-2">
+                            <h4 className="font-semibold text-blue-800 mb-2 text-sm print:text-xs">Économies détaillées</h4>
+                            <div className="space-y-1 text-sm print:text-xs">
+                              <div className="flex justify-between">
+                                <span className="text-blue-700">Économies électricité</span>
+                                <span className="font-medium">{analysis.totalElectricitySavings.toLocaleString()} €</span>
+                              </div>
+                              <div className="flex justify-between">
+                                <span className="text-blue-700">Revenus vente</span>
+                                <span className="font-medium">{analysis.totalSales.toLocaleString()} €</span>
+                              </div>
+                              <div className="flex justify-between border-t border-blue-200 pt-1 mt-2">
+                                <span className="text-blue-800 font-semibold">Total économies</span>
+                                <span className="font-bold text-blue-800">{analysis.totalSavings.toLocaleString()} €</span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })()}
+                    
+                    {/* Comparaison sur toutes les durées */}
+                    <div className="mt-4 bg-white p-3 rounded-lg print:p-2">
+                      <h4 className="font-semibold text-blue-800 mb-2 text-sm print:text-xs text-center">
+                        Comparaison des économies par durée
+                      </h4>
+                      <div className="grid grid-cols-5 gap-2 text-xs print:text-xs">
+                        {[10, 15, 20, 25, 30].map(duration => {
+                          const analysis = economicData.economicAnalysis.find(a => a.duration === duration);
+                          const isSelected = duration === offer.duration;
+                          return (
+                            <div key={duration} className={`text-center p-2 rounded ${isSelected ? 'bg-blue-100 border-2 border-blue-400' : 'bg-gray-50'}`}>
+                              <div className="font-semibold text-blue-800">{duration} ans</div>
+                              <div className="text-blue-700 font-medium">
+                                {analysis ? `${Math.round(analysis.totalSavings / 1000)}k€` : 'N/A'}
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  </div>
+                )}
 
                 {/* Processus de mise en place */}
                 <div className="mt-6 bg-white border-2 border-green-200 p-4 rounded-lg print-process-section">
