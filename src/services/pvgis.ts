@@ -22,7 +22,7 @@ export const getPVGISData = async (
     throw new Error('Puissance invalide (doit être entre 0.1 et 1000 kWc)');
   }
 
-  const url = `https://re.jrc.ec.europa.eu/api/v5_2/PVcalc?lat=${latitude}&lon=${longitude}&peakpower=${peakPower}&loss=14&mountingplace=building&angle=35&aspect=0&outputformat=json`;
+  const url = `/api/pvgis/PVcalc?lat=${latitude}&lon=${longitude}&peakpower=${peakPower}&loss=14&mountingplace=building&angle=35&aspect=0&outputformat=json`;
   
   try {
     const response = await fetch(url);
