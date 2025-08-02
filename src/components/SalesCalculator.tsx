@@ -630,7 +630,7 @@ const SalesCalculator: React.FC = () => {
                           className="w-full bg-green-100 text-green-700 py-2 px-4 rounded-lg hover:bg-green-200 transition-colors flex items-center justify-center"
                         >
                           <TrendingUp className="w-4 h-4 mr-2" />
-                          Voir détails économiques
+                          Voir détails économiques et valeurs résiduelles
                         </button>
 
                         <button

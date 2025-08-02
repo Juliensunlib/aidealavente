@@ -18,16 +18,27 @@ interface MapViewProps {
 }
 
 const MapView: React.FC<MapViewProps> = ({ latitude, longitude, address }) => {
+  useEffect(() => {
+    // Force le redimensionnement de la carte après le montage
+    const timer = setTimeout(() => {
+      window.dispatchEvent(new Event('resize'));
+    }, 100);
+    
+    return () => clearTimeout(timer);
+  }, [latitude, longitude]);
+
   return (
     <div className="h-64 w-full rounded-lg overflow-hidden border border-gray-300">
       <MapContainer
         center={[latitude, longitude]}
         zoom={16}
         style={{ height: '100%', width: '100%' }}
+        key={`${latitude}-${longitude}`}
       >
         <TileLayer
-          url="https://wxs.ign.fr/choisirgeoportail/geoportail/wmts?REQUEST=GetTile&SERVICE=WMTS&VERSION=1.0.0&STYLE=normal&TILEMATRIXSET=PM&FORMAT=image/jpeg&LAYER=ORTHOIMAGERY.ORTHOPHOTOS&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}"
+          url="https://wxs.ign.fr/essentiels/geoportail/wmts?REQUEST=GetTile&SERVICE=WMTS&VERSION=1.0.0&STYLE=normal&TILEMATRIXSET=PM&FORMAT=image/jpeg&LAYER=ORTHOIMAGERY.ORTHOPHOTOS&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}"
           attribution='&copy; <a href="https://www.geoportail.gouv.fr/">Géoportail</a>'
+          maxZoom={19}
         />
         <Marker position={[latitude, longitude]}>
           <Popup>
