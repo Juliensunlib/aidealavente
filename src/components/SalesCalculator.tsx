@@ -129,8 +129,9 @@ const SalesCalculator: React.FC = () => {
     setLongitude(lng);
     
     // Calculer automatiquement le productible si on a la puissance
-    if (power && parseFloat(power) > 0) {
-      await calculatePVGISProduction(lat, lng, parseFloat(power));
+    const powerValue = parseFloat(power);
+    if (power && !isNaN(powerValue) && powerValue >= 2) {
+      await calculatePVGISProduction(lat, lng, powerValue);
     }
   };
 
