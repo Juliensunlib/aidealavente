@@ -474,7 +474,20 @@ const SalesCalculator: React.FC = () => {
                   <div className="grid md:grid-cols-2 gap-6">
                     <div>
                       <h4 className="text-sm font-medium text-gray-700 mb-2">Vue satellite du projet</h4>
-                      <MapView latitude={latitude} longitude={longitude} address={address} />
+                      <MapView 
+                        latitude={latitude} 
+                        longitude={longitude} 
+                        address={address}
+                        onLocationChange={async (lat, lng) => {
+                          setLatitude(lat);
+                          setLongitude(lng);
+                          // Recalculer le productible avec la nouvelle position
+                          const powerValue = parseFloat(power);
+                          if (powerValue >= 2) {
+                            await calculatePVGISProduction(lat, lng, powerValue);
+                          }
+                        }}
+                      />
                     </div>
                     
                     <div className="space-y-4">
