@@ -5,9 +5,10 @@ import { searchAddress } from '../services/geoportail';
 interface AddressSearchProps {
   onAddressSelect: (address: string, latitude: number, longitude: number) => void;
   selectedAddress: string;
+  onError?: (error: string) => void;
 }
 
-const AddressSearch: React.FC<AddressSearchProps> = ({ onAddressSelect, selectedAddress }) => {
+const AddressSearch: React.FC<AddressSearchProps> = ({ onAddressSelect, selectedAddress, onError }) => {
   const [searchTerm, setSearchTerm] = useState(selectedAddress);
   const [suggestions, setSuggestions] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -17,10 +18,12 @@ const AddressSearch: React.FC<AddressSearchProps> = ({ onAddressSelect, selected
     if (term.length < 3) {
       setSuggestions([]);
       setShowSuggestions(false);
+      onError?.('');
       return;
     }
 
     setIsLoading(true);
+    onError?.(''); // Clear any existing errors
     try {
       const response = await searchAddress(term);
       setSuggestions(response.features || []);
@@ -28,6 +31,7 @@ const AddressSearch: React.FC<AddressSearchProps> = ({ onAddressSelect, selected
     } catch (error) {
       console.error('Erreur de recherche:', error);
       setSuggestions([]);
+      onError?.('Erreur lors de la recherche d\'adresse. Vérifiez votre connexion internet.');
     } finally {
       setIsLoading(false);
     }
@@ -45,6 +49,7 @@ const AddressSearch: React.FC<AddressSearchProps> = ({ onAddressSelect, selected
     
     setSearchTerm(address);
     setShowSuggestions(false);
+    onError?.(''); // Clear any errors when address is successfully selected
     onAddressSelect(address, latitude, longitude);
   };
 

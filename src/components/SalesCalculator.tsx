@@ -436,6 +436,7 @@ const SalesCalculator: React.FC = () => {
                   <AddressSearch
                     onAddressSelect={handleAddressSelect}
                     selectedAddress={address}
+                    onError={setError}
                   />
                 </div>
                 
