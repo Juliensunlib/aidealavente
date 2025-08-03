@@ -199,7 +199,7 @@ const SalesCalculator: React.FC = () => {
     const monthlyBillValue = parseFloat(monthlyBill);
     const electricityPriceValue = parseFloat(electricityPrice);
 
-    if (!powerValue || !priceValue || powerValue < 2) {
+    if (!power || !priceValue || isNaN(powerValue) || powerValue < 2) {
       setError('Veuillez saisir une puissance valide (≥ 2 kWc) et un prix d\'installation.');
       return;
     }
