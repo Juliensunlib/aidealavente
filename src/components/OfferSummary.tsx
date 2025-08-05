@@ -143,7 +143,7 @@ const OfferSummary: React.FC<OfferSummaryProps> = ({
               <div className="bg-blue-50 p-3 rounded-lg border border-blue-200">
                 <h3 className="text-lg font-semibold text-blue-800 mb-2 flex items-center">
                   <TrendingUp className="w-5 h-5 mr-2" />
-                  Étude économique sur {offer.duration} ans
+                  Étude économique - Économies brutes par durée
                 </h3>
                 
                 {/* Avertissement */}
@@ -153,36 +153,26 @@ const OfferSummary: React.FC<OfferSummaryProps> = ({
                   </p>
                 </div>
 
-                <div className="grid grid-cols-2 gap-3 text-sm">
-                  <div>
-                    <p className="text-blue-700">Production totale</p>
-                    <p className="font-semibold text-blue-800">
-                      {Math.round(offer.economicAnalysis.totalProduction).toLocaleString()} kWh
-                    </p>
+                {/* Tableau des économies par durée */}
+                <div className="bg-white rounded-lg overflow-hidden">
+                  <div className="grid grid-cols-6 gap-1 text-xs font-medium text-blue-800 bg-blue-100 p-2">
+                    <div className="text-center">Durée</div>
+                    <div className="text-center">10 ans</div>
+                    <div className="text-center">15 ans</div>
+                    <div className="text-center">20 ans</div>
+                    <div className="text-center">25 ans</div>
+                    <div className="text-center">30 ans</div>
                   </div>
-                  <div>
-                    <p className="text-blue-700">Autoconsommation</p>
-                    <p className="font-semibold text-blue-800">
-                      {Math.round(offer.economicAnalysis.totalSelfConsumption).toLocaleString()} kWh
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-blue-700">Économies électricité</p>
-                    <p className="font-semibold text-blue-800">
-                      {formatCurrency(offer.economicAnalysis.totalElectricitySavings)}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-blue-700">Revenus vente surplus</p>
-                    <p className="font-semibold text-blue-800">
-                      {formatCurrency(offer.economicAnalysis.totalSales)}
-                    </p>
-                  </div>
-                  <div className="col-span-2 bg-blue-100 p-2 rounded">
-                    <p className="text-blue-700 text-center">Économies totales brutes</p>
-                    <p className="text-xl font-bold text-blue-800 text-center">
-                      {formatCurrency(offer.economicAnalysis.totalSavings)}
-                    </p>
+                  <div className="grid grid-cols-6 gap-1 text-xs p-2">
+                    <div className="text-blue-700 font-medium">Économies brutes</div>
+                    {[10, 15, 20, 25, 30].map(duration => {
+                      const analysis = economicData.economicAnalysis.find(a => a.duration === duration);
+                      return (
+                        <div key={duration} className="text-center font-semibold text-blue-800">
+                          {analysis ? formatCurrency(analysis.totalSavings) : 'N/A'}
+                        </div>
+                      );
+                    })}
                   </div>
                 </div>
               </div>
