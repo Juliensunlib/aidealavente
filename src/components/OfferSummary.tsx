@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowLeft, Zap, MapPin, Euro, TrendingUp, CheckCircle, Users, Building2, FileText, Calendar, Battery } from 'lucide-react';
+import { ArrowLeft, Zap, MapPin, Euro, TrendingUp, CheckCircle, Users, Building2, FileText, Calendar, Battery, Mail } from 'lucide-react';
 import { EconomicData } from '../types';
 
 interface CalculationResult {
@@ -50,7 +50,7 @@ const OfferSummary: React.FC<OfferSummaryProps> = ({
   const displayPrice = displayMode === 'HT' ? offer.monthlyPayment : offer.monthlyPaymentTTC;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 to-green-100 p-2 print:p-0 print:bg-white">
+    <div className="min-h-screen bg-gradient-to-br from-green-50 to-green-100 p-2 print:p-0 print:bg-white print:text-xs">
       <div className="max-w-4xl mx-auto">
         {/* Header - masqué à l'impression */}
         <div className="print:hidden mb-4">
@@ -64,32 +64,32 @@ const OfferSummary: React.FC<OfferSummaryProps> = ({
         </div>
 
         {/* Contenu principal */}
-        <div className="bg-white rounded-lg shadow-xl print:shadow-none print:rounded-none">
+        <div className="bg-white rounded-lg shadow-xl print:shadow-none print:rounded-none print:text-xs">
           {/* En-tête du résumé */}
-          <div className="bg-gradient-to-r from-green-600 to-green-700 text-white p-4 rounded-t-lg print:rounded-none">
+          <div className="bg-gradient-to-r from-green-600 to-green-700 text-white p-4 rounded-t-lg print:rounded-none print:p-2">
             <div className="flex items-center justify-between">
               <div className="flex items-center">
-                <Zap className="w-8 h-8 mr-3" />
+                <Zap className="w-8 h-8 mr-3 print:w-5 print:h-5 print:mr-2" />
                 <div>
-                  <h1 className="text-2xl font-bold">Résumé d'offre SunLib</h1>
-                  <p className="text-green-100">Abonnement solaire sur {offer.duration} ans</p>
+                  <h1 className="text-2xl font-bold print:text-lg">Résumé d'offre SunLib</h1>
+                  <p className="text-green-100 print:text-xs">Abonnement solaire sur {offer.duration} ans</p>
                 </div>
               </div>
               <div className="text-right">
-                <p className="text-3xl font-bold">{formatCurrency(displayPrice)}</p>
-                <p className="text-green-100">par mois {displayMode}</p>
+                <p className="text-3xl font-bold print:text-xl">{formatCurrency(displayPrice)}</p>
+                <p className="text-green-100 print:text-xs">par mois {displayMode}</p>
               </div>
             </div>
           </div>
 
-          <div className="p-4 space-y-4">
+          <div className="p-4 space-y-4 print:p-2 print:space-y-2">
             {/* 1. Détails de l'installation */}
-            <div className="bg-gray-50 p-3 rounded-lg">
-              <h3 className="text-lg font-semibold text-gray-800 mb-2 flex items-center">
-                <Zap className="w-5 h-5 mr-2 text-green-600" />
+            <div className="bg-gray-50 p-3 rounded-lg print:p-2">
+              <h3 className="text-lg font-semibold text-gray-800 mb-2 flex items-center print:text-sm print:mb-1">
+                <Zap className="w-5 h-5 mr-2 text-green-600 print:w-3 print:h-3 print:mr-1" />
                 Détails de l'installation
               </h3>
-              <div className="grid grid-cols-2 gap-3 text-sm">
+              <div className="grid grid-cols-2 gap-3 text-sm print:gap-1 print:text-xs">
                 <div>
                   <p className="text-gray-600">Puissance installée</p>
                   <p className="font-semibold">{power} kWc</p>
@@ -106,28 +106,28 @@ const OfferSummary: React.FC<OfferSummaryProps> = ({
                 </div>
                 <div>
                   <p className="text-gray-600">Taux d'autoconsommation</p>
-                  <p className="font-semibold flex items-center">
+                  <p className="font-semibold flex items-center print:text-xs">
                     {virtualBattery ? '90%' : '60%'}
-                    {virtualBattery && <Battery className="w-3 h-3 ml-1 text-green-600" />}
+                    {virtualBattery && <Battery className="w-3 h-3 ml-1 text-green-600 print:w-2 print:h-2" />}
                   </p>
                 </div>
               </div>
             </div>
 
             {/* 2. Conditions financières */}
-            <div className="bg-green-50 p-3 rounded-lg border border-green-200">
-              <h3 className="text-lg font-semibold text-green-800 mb-2 flex items-center">
-                <Euro className="w-5 h-5 mr-2" />
+            <div className="bg-green-50 p-3 rounded-lg border border-green-200 print:p-2">
+              <h3 className="text-lg font-semibold text-green-800 mb-2 flex items-center print:text-sm print:mb-1">
+                <Euro className="w-5 h-5 mr-2 print:w-3 print:h-3 print:mr-1" />
                 Conditions financières
               </h3>
-              <div className="grid grid-cols-2 gap-3 text-sm">
+              <div className="grid grid-cols-2 gap-3 text-sm print:gap-1 print:text-xs">
                 <div>
                   <p className="text-green-700">Abonnement mensuel {displayMode}</p>
-                  <p className="text-xl font-bold text-green-800">{formatCurrency(displayPrice)}</p>
+                  <p className="text-xl font-bold text-green-800 print:text-base">{formatCurrency(displayPrice)}</p>
                 </div>
                 <div>
                   <p className="text-green-700">Durée du contrat</p>
-                  <p className="text-xl font-bold text-green-800">{offer.duration} ans</p>
+                  <p className="text-xl font-bold text-green-800 print:text-base">{offer.duration} ans</p>
                 </div>
                 {clientType === 'particulier' && (
                   <div className="col-span-2">
@@ -140,22 +140,22 @@ const OfferSummary: React.FC<OfferSummaryProps> = ({
 
             {/* 3. Étude économique */}
             {economicData && offer.economicAnalysis && (
-              <div className="bg-blue-50 p-3 rounded-lg border border-blue-200">
-                <h3 className="text-lg font-semibold text-blue-800 mb-2 flex items-center">
-                  <TrendingUp className="w-5 h-5 mr-2" />
+              <div className="bg-blue-50 p-3 rounded-lg border border-blue-200 print:p-2">
+                <h3 className="text-lg font-semibold text-blue-800 mb-2 flex items-center print:text-sm print:mb-1">
+                  <TrendingUp className="w-5 h-5 mr-2 print:w-3 print:h-3 print:mr-1" />
                   Étude économique - Économies brutes par durée
                 </h3>
                 
                 {/* Avertissement */}
-                <div className="bg-yellow-100 border border-yellow-300 p-2 rounded mb-3">
-                  <p className="text-xs text-yellow-800 font-medium">
+                <div className="bg-yellow-100 border border-yellow-300 p-2 rounded mb-3 print:p-1 print:mb-1">
+                  <p className="text-xs text-yellow-800 font-medium print:text-xs">
                     ⚠️ Économies calculées BRUTES (avant déduction de l'abonnement SunLib)
                   </p>
                 </div>
 
                 {/* Tableau des économies par durée */}
                 <div className="bg-white rounded-lg overflow-hidden">
-                  <div className="grid grid-cols-6 gap-1 text-xs font-medium text-blue-800 bg-blue-100 p-2">
+                  <div className="grid grid-cols-6 gap-1 text-xs font-medium text-blue-800 bg-blue-100 p-2 print:p-1 print:text-xs">
                     <div className="text-center">Durée</div>
                     <div className="text-center">10 ans</div>
                     <div className="text-center">15 ans</div>
@@ -163,7 +163,7 @@ const OfferSummary: React.FC<OfferSummaryProps> = ({
                     <div className="text-center">25 ans</div>
                     <div className="text-center">30 ans</div>
                   </div>
-                  <div className="grid grid-cols-6 gap-1 text-xs p-2">
+                  <div className="grid grid-cols-6 gap-1 text-xs p-2 print:p-1 print:text-xs">
                     <div className="text-blue-700 font-medium">Économies brutes</div>
                     {[10, 15, 20, 25, 30].map(duration => {
                       const analysis = economicData.economicAnalysis.find(a => a.duration === duration);
@@ -179,35 +179,35 @@ const OfferSummary: React.FC<OfferSummaryProps> = ({
             )}
 
             {/* 4. Avantages de l'abonnement SunLib */}
-            <div className="bg-green-50 p-3 rounded-lg border border-green-200">
-              <h3 className="text-lg font-semibold text-green-800 mb-2 flex items-center">
-                <CheckCircle className="w-5 h-5 mr-2" />
+            <div className="bg-green-50 p-3 rounded-lg border border-green-200 print:p-2">
+              <h3 className="text-lg font-semibold text-green-800 mb-2 flex items-center print:text-sm print:mb-1">
+                <CheckCircle className="w-5 h-5 mr-2 print:w-3 print:h-3 print:mr-1" />
                 Avantages de l'abonnement SunLib
               </h3>
-              <div className="grid grid-cols-1 gap-2 text-sm">
+              <div className="grid grid-cols-1 gap-2 text-sm print:gap-1 print:text-xs">
                 <div className="flex items-center">
-                  <CheckCircle className="w-4 h-4 text-green-600 mr-2 flex-shrink-0" />
+                  <CheckCircle className="w-4 h-4 text-green-600 mr-2 flex-shrink-0 print:w-3 print:h-3 print:mr-1" />
                   <span>Installation et mise en service incluses</span>
                 </div>
                 <div className="flex items-center">
-                  <CheckCircle className="w-4 h-4 text-green-600 mr-2 flex-shrink-0" />
+                  <CheckCircle className="w-4 h-4 text-green-600 mr-2 flex-shrink-0 print:w-3 print:h-3 print:mr-1" />
                   <span>Maintenance et assurance pendant toute la durée</span>
                 </div>
                 <div className="flex items-center">
-                  <CheckCircle className="w-4 h-4 text-green-600 mr-2 flex-shrink-0" />
+                  <CheckCircle className="w-4 h-4 text-green-600 mr-2 flex-shrink-0 print:w-3 print:h-3 print:mr-1" />
                   <span>Monitoring et suivi de production</span>
                 </div>
                 <div className="flex items-center">
-                  <CheckCircle className="w-4 h-4 text-green-600 mr-2 flex-shrink-0" />
+                  <CheckCircle className="w-4 h-4 text-green-600 mr-2 flex-shrink-0 print:w-3 print:h-3 print:mr-1" />
                   <span>Garantie de performance sur {offer.duration} ans</span>
                 </div>
                 <div className="flex items-center">
-                  <CheckCircle className="w-4 h-4 text-green-600 mr-2 flex-shrink-0" />
+                  <CheckCircle className="w-4 h-4 text-green-600 mr-2 flex-shrink-0 print:w-3 print:h-3 print:mr-1" />
                   <span>Option de rachat à tout moment</span>
                 </div>
                 {virtualBattery && (
                   <div className="flex items-center">
-                    <CheckCircle className="w-4 h-4 text-green-600 mr-2 flex-shrink-0" />
+                    <CheckCircle className="w-4 h-4 text-green-600 mr-2 flex-shrink-0 print:w-3 print:h-3 print:mr-1" />
                     <span>Batterie virtuelle incluse (90% d'autoconsommation)</span>
                   </div>
                 )}
@@ -215,26 +215,26 @@ const OfferSummary: React.FC<OfferSummaryProps> = ({
             </div>
 
             {/* 5. Processus et prochaines étapes */}
-            <div className="bg-gray-50 p-3 rounded-lg">
-              <h3 className="text-lg font-semibold text-gray-800 mb-2 flex items-center">
-                <Calendar className="w-5 h-5 mr-2 text-green-600" />
+            <div className="bg-gray-50 p-3 rounded-lg print:p-2">
+              <h3 className="text-lg font-semibold text-gray-800 mb-2 flex items-center print:text-sm print:mb-1">
+                <Calendar className="w-5 h-5 mr-2 text-green-600 print:w-3 print:h-3 print:mr-1" />
                 Processus et prochaines étapes
               </h3>
-              <div className="space-y-2 text-sm">
+              <div className="space-y-2 text-sm print:space-y-1 print:text-xs">
                 <div className="flex items-start">
-                  <span className="bg-green-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs mr-2 mt-0.5 flex-shrink-0">1</span>
+                  <span className="bg-green-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs mr-2 mt-0.5 flex-shrink-0 print:w-4 print:h-4 print:mr-1 print:text-xs">1</span>
                   <span>Étude technique et administrative (2-4 semaines)</span>
                 </div>
                 <div className="flex items-start">
-                  <span className="bg-green-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs mr-2 mt-0.5 flex-shrink-0">2</span>
+                  <span className="bg-green-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs mr-2 mt-0.5 flex-shrink-0 print:w-4 print:h-4 print:mr-1 print:text-xs">2</span>
                   <span>Validation du dossier et signature du contrat</span>
                 </div>
                 <div className="flex items-start">
-                  <span className="bg-green-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs mr-2 mt-0.5 flex-shrink-0">3</span>
+                  <span className="bg-green-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs mr-2 mt-0.5 flex-shrink-0 print:w-4 print:h-4 print:mr-1 print:text-xs">3</span>
                   <span>Installation par nos équipes certifiées (1-2 jours)</span>
                 </div>
                 <div className="flex items-start">
-                  <span className="bg-green-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs mr-2 mt-0.5 flex-shrink-0">4</span>
+                  <span className="bg-green-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs mr-2 mt-0.5 flex-shrink-0 print:w-4 print:h-4 print:mr-1 print:text-xs">4</span>
                   <span>Mise en service et début de la production</span>
                 </div>
               </div>
@@ -242,22 +242,35 @@ const OfferSummary: React.FC<OfferSummaryProps> = ({
           </div>
 
           {/* Footer */}
-          <div className="bg-gray-100 p-3 rounded-b-lg print:rounded-none text-center">
-            <p className="text-sm text-gray-600">
+          <div className="bg-gray-100 p-3 rounded-b-lg print:rounded-none text-center print:p-1">
+            <p className="text-sm text-gray-600 print:text-xs">
               Cette offre est valable 30 jours. Pour plus d'informations, contactez votre conseiller SunLib.
             </p>
           </div>
         </div>
 
-        {/* Bouton d'impression - masqué à l'impression */}
-        <div className="print:hidden mt-4 text-center">
-          <button
-            onClick={() => window.print()}
-            className="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-colors flex items-center mx-auto"
-          >
-            <FileText className="w-5 h-5 mr-2" />
-            Imprimer le résumé
-          </button>
+        {/* Boutons d'action - masqués à l'impression */}
+        <div className="print:hidden mt-4 text-center space-y-3">
+          <div className="flex justify-center space-x-4">
+            <button
+              onClick={() => {
+                const subject = encodeURIComponent(`Résumé d'offre SunLib - Abonnement ${offer.duration} ans`);
+                const body = encodeURIComponent(`Bonjour,\n\nVeuillez trouver ci-joint le résumé de votre offre SunLib :\n\n- Puissance : ${power} kWc\n- Abonnement mensuel : ${formatCurrency(displayPrice)} ${displayMode}\n- Durée : ${offer.duration} ans\n\nCordialement,\nÉquipe SunLib`);
+                window.location.href = `mailto:?subject=${subject}&body=${body}`;
+              }}
+              className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors flex items-center"
+            >
+              <Mail className="w-5 h-5 mr-2" />
+              Envoyer par mail
+            </button>
+            <button
+              onClick={() => window.print()}
+              className="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-colors flex items-center"
+            >
+              <FileText className="w-5 h-5 mr-2" />
+              Imprimer le résumé
+            </button>
+          </div>
         </div>
       </div>
     </div>
