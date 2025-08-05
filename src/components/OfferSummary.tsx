@@ -50,8 +50,8 @@ const OfferSummary: React.FC<OfferSummaryProps> = ({
   const displayPrice = displayMode === 'HT' ? offer.monthlyPayment : offer.monthlyPaymentTTC;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 to-green-100 p-2 print:p-0 print:bg-white print:text-xs">
-      <div className="max-w-4xl mx-auto">
+    <div className="min-h-screen bg-gradient-to-br from-green-50 to-green-100 p-2 print:p-0 print:bg-white print:text-sm print:min-h-screen">
+      <div className="max-w-4xl mx-auto print:max-w-none print:mx-0">
         {/* Header - masqué à l'impression */}
         <div className="print:hidden mb-4">
           <button
@@ -64,32 +64,32 @@ const OfferSummary: React.FC<OfferSummaryProps> = ({
         </div>
 
         {/* Contenu principal */}
-        <div className="bg-white rounded-lg shadow-xl print:shadow-none print:rounded-none print:text-xs">
+        <div className="bg-white rounded-lg shadow-xl print:shadow-none print:rounded-none print:text-sm print:h-screen print:flex print:flex-col">
           {/* En-tête du résumé */}
-          <div className="bg-gradient-to-r from-green-600 to-green-700 text-white p-4 rounded-t-lg print:rounded-none print:p-2">
+          <div className="bg-gradient-to-r from-green-600 to-green-700 text-white p-4 rounded-t-lg print:rounded-none print:p-3 print:flex-shrink-0">
             <div className="flex items-center justify-between">
               <div className="flex items-center">
-                <Zap className="w-8 h-8 mr-3 print:w-5 print:h-5 print:mr-2" />
+                <Zap className="w-8 h-8 mr-3 print:w-6 print:h-6 print:mr-3" />
                 <div>
-                  <h1 className="text-2xl font-bold print:text-lg">Résumé d'offre SunLib</h1>
-                  <p className="text-green-100 print:text-xs">Abonnement solaire sur {offer.duration} ans</p>
+                  <h1 className="text-2xl font-bold print:text-xl">Résumé d'offre SunLib</h1>
+                  <p className="text-green-100 print:text-sm">Abonnement solaire sur {offer.duration} ans</p>
                 </div>
               </div>
               <div className="text-right">
-                <p className="text-3xl font-bold print:text-xl">{formatCurrency(displayPrice)}</p>
-                <p className="text-green-100 print:text-xs">par mois {displayMode}</p>
+                <p className="text-3xl font-bold print:text-2xl">{formatCurrency(displayPrice)}</p>
+                <p className="text-green-100 print:text-sm">par mois {displayMode}</p>
               </div>
             </div>
           </div>
 
-          <div className="p-4 space-y-4 print:p-2 print:space-y-2">
+          <div className="p-4 space-y-4 print:p-4 print:space-y-3 print:flex-1 print:overflow-hidden">
             {/* 1. Détails de l'installation */}
-            <div className="bg-gray-50 p-3 rounded-lg print:p-2">
-              <h3 className="text-lg font-semibold text-gray-800 mb-2 flex items-center print:text-sm print:mb-1">
-                <Zap className="w-5 h-5 mr-2 text-green-600 print:w-3 print:h-3 print:mr-1" />
+            <div className="bg-gray-50 p-3 rounded-lg print:p-3">
+              <h3 className="text-lg font-semibold text-gray-800 mb-2 flex items-center print:text-base print:mb-2">
+                <Zap className="w-5 h-5 mr-2 text-green-600 print:w-4 print:h-4 print:mr-2" />
                 Détails de l'installation
               </h3>
-              <div className="grid grid-cols-2 gap-3 text-sm print:gap-1 print:text-xs">
+              <div className="grid grid-cols-2 gap-3 text-sm print:gap-3 print:text-sm">
                 <div>
                   <p className="text-gray-600">Puissance installée</p>
                   <p className="font-semibold">{power} kWc</p>
@@ -106,28 +106,28 @@ const OfferSummary: React.FC<OfferSummaryProps> = ({
                 </div>
                 <div>
                   <p className="text-gray-600">Taux d'autoconsommation</p>
-                  <p className="font-semibold flex items-center print:text-xs">
+                  <p className="font-semibold flex items-center print:text-sm">
                     {virtualBattery ? '90%' : '60%'}
-                    {virtualBattery && <Battery className="w-3 h-3 ml-1 text-green-600 print:w-2 print:h-2" />}
+                    {virtualBattery && <Battery className="w-3 h-3 ml-1 text-green-600 print:w-3 print:h-3" />}
                   </p>
                 </div>
               </div>
             </div>
 
             {/* 2. Conditions financières */}
-            <div className="bg-green-50 p-3 rounded-lg border border-green-200 print:p-2">
-              <h3 className="text-lg font-semibold text-green-800 mb-2 flex items-center print:text-sm print:mb-1">
-                <Euro className="w-5 h-5 mr-2 print:w-3 print:h-3 print:mr-1" />
+            <div className="bg-green-50 p-3 rounded-lg border border-green-200 print:p-3">
+              <h3 className="text-lg font-semibold text-green-800 mb-2 flex items-center print:text-base print:mb-2">
+                <Euro className="w-5 h-5 mr-2 print:w-4 print:h-4 print:mr-2" />
                 Conditions financières
               </h3>
-              <div className="grid grid-cols-2 gap-3 text-sm print:gap-1 print:text-xs">
+              <div className="grid grid-cols-2 gap-3 text-sm print:gap-3 print:text-sm">
                 <div>
                   <p className="text-green-700">Abonnement mensuel {displayMode}</p>
-                  <p className="text-xl font-bold text-green-800 print:text-base">{formatCurrency(displayPrice)}</p>
+                  <p className="text-xl font-bold text-green-800 print:text-lg">{formatCurrency(displayPrice)}</p>
                 </div>
                 <div>
                   <p className="text-green-700">Durée du contrat</p>
-                  <p className="text-xl font-bold text-green-800 print:text-base">{offer.duration} ans</p>
+                  <p className="text-xl font-bold text-green-800 print:text-lg">{offer.duration} ans</p>
                 </div>
                 {clientType === 'particulier' && (
                   <div className="col-span-2">
@@ -140,22 +140,22 @@ const OfferSummary: React.FC<OfferSummaryProps> = ({
 
             {/* 3. Étude économique */}
             {economicData && offer.economicAnalysis && (
-              <div className="bg-blue-50 p-3 rounded-lg border border-blue-200 print:p-2">
-                <h3 className="text-lg font-semibold text-blue-800 mb-2 flex items-center print:text-sm print:mb-1">
-                  <TrendingUp className="w-5 h-5 mr-2 print:w-3 print:h-3 print:mr-1" />
+              <div className="bg-blue-50 p-3 rounded-lg border border-blue-200 print:p-3">
+                <h3 className="text-lg font-semibold text-blue-800 mb-2 flex items-center print:text-base print:mb-2">
+                  <TrendingUp className="w-5 h-5 mr-2 print:w-4 print:h-4 print:mr-2" />
                   Étude économique - Économies brutes par durée
                 </h3>
                 
                 {/* Avertissement */}
-                <div className="bg-yellow-100 border border-yellow-300 p-2 rounded mb-3 print:p-1 print:mb-1">
-                  <p className="text-xs text-yellow-800 font-medium print:text-xs">
+                <div className="bg-yellow-100 border border-yellow-300 p-2 rounded mb-3 print:p-2 print:mb-2">
+                  <p className="text-xs text-yellow-800 font-medium print:text-sm">
                     ⚠️ Économies calculées BRUTES (avant déduction de l'abonnement SunLib)
                   </p>
                 </div>
 
                 {/* Tableau des économies par durée */}
                 <div className="bg-white rounded-lg overflow-hidden">
-                  <div className="grid grid-cols-6 gap-1 text-xs font-medium text-blue-800 bg-blue-100 p-2 print:p-1 print:text-xs">
+                  <div className="grid grid-cols-6 gap-1 text-xs font-medium text-blue-800 bg-blue-100 p-2 print:p-2 print:text-sm">
                     <div className="text-center">Durée</div>
                     <div className="text-center">10 ans</div>
                     <div className="text-center">15 ans</div>
@@ -163,7 +163,7 @@ const OfferSummary: React.FC<OfferSummaryProps> = ({
                     <div className="text-center">25 ans</div>
                     <div className="text-center">30 ans</div>
                   </div>
-                  <div className="grid grid-cols-6 gap-1 text-xs p-2 print:p-1 print:text-xs">
+                  <div className="grid grid-cols-6 gap-1 text-xs p-2 print:p-2 print:text-sm">
                     <div className="text-blue-700 font-medium">Économies brutes</div>
                     {[10, 15, 20, 25, 30].map(duration => {
                       const analysis = economicData.economicAnalysis.find(a => a.duration === duration);
@@ -179,35 +179,35 @@ const OfferSummary: React.FC<OfferSummaryProps> = ({
             )}
 
             {/* 4. Avantages de l'abonnement SunLib */}
-            <div className="bg-green-50 p-3 rounded-lg border border-green-200 print:p-2">
-              <h3 className="text-lg font-semibold text-green-800 mb-2 flex items-center print:text-sm print:mb-1">
-                <CheckCircle className="w-5 h-5 mr-2 print:w-3 print:h-3 print:mr-1" />
+            <div className="bg-green-50 p-3 rounded-lg border border-green-200 print:p-3">
+              <h3 className="text-lg font-semibold text-green-800 mb-2 flex items-center print:text-base print:mb-2">
+                <CheckCircle className="w-5 h-5 mr-2 print:w-4 print:h-4 print:mr-2" />
                 Avantages de l'abonnement SunLib
               </h3>
-              <div className="grid grid-cols-1 gap-2 text-sm print:gap-1 print:text-xs">
+              <div className="grid grid-cols-2 gap-2 text-sm print:gap-2 print:text-sm">
                 <div className="flex items-center">
-                  <CheckCircle className="w-4 h-4 text-green-600 mr-2 flex-shrink-0 print:w-3 print:h-3 print:mr-1" />
+                  <CheckCircle className="w-4 h-4 text-green-600 mr-2 flex-shrink-0 print:w-3 print:h-3 print:mr-2" />
                   <span>Installation et mise en service incluses</span>
                 </div>
                 <div className="flex items-center">
-                  <CheckCircle className="w-4 h-4 text-green-600 mr-2 flex-shrink-0 print:w-3 print:h-3 print:mr-1" />
+                  <CheckCircle className="w-4 h-4 text-green-600 mr-2 flex-shrink-0 print:w-3 print:h-3 print:mr-2" />
                   <span>Maintenance et assurance pendant toute la durée</span>
                 </div>
                 <div className="flex items-center">
-                  <CheckCircle className="w-4 h-4 text-green-600 mr-2 flex-shrink-0 print:w-3 print:h-3 print:mr-1" />
+                  <CheckCircle className="w-4 h-4 text-green-600 mr-2 flex-shrink-0 print:w-3 print:h-3 print:mr-2" />
                   <span>Monitoring et suivi de production</span>
                 </div>
                 <div className="flex items-center">
-                  <CheckCircle className="w-4 h-4 text-green-600 mr-2 flex-shrink-0 print:w-3 print:h-3 print:mr-1" />
+                  <CheckCircle className="w-4 h-4 text-green-600 mr-2 flex-shrink-0 print:w-3 print:h-3 print:mr-2" />
                   <span>Garantie de performance sur {offer.duration} ans</span>
                 </div>
                 <div className="flex items-center">
-                  <CheckCircle className="w-4 h-4 text-green-600 mr-2 flex-shrink-0 print:w-3 print:h-3 print:mr-1" />
+                  <CheckCircle className="w-4 h-4 text-green-600 mr-2 flex-shrink-0 print:w-3 print:h-3 print:mr-2" />
                   <span>Option de rachat à tout moment</span>
                 </div>
                 {virtualBattery && (
                   <div className="flex items-center">
-                    <CheckCircle className="w-4 h-4 text-green-600 mr-2 flex-shrink-0 print:w-3 print:h-3 print:mr-1" />
+                    <CheckCircle className="w-4 h-4 text-green-600 mr-2 flex-shrink-0 print:w-3 print:h-3 print:mr-2" />
                     <span>Batterie virtuelle incluse (90% d'autoconsommation)</span>
                   </div>
                 )}
@@ -215,26 +215,26 @@ const OfferSummary: React.FC<OfferSummaryProps> = ({
             </div>
 
             {/* 5. Processus et prochaines étapes */}
-            <div className="bg-gray-50 p-3 rounded-lg print:p-2">
-              <h3 className="text-lg font-semibold text-gray-800 mb-2 flex items-center print:text-sm print:mb-1">
-                <Calendar className="w-5 h-5 mr-2 text-green-600 print:w-3 print:h-3 print:mr-1" />
+            <div className="bg-gray-50 p-3 rounded-lg print:p-3">
+              <h3 className="text-lg font-semibold text-gray-800 mb-2 flex items-center print:text-base print:mb-2">
+                <Calendar className="w-5 h-5 mr-2 text-green-600 print:w-4 print:h-4 print:mr-2" />
                 Processus et prochaines étapes
               </h3>
-              <div className="space-y-2 text-sm print:space-y-1 print:text-xs">
+              <div className="grid grid-cols-2 gap-2 text-sm print:gap-2 print:text-sm">
                 <div className="flex items-start">
-                  <span className="bg-green-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs mr-2 mt-0.5 flex-shrink-0 print:w-4 print:h-4 print:mr-1 print:text-xs">1</span>
+                  <span className="bg-green-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs mr-2 mt-0.5 flex-shrink-0 print:w-4 print:h-4 print:mr-2 print:text-xs">1</span>
                   <span>Étude technique et administrative (2-4 semaines)</span>
                 </div>
                 <div className="flex items-start">
-                  <span className="bg-green-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs mr-2 mt-0.5 flex-shrink-0 print:w-4 print:h-4 print:mr-1 print:text-xs">2</span>
+                  <span className="bg-green-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs mr-2 mt-0.5 flex-shrink-0 print:w-4 print:h-4 print:mr-2 print:text-xs">2</span>
                   <span>Validation du dossier et signature du contrat</span>
                 </div>
                 <div className="flex items-start">
-                  <span className="bg-green-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs mr-2 mt-0.5 flex-shrink-0 print:w-4 print:h-4 print:mr-1 print:text-xs">3</span>
+                  <span className="bg-green-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs mr-2 mt-0.5 flex-shrink-0 print:w-4 print:h-4 print:mr-2 print:text-xs">3</span>
                   <span>Installation par nos équipes certifiées (1-2 jours)</span>
                 </div>
                 <div className="flex items-start">
-                  <span className="bg-green-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs mr-2 mt-0.5 flex-shrink-0 print:w-4 print:h-4 print:mr-1 print:text-xs">4</span>
+                  <span className="bg-green-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs mr-2 mt-0.5 flex-shrink-0 print:w-4 print:h-4 print:mr-2 print:text-xs">4</span>
                   <span>Mise en service et début de la production</span>
                 </div>
               </div>
@@ -242,8 +242,8 @@ const OfferSummary: React.FC<OfferSummaryProps> = ({
           </div>
 
           {/* Footer */}
-          <div className="bg-gray-100 p-3 rounded-b-lg print:rounded-none text-center print:p-1">
-            <p className="text-sm text-gray-600 print:text-xs">
+          <div className="bg-gray-100 p-3 rounded-b-lg print:rounded-none text-center print:p-2 print:flex-shrink-0">
+            <p className="text-sm text-gray-600 print:text-sm">
               Cette offre est valable 30 jours. Pour plus d'informations, contactez votre conseiller SunLib.
             </p>
           </div>
