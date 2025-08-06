@@ -153,7 +153,7 @@ const SalesCalculator: React.FC = () => {
     const sellPrice = 0.004; // 0.4 cts/kWh
     
     const durations = [10, 15, 20, 25, 30];
-    const economicAnalysis = durations.map(duration => {
+    const economicAnalysis = durations.map((duration, index) => {
       const totalProduction = production * duration;
       const totalSelfConsumption = totalProduction * selfConsumptionRate;
       const totalSurplus = totalProduction - totalSelfConsumption;
@@ -164,12 +164,32 @@ const SalesCalculator: React.FC = () => {
       // Revenus de la vente du surplus
       const totalSales = totalSurplus * sellPrice;
       
-      // Économies totales
-      const totalSavings = totalElectricitySavings + totalSales;
+      // Économies brutes
+      const totalGrossSavings = totalElectricitySavings + totalSales;
+      
+      // Coût total de l'abonnement sur la durée
+      // On utilise les résultats calculés pour récupérer le montant mensuel
+      const durations = [10, 15, 20, 25];
+      let monthlyCost = 0;
+      if (durations.includes(duration)) {
+        const powerValue = parseFloat(power);
+        const priceValue = parseFloat(installationPrice);
+        if (powerValue && priceValue) {
+          const rate = getVariableRates(duration, powerValue);
+          const monthlyPaymentHT = calculateMonthlyPayment(priceValue, rate, duration * 12);
+          monthlyCost = displayMode === 'HT' ? monthlyPaymentHT : monthlyPaymentHT * 1.20;
+        }
+      }
+      const totalSubscriptionCost = monthlyCost * 12 * duration;
+      
+      // Économies nettes (après déduction de l'abonnement)
+      const totalSavings = totalGrossSavings - totalSubscriptionCost;
       
       return {
         duration,
         totalSavings,
+        totalGrossSavings,
+        totalSubscriptionCost,
         totalProduction,
         totalSelfConsumption,
         totalSales,
