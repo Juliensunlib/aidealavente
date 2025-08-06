@@ -10,6 +10,8 @@ export interface EconomicData {
   economicAnalysis: {
     duration: number;
     totalSavings: number;
+    totalGrossSavings?: number;
+    totalSubscriptionCost?: number;
     totalProduction: number;
     totalSelfConsumption: number;
     totalSales: number;
