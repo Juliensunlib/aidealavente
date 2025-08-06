@@ -149,7 +149,7 @@ const OfferSummary: React.FC<OfferSummaryProps> = ({
                 {/* Avertissement */}
                 <div className="bg-yellow-100 border border-yellow-300 p-2 rounded mb-3 print:p-2 print:mb-2">
                   <p className="text-xs text-yellow-800 font-medium print:text-sm">
-                    💰 Économies calculées NETTES (après déduction de l'abonnement SunLib)
+                    💰 Économies calculées BRUTES (avant déduction de l'abonnement SunLib)
                   </p>
                 </div>
 
@@ -164,13 +164,13 @@ const OfferSummary: React.FC<OfferSummaryProps> = ({
                     <div className="text-center">30 ans</div>
                   </div>
                   <div className="grid grid-cols-6 gap-1 text-xs p-2 print:p-2 print:text-sm">
-                    <div className="text-blue-700 font-medium">Économies nettes</div>
+                    <div className="text-blue-700 font-medium">Économies brutes</div>
                     {[10, 15, 20, 25, 30].map(duration => {
                       const analysis = economicData.economicAnalysis.find(a => a.duration === duration);
                       return (
                         <div key={duration} className="text-center font-semibold text-blue-800">
                           {analysis ? (
-                            <span className={analysis.totalSavings >= 0 ? 'text-green-600' : 'text-red-600'}>
+                            <span className="text-green-600">
                               {formatCurrency(analysis.totalSavings)}
                             </span>
                           ) : 'N/A'}

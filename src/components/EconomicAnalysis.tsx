@@ -70,26 +70,26 @@ const EconomicAnalysis: React.FC<EconomicAnalysisProps> = ({
 
         <div className="bg-white p-3 rounded-lg border-2 border-green-300">
           <div className="text-center">
-            <p className="text-sm text-gray-600 mb-1">Économies nettes sur {selectedDuration} ans</p>
-            <p className={`text-2xl font-bold ${analysisForDuration.totalSavings >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+            <p className="text-sm text-gray-600 mb-1">Économies brutes sur {selectedDuration} ans</p>
+            <p className="text-2xl font-bold text-green-600">
               {formatCurrency(analysisForDuration.totalSavings)}
             </p>
             <p className="text-xs text-gray-500 mt-1">
-              (après déduction abonnement SunLib)
+              (avant déduction abonnement SunLib)
             </p>
           </div>
           
           <div className="mt-3 grid grid-cols-2 gap-2 text-xs">
             <div className="text-center">
-              <p className="text-gray-600">Économies brutes</p>
+              <p className="text-gray-600">Économies électricité</p>
               <p className="font-semibold text-green-700">
-                {formatCurrency((analysisForDuration as any).totalGrossSavings || (analysisForDuration.totalElectricitySavings + analysisForDuration.totalSales))}
+                {formatCurrency(analysisForDuration.totalElectricitySavings)}
               </p>
             </div>
             <div className="text-center">
-              <p className="text-gray-600">Coût abonnement</p>
-              <p className="font-semibold text-red-600">
-                -{formatCurrency((analysisForDuration as any).totalSubscriptionCost || 0)}
+              <p className="text-gray-600">Revenus vente surplus</p>
+              <p className="font-semibold text-green-700">
+                {formatCurrency(analysisForDuration.totalSales)}
               </p>
             </div>
           </div>

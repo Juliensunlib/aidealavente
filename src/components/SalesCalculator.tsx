@@ -183,13 +183,11 @@ const SalesCalculator: React.FC = () => {
       const totalSubscriptionCost = monthlyCost * 12 * duration;
       
       // Économies nettes (après déduction de l'abonnement)
-      const totalSavings = totalGrossSavings - totalSubscriptionCost;
+      const totalSavings = totalGrossSavings;
       
       return {
         duration,
         totalSavings,
-        totalGrossSavings,
-        totalSubscriptionCost,
         totalProduction,
         totalSelfConsumption,
         totalSales,
