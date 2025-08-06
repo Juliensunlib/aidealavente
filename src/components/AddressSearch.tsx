@@ -31,7 +31,8 @@ const AddressSearch: React.FC<AddressSearchProps> = ({ onAddressSelect, selected
     } catch (error) {
       console.error('Erreur de recherche:', error);
       setSuggestions([]);
-      onError?.('Erreur lors de la recherche d\'adresse. Vérifiez votre connexion internet.');
+      const errorMessage = error instanceof Error ? error.message : 'Erreur lors de la recherche d\'adresse';
+      onError?.(errorMessage);
     } finally {
       setIsLoading(false);
     }
