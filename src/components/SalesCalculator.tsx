@@ -285,4 +285,12 @@ const SalesCalculator: React.FC = () => {
     setShowResults(true);
     setIsFormCollapsed(true);
   };
+
+  return (
+    <div>
+      {/* Component JSX will go here */}
+    </div>
+  );
 }
+
+export default SalesCalculator;
