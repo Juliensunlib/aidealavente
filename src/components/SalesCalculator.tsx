@@ -150,7 +150,7 @@ const SalesCalculator: React.FC = () => {
 
   const calculateEconomicAnalysis = (powerValue: number, production: number, monthlyBillValue: number, electricityPriceValue: number) => {
     const selfConsumptionRate = virtualBattery ? 0.9 : 0.6;
-    const sellPrice = 0.40; // 40 cts/kWh (tarif de rachat EDF OA)
+    const sellPrice = 0.04; // 4 cts/kWh (tarif de rachat EDF OA)
     
     const durations = [10, 15, 20, 25, 30];
     const economicAnalysis = durations.map((duration, index) => {
