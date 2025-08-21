@@ -287,8 +287,359 @@ const SalesCalculator: React.FC = () => {
   };
 
   return (
-    <div>
-      {/* Component JSX will go here */}
+    <div className="min-h-screen bg-gradient-to-br from-green-50 to-green-100 p-4">
+      {showOfferSummary && selectedOffer ? (
+        <OfferSummary
+          offer={selectedOffer}
+          economicData={economicData}
+          power={parseFloat(power)}
+          clientType={clientType}
+          displayMode={displayMode}
+          virtualBattery={virtualBattery}
+          onBack={() => setShowOfferSummary(false)}
+        />
+      ) : (
+        <div className="max-w-6xl mx-auto">
+          {/* Header */}
+          <div className="text-center mb-8">
+            <div className="flex items-center justify-center mb-4">
+              <Zap className="w-12 h-12 text-green-600 mr-3" />
+              <h1 className="text-4xl font-bold text-gray-800">Outil d'aide à la vente SunLib</h1>
+            </div>
+            <p className="text-xl text-gray-600">Calculateur d'abonnement solaire avec étude économique</p>
+          </div>
+
+          {/* Formulaire principal */}
+          <div className="bg-white rounded-xl shadow-lg overflow-hidden mb-6">
+            <div 
+              className="bg-green-600 text-white p-4 cursor-pointer flex items-center justify-between"
+              onClick={() => setIsFormCollapsed(!isFormCollapsed)}
+            >
+              <div className="flex items-center">
+                <Calculator className="w-6 h-6 mr-3" />
+                <h2 className="text-xl font-semibold">Paramètres du projet</h2>
+              </div>
+              {isFormCollapsed ? <ChevronDown className="w-5 h-5" /> : <ChevronUp className="w-5 h-5" />}
+            </div>
+            
+            {!isFormCollapsed && (
+              <div className="p-6 space-y-6">
+                {/* Type de client et mode d'affichage */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-3">
+                      Type de client
+                    </label>
+                    <div className="flex space-x-4">
+                      <button
+                        onClick={() => setClientType('particulier')}
+                        className={`flex items-center px-4 py-2 rounded-lg border-2 transition-all ${
+                          clientType === 'particulier'
+                            ? 'border-green-500 bg-green-50 text-green-700'
+                            : 'border-gray-300 hover:border-green-300'
+                        }`}
+                      >
+                        <Users className="w-5 h-5 mr-2" />
+                        Particulier
+                      </button>
+                      <button
+                        onClick={() => setClientType('entreprise')}
+                        className={`flex items-center px-4 py-2 rounded-lg border-2 transition-all ${
+                          clientType === 'entreprise'
+                            ? 'border-green-500 bg-green-50 text-green-700'
+                            : 'border-gray-300 hover:border-green-300'
+                        }`}
+                      >
+                        <Building2 className="w-5 h-5 mr-2" />
+                        Entreprise
+                      </button>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-3">
+                      Mode d'affichage
+                    </label>
+                    <div className="flex space-x-4">
+                      <button
+                        onClick={() => setDisplayMode('HT')}
+                        className={`px-4 py-2 rounded-lg border-2 transition-all ${
+                          displayMode === 'HT'
+                            ? 'border-green-500 bg-green-50 text-green-700'
+                            : 'border-gray-300 hover:border-green-300'
+                        }`}
+                      >
+                        HT
+                      </button>
+                      <button
+                        onClick={() => setDisplayMode('TTC')}
+                        className={`px-4 py-2 rounded-lg border-2 transition-all ${
+                          displayMode === 'TTC'
+                            ? 'border-green-500 bg-green-50 text-green-700'
+                            : 'border-gray-300 hover:border-green-300'
+                        }`}
+                      >
+                        TTC
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Batterie virtuelle */}
+                <div>
+                  <label className="flex items-center space-x-3 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={virtualBattery}
+                      onChange={(e) => setVirtualBattery(e.target.checked)}
+                      className="w-5 h-5 text-green-600 border-gray-300 rounded focus:ring-green-500"
+                    />
+                    <div className="flex items-center">
+                      <Battery className="w-5 h-5 text-green-600 mr-2" />
+                      <span className="text-sm font-medium text-gray-700">
+                        Inclure la batterie virtuelle (90% d'autoconsommation vs 60%)
+                      </span>
+                    </div>
+                  </label>
+                </div>
+
+                {/* Paramètres techniques */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Puissance de l'installation (kWc)
+                    </label>
+                    <input
+                      type="number"
+                      value={power}
+                      onChange={(e) => {
+                        const newPower = e.target.value;
+                        setPower(newPower);
+                        
+                        // Recalculer le productible si on a une adresse
+                        const powerValue = parseFloat(newPower);
+                        if (latitude && longitude && !isNaN(powerValue) && powerValue >= 2) {
+                          calculatePVGISProduction(latitude, longitude, powerValue);
+                        }
+                      }}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                      placeholder="Ex: 6"
+                      min="2"
+                      step="0.5"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Prix d'installation HT (€)
+                    </label>
+                    <input
+                      type="number"
+                      value={installationPrice}
+                      onChange={(e) => setInstallationPrice(e.target.value)}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                      placeholder="Ex: 12000"
+                    />
+                  </div>
+                </div>
+
+                {/* Localisation */}
+                <div className="space-y-4">
+                  <AddressSearch
+                    onAddressSelect={handleAddressSelect}
+                    selectedAddress={address}
+                    onError={setError}
+                  />
+                  
+                  {latitude && longitude && (
+                    <MapView
+                      latitude={latitude}
+                      longitude={longitude}
+                      address={address}
+                      onLocationChange={async (lat, lng) => {
+                        setLatitude(lat);
+                        setLongitude(lng);
+                        
+                        // Recalculer le productible avec la nouvelle position
+                        const powerValue = parseFloat(power);
+                        if (powerValue && !isNaN(powerValue) && powerValue >= 2) {
+                          await calculatePVGISProduction(lat, lng, powerValue);
+                        }
+                      }}
+                    />
+                  )}
+                </div>
+
+                {/* Données économiques */}
+                <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
+                  <h3 className="text-lg font-semibold text-blue-800 mb-4 flex items-center">
+                    <TrendingUp className="w-5 h-5 mr-2" />
+                    Données pour l'étude économique
+                  </h3>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-blue-700 mb-2">
+                        Facture mensuelle d'électricité (€)
+                      </label>
+                      <input
+                        type="number"
+                        value={monthlyBill}
+                        onChange={(e) => setMonthlyBill(e.target.value)}
+                        className="w-full px-3 py-2 border border-blue-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        placeholder="Ex: 120"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-blue-700 mb-2">
+                        Prix de l'électricité (€/kWh)
+                      </label>
+                      <input
+                        type="number"
+                        value={electricityPrice}
+                        onChange={(e) => setElectricityPrice(e.target.value)}
+                        className="w-full px-3 py-2 border border-blue-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        placeholder="Ex: 0.25"
+                        step="0.01"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-blue-700 mb-2">
+                        Production annuelle estimée
+                      </label>
+                      <div className="flex items-center">
+                        {isLoadingPVGIS ? (
+                          <div className="flex items-center text-blue-600">
+                            <Loader className="w-4 h-4 mr-2 animate-spin" />
+                            <span className="text-sm">Calcul en cours...</span>
+                          </div>
+                        ) : annualProduction ? (
+                          <span className="text-lg font-semibold text-blue-800">
+                            {Math.round(annualProduction).toLocaleString()} kWh/an
+                          </span>
+                        ) : (
+                          <span className="text-sm text-gray-500">
+                            Sélectionnez une adresse et une puissance
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Bouton de calcul */}
+                <div className="text-center">
+                  <button
+                    onClick={handleCalculate}
+                    className="bg-green-600 text-white px-8 py-3 rounded-lg hover:bg-green-700 transition-colors text-lg font-semibold flex items-center mx-auto"
+                  >
+                    <Calculator className="w-6 h-6 mr-2" />
+                    Calculer les abonnements
+                  </button>
+                </div>
+
+                {/* Affichage des erreurs */}
+                {error && (
+                  <div className="bg-red-50 border border-red-200 rounded-lg p-4 flex items-center">
+                    <AlertCircle className="w-5 h-5 text-red-600 mr-2 flex-shrink-0" />
+                    <span className="text-red-700">{error}</span>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+
+          {/* Résultats */}
+          {showResults && results.length > 0 && (
+            <div className="space-y-6">
+              <div className="text-center">
+                <h2 className="text-2xl font-bold text-gray-800 mb-2">Résultats des calculs</h2>
+                <p className="text-gray-600">Abonnements SunLib disponibles</p>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                {results.map((result) => {
+                  const displayPrice = displayMode === 'HT' ? result.monthlyPayment : result.monthlyPaymentTTC;
+                  const solvabilityColors = {
+                    excellent: 'border-green-500 bg-green-50',
+                    good: 'border-blue-500 bg-blue-50',
+                    acceptable: 'border-yellow-500 bg-yellow-50',
+                    difficult: 'border-red-500 bg-red-50'
+                  };
+                  const solvabilityLabels = {
+                    excellent: 'Excellent',
+                    good: 'Bon',
+                    acceptable: 'Acceptable',
+                    difficult: 'Difficile'
+                  };
+
+                  return (
+                    <div key={result.duration} className={`bg-white rounded-xl shadow-lg border-2 ${solvabilityColors[result.solvability]} overflow-hidden`}>
+                      <div className="p-6">
+                        <div className="text-center mb-4">
+                          <h3 className="text-xl font-bold text-gray-800">{result.duration} ans</h3>
+                          <p className="text-3xl font-bold text-green-600 mt-2">
+                            {Math.round(displayPrice).toLocaleString()} €
+                          </p>
+                          <p className="text-sm text-gray-600">par mois {displayMode}</p>
+                        </div>
+
+                        <div className="space-y-3 text-sm">
+                          {clientType === 'particulier' && (
+                            <div>
+                              <p className="text-gray-600">Revenus minimum requis</p>
+                              <p className="font-semibold">{result.minRevenue.toLocaleString()} € / an</p>
+                            </div>
+                          )}
+                          <div>
+                            <p className="text-gray-600">Solvabilité</p>
+                            <p className="font-semibold">{solvabilityLabels[result.solvability]}</p>
+                          </div>
+                        </div>
+
+                        <div className="mt-4 space-y-2">
+                          <button
+                            onClick={() => {
+                              setSelectedDuration(result.duration);
+                            }}
+                            className={`w-full px-4 py-2 rounded-lg border-2 transition-all text-sm ${
+                              selectedDuration === result.duration
+                                ? 'border-green-500 bg-green-50 text-green-700'
+                                : 'border-gray-300 hover:border-green-300'
+                            }`}
+                          >
+                            {selectedDuration === result.duration ? 'Analyse affichée' : 'Voir analyse économique'}
+                          </button>
+                          
+                          <button
+                            onClick={() => {
+                              setSelectedOffer(result);
+                              setShowOfferSummary(true);
+                            }}
+                            className="w-full bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors text-sm flex items-center justify-center"
+                          >
+                            <FileText className="w-4 h-4 mr-2" />
+                            Résumé d'offre
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* Analyse économique */}
+                      {selectedDuration === result.duration && economicData && (
+                        <EconomicAnalysis
+                          economicData={economicData}
+                          selectedDuration={result.duration}
+                          displayMode={displayMode}
+                          virtualBattery={virtualBattery}
+                        />
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 }
