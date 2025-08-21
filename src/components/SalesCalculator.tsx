@@ -150,7 +150,7 @@ const SalesCalculator: React.FC = () => {
 
   const calculateEconomicAnalysis = (powerValue: number, production: number, monthlyBillValue: number, electricityPriceValue: number) => {
     const selfConsumptionRate = virtualBattery ? 0.9 : 0.6;
-    const sellPrice = 0.004; // 0.4 cts/kWh
+    const sellPrice = 0.10; // 10 cts/kWh (tarif de rachat EDF OA)
     
     const durations = [10, 15, 20, 25, 30];
     const economicAnalysis = durations.map((duration, index) => {
@@ -534,7 +534,7 @@ const SalesCalculator: React.FC = () => {
                               </div>
                               <div className="flex justify-between items-center">
                                 <span className="text-green-700">Prix de revente surplus</span>
-                                <span className="font-semibold text-green-800">0.4 cts/kWh</span>
+                                <span className="font-semibold text-green-800">10 cts/kWh</span>
                               </div>
                             </div>
                           ) : (
