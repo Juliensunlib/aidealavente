@@ -336,7 +336,7 @@ const OfferSummary: React.FC<OfferSummaryProps> = ({
                   ? `\n\nÉTUDE ÉCONOMIQUE :\n- Production annuelle estimée : ${Math.round(economicData.annualProduction).toLocaleString()} kWh/an\n- Taux d'autoconsommation : ${virtualBattery ? '90%' : '60%'}${virtualBattery ? ' (avec batterie virtuelle)' : ''}\n- Économies brutes sur ${offer.duration} ans : ${formatCurrency(offer.economicAnalysis.totalSavings)}\n  • Économies électricité : ${formatCurrency(offer.economicAnalysis.totalElectricitySavings)}\n  • Revenus vente surplus : ${formatCurrency(offer.economicAnalysis.totalSales)}`
                   : '';
                 
-                const body = encodeURIComponent(`Bonjour,
+                const body = `Bonjour,
 
 Veuillez trouver ci-dessous le résumé de votre offre SunLib :
 
@@ -391,9 +391,37 @@ Installation des panneaux solaires et mise en service. Démarrage de l'abonnemen
 Cette offre est valable 30 jours.
 
 Cordialement,
-Équipe SunLib`);
+Équipe SunLib`;
                 
-                window.location.href = `mailto:?subject=${subject}&body=${body}`;
+                // Créer un lien mailto avec gestion d'erreur
+                try {
+                  const mailtoLink = `mailto:?subject=${subject}&body=${encodeURIComponent(body)}`;
+                  
+                  // Vérifier la longueur de l'URL (limite ~2000 caractères pour la compatibilité)
+                  if (mailtoLink.length > 2000) {
+                    // Version simplifiée si trop long
+                    const simpleBody = `Bonjour,
+
+Résumé de votre offre SunLib :
+
+- Puissance : ${power} kWc
+- Abonnement : ${formatCurrency(displayPrice)} ${displayMode}/mois
+- Durée : ${offer.duration} ans
+- Localisation : ${economicData?.address || 'Non spécifiée'}${economicAnalysisText}
+
+Pour plus de détails, consultez le résumé complet.
+
+Cordialement,
+Équipe SunLib`;
+                    
+                    window.open(`mailto:?subject=${subject}&body=${encodeURIComponent(simpleBody)}`, '_self');
+                  } else {
+                    window.open(mailtoLink, '_self');
+                  }
+                } catch (error) {
+                  console.error('Erreur lors de l\'ouverture de l\'email:', error);
+                  alert('Impossible d\'ouvrir le client email. Veuillez copier les informations manuellement.');
+                }
               }}
               className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors flex items-center"
             >
