@@ -251,3 +251,37 @@ const SalesCalculator: React.FC = () => {
 
     // Calculer l'analyse économique
     const economicAnalysisData = calculateEconomicAnalysis(
+      powerValue,
+      annualProduction,
+      monthlyBillValue,
+      electricityPriceValue
+    );
+
+    const durations = [10, 15, 20, 25];
+    const calculationResults: CalculationResult[] = durations.map(duration => {
+      const rate = getVariableRates(duration, powerValue);
+      const monthlyPaymentHT = calculateMonthlyPayment(priceValue, rate, duration * 12);
+      const monthlyPaymentTTC = monthlyPaymentHT * 1.20;
+      const monthlyPayment = displayMode === 'HT' ? monthlyPaymentHT : monthlyPaymentTTC;
+      const minRevenue = calculateMinRevenue(monthlyPayment);
+      const solvability = getSolvability(monthlyPayment);
+      const residualValues = calculateResidualValues(priceValue, duration);
+      
+      // Trouver l'analyse économique correspondante
+      const economicAnalysis = economicAnalysisData.find(analysis => analysis.duration === duration);
+      
+      return {
+        duration,
+        monthlyPayment: monthlyPaymentHT,
+        monthlyPaymentTTC,
+        minRevenue,
+        solvability,
+        residualValues,
+        economicAnalysis
+      };
+    });
+
+    setResults(calculationResults);
+    setShowResults(true);
+    setIsFormCollapsed(true);
+  };
