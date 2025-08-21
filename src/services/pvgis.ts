@@ -22,7 +22,18 @@ export const getPVGISData = async (
     throw new Error('Puissance invalide (doit être entre 0.1 et 1000 kWc)');
   }
 
-  const url = `/api/pvgis/PVcalc?lat=${latitude}&lon=${longitude}&peakpower=${peakPower}&loss=14&mountingplace=building&angle=35&aspect=0&outputformat=json`;
+  // Détection de l'environnement
+  const isDevelopment = import.meta.env.DEV;
+  
+  let url: string;
+  if (isDevelopment) {
+    // En développement, utiliser le proxy Vite
+    url = `/api/pvgis/PVcalc?lat=${latitude}&lon=${longitude}&peakpower=${peakPower}&loss=14&mountingplace=building&angle=35&aspect=0&outputformat=json`;
+  } else {
+    // En production, utiliser un proxy CORS public
+    const pvgisUrl = `https://re.jrc.ec.europa.eu/api/v5_2/PVcalc?lat=${latitude}&lon=${longitude}&peakpower=${peakPower}&loss=14&mountingplace=building&angle=35&aspect=0&outputformat=json`;
+    url = `https://api.allorigins.win/get?url=${encodeURIComponent(pvgisUrl)}`;
+  }
   
   try {
     const response = await fetch(url);
@@ -30,7 +41,17 @@ export const getPVGISData = async (
       throw new Error(`Erreur API PVGIS: ${response.status} - ${response.statusText}`);
     }
     
-    const data: PVGISResponse = await response.json();
+    let data: PVGISResponse;
+    if (isDevelopment) {
+      data = await response.json();
+    } else {
+      // En production, extraire les données du proxy CORS
+      const proxyResponse = await response.json();
+      if (!proxyResponse.contents) {
+        throw new Error('Réponse du proxy CORS invalide');
+      }
+      data = JSON.parse(proxyResponse.contents);
+    }
     
     if (!data.outputs || !data.outputs.totals || !data.outputs.totals.fixed) {
       throw new Error('Données PVGIS incomplètes ou format invalide');
