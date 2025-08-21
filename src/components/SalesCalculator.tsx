@@ -285,3 +285,4 @@ const SalesCalculator: React.FC = () => {
     setShowResults(true);
     setIsFormCollapsed(true);
   };
+}
