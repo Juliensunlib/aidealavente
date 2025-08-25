@@ -167,22 +167,7 @@ const SalesCalculator: React.FC = () => {
       // Économies brutes
       const totalGrossSavings = totalElectricitySavings + totalSales;
       
-      // Coût total de l'abonnement sur la durée
-      // On utilise les résultats calculés pour récupérer le montant mensuel
-      const durations = [10, 15, 20, 25];
-      let monthlyCost = 0;
-      if (durations.includes(duration)) {
-        const powerValue = parseFloat(power);
-        const priceValue = parseFloat(installationPrice);
-        if (powerValue && priceValue) {
-          const rate = getVariableRates(duration, powerValue);
-          const monthlyPaymentHT = calculateMonthlyPayment(priceValue, rate, duration * 12);
-          monthlyCost = displayMode === 'HT' ? monthlyPaymentHT : monthlyPaymentHT * 1.20;
-        }
-      }
-      const totalSubscriptionCost = monthlyCost * 12 * duration;
-      
-      // Économies nettes (après déduction de l'abonnement)
+      // Économies brutes = total sur la durée d'analyse
       const totalSavings = totalGrossSavings;
       
       return {
@@ -191,7 +176,10 @@ const SalesCalculator: React.FC = () => {
         totalProduction,
         totalSelfConsumption,
         totalSales,
-        totalElectricitySavings
+        totalElectricitySavings,
+        // Nouvelles données pour l'analyse nette
+        annualGrossSavings: totalGrossSavings / duration,
+        totalGrossSavings
       };
     });
 
@@ -630,6 +618,8 @@ const SalesCalculator: React.FC = () => {
                           selectedDuration={result.duration}
                           displayMode={displayMode}
                           virtualBattery={virtualBattery}
+                          monthlySubscription={displayMode === 'HT' ? result.monthlyPayment : result.monthlyPaymentTTC}
+                          subscriptionDuration={result.duration}
                         />
                       )}
                     </div>

@@ -14,6 +14,8 @@ export interface EconomicData {
     totalSelfConsumption: number;
     totalSales: number;
     totalElectricitySavings: number;
+    annualGrossSavings: number;
+    totalGrossSavings: number;
   }[];
 }
 
