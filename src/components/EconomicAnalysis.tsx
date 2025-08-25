@@ -177,6 +177,93 @@ const EconomicAnalysis: React.FC<EconomicAnalysisProps> = ({
             </div>
           </div>
         </div>
+
+        {/* Tableau des économies par durée d'analyse */}
+        <div className="bg-blue-50 p-3 rounded-lg border border-blue-300">
+          <h6 className="font-semibold text-blue-800 mb-3 text-center">
+            💰 Impact des années gratuites - Abonnement {subscriptionDuration} ans
+          </h6>
+          
+          <div className="bg-white rounded-lg overflow-hidden">
+            <div className="grid grid-cols-6 gap-1 text-xs font-medium text-blue-800 bg-blue-100 p-2">
+              <div className="text-center">Durée analyse</div>
+              <div className="text-center">10 ans</div>
+              <div className="text-center">15 ans</div>
+              <div className="text-center">20 ans</div>
+              <div className="text-center">25 ans</div>
+              <div className="text-center">30 ans</div>
+            </div>
+            
+            {/* Économies brutes */}
+            <div className="grid grid-cols-6 gap-1 text-xs p-2 border-b border-gray-200">
+              <div className="text-blue-700 font-medium">Économies brutes</div>
+              {[10, 15, 20, 25, 30].map(duration => {
+                const analysis = economicData.economicAnalysis.find(a => a.duration === duration);
+                return (
+                  <div key={duration} className="text-center font-semibold text-blue-800">
+                    {analysis ? formatCurrency(analysis.totalSavings) : 'N/A'}
+                  </div>
+                );
+              })}
+            </div>
+            
+            {/* Coût abonnement */}
+            <div className="grid grid-cols-6 gap-1 text-xs p-2 border-b border-gray-200">
+              <div className="text-red-700 font-medium">Coût abonnement</div>
+              {[10, 15, 20, 25, 30].map(duration => {
+                const abonnementDuration = Math.min(duration, subscriptionDuration);
+                const cost = monthlySubscription * 12 * abonnementDuration;
+                return (
+                  <div key={duration} className="text-center font-semibold text-red-700">
+                    -{formatCurrency(cost)}
+                  </div>
+                );
+              })}
+            </div>
+            
+            {/* Années gratuites */}
+            <div className="grid grid-cols-6 gap-1 text-xs p-2 border-b border-gray-200">
+              <div className="text-green-700 font-medium">Années gratuites</div>
+              {[10, 15, 20, 25, 30].map(duration => {
+                const freeYears = Math.max(0, duration - subscriptionDuration);
+                return (
+                  <div key={duration} className="text-center font-semibold text-green-700">
+                    {freeYears > 0 ? `${freeYears} ans` : '-'}
+                  </div>
+                );
+              })}
+            </div>
+            
+            {/* Économies nettes totales */}
+            <div className="grid grid-cols-6 gap-1 text-xs p-2 bg-green-50">
+              <div className="text-green-800 font-bold">ÉCONOMIES NETTES</div>
+              {[10, 15, 20, 25, 30].map(duration => {
+                const analysis = economicData.economicAnalysis.find(a => a.duration === duration);
+                if (!analysis) return <div key={duration} className="text-center">N/A</div>;
+                
+                const abonnementDuration = Math.min(duration, subscriptionDuration);
+                const totalSubscriptionCost = monthlySubscription * 12 * abonnementDuration;
+                const grossSavingsDuringSubscription = analysis.annualGrossSavings * abonnementDuration;
+                const netSavingsDuringSubscription = grossSavingsDuringSubscription - totalSubscriptionCost;
+                
+                const freeYears = Math.max(0, duration - subscriptionDuration);
+                const savingsAfterSubscription = freeYears > 0 ? analysis.annualGrossSavings * freeYears : 0;
+                
+                const totalNetSavings = netSavingsDuringSubscription + savingsAfterSubscription;
+                
+                return (
+                  <div key={duration} className="text-center font-bold text-green-800">
+                    {formatCurrency(totalNetSavings)}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+          
+          <div className="mt-2 text-xs text-blue-600 text-center">
+            💡 Plus la durée d'analyse est longue, plus les années gratuites augmentent la rentabilité !
+          </div>
+        </div>
       </div>
     </div>
   );
