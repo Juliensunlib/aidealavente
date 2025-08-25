@@ -137,12 +137,15 @@ const SalesCalculator: React.FC = () => {
 
   const calculatePVGISProduction = async (lat: number, lng: number, powerValue: number) => {
     setIsLoadingPVGIS(true);
+    setError(''); // Clear any previous errors
     try {
       const production = await getPVGISData(lat, lng, powerValue);
       setAnnualProduction(production);
+      console.log(`Production calculée pour ${powerValue} kWc: ${production} kWh/an`);
     } catch (error) {
       console.error('Erreur PVGIS:', error);
       setError('Impossible de récupérer les données de production solaire');
+      setAnnualProduction(null);
     } finally {
       setIsLoadingPVGIS(false);
     }
@@ -404,7 +407,7 @@ const SalesCalculator: React.FC = () => {
                         const newPower = e.target.value;
                         setPower(newPower);
                         
-                        // Recalculer le productible si on a une adresse
+                        // Recalculer le productible automatiquement si on a une adresse
                         const powerValue = parseFloat(newPower);
                         if (latitude && longitude && !isNaN(powerValue) && powerValue >= 2) {
                           calculatePVGISProduction(latitude, longitude, powerValue);
